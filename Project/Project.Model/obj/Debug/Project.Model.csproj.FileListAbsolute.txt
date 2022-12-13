@@ -1,0 +1,6 @@
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Model\bin\Debug\Project.Model.dll
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Model\bin\Debug\Project.Model.pdb
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Model\obj\Debug\Project.Model.csproj.AssemblyReference.cache
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Model\obj\Debug\Project.Model.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Model\obj\Debug\Project.Model.dll
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Model\obj\Debug\Project.Model.pdb
