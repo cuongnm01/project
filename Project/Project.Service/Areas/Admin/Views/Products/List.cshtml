@@ -1,0 +1,64 @@
+﻿@using Common.Constants
+@using Project.Model.Model
+@using Common.Helpers
+@model IEnumerable<ProductInfo>
+@{
+    int stt = 0;
+
+}
+@if (Model != null && Model.Count() > 0)
+{
+    foreach (var item in Model)
+    {
+<tr>
+    <td class="text-center">@(++stt)</td>
+
+    <td class="text-center">
+        <span class="">@(item.Product.Name)</span>
+    </td>
+    <td class="text-center">
+        <span class="">@(item.Category.Name)</span>
+    </td>
+    <td class="text-center">
+        <span class="">@item.Product.CreateDate.Value.ToString("dd/MM/yyyy")</span>
+    </td>
+    <td class="text-center"><img width="50" src="@(string.IsNullOrEmpty(item.Product.Image)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Product.Image.Replace("~","")) " /></td>
+    <td class="text-center">
+        <span data-id="@item.Product.ProductId" onclick="CapNhatTrangThai($(this))" style="cursor: pointer" title="Cập nhật trạng thái">
+            <i class="fa @(item.Product.StatusID == EnumStatus.ACTIVE? "fa-unlock":"fa-lock")" style="font-size:22px;"></i>
+        </span>
+    </td>
+
+    <td class="text-center clickable-td">
+        <div class="dropdown">
+            <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
+                Thao tác
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Product", new { area = "Admin", id = item.Product.ProductId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i>Chỉnh sửa</a>
+
+                </li>
+                <li>
+                    <a class="btn btn-xs btn-danger" data-id="@item.Product.ProductId" onclick="Xoa($(this))"><i class="fa fa-trash"></i>Xoá</a>
+                </li>
+            </ul>
+        </div>
+
+    </td>
+</tr>
+
+    }
+}
+<script>
+    $('#idsotrang').val('@ViewBag.sotrang');
+    document.getElementById("idtongsotrang").innerHTML = '@ViewBag.tongsotrang';
+    document.getElementById("idtongso").innerHTML = '(' + '@ViewBag.tongso' + ')';
+    $(".clickable-td").on("click", function (e) {
+        //e.stopPropagation();
+        $(".dropdown-toggle").dropdown();
+    });
+
+</script>
+

@@ -1,0 +1,442 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+@model Product
+@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+
+}
+<script src="//code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>@Message.F_PRODUCT </h2>
+                <div class="clearfix"></div>
+            </div>
+            <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
+                <div class="modal-body">
+                    <input type="hidden" id="Id" name="Id" value="@(Model != null? Model.ProductId.ToString():Guid.Empty.ToString())">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Tên sản phẩm</label>
+                            <div>
+                                <input class="form-control" id="Name" name="Name" type="text" value="@(Model != null? Model.Name : "")">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Hình ảnh :</label>
+                            <div>
+                                <div style="margin-bottom:10px">
+                                    <input type="file" class="form-control" name="_Logo" />
+                                </div>
+                                @if (Model != null && Model.Image != null)
+                                {
+                                    <div class="col-md-55">
+                                        <div class="thumbnail" style="height:auto;">
+                                            <div class="image view view-first">
+                                                <img id="_Logo" src="@Model.Image.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
+                                                <div class="mask">
+                                                    <p></p>
+                                                    <div class="tools tools-bottom">
+                                                        <a href="javascript: window.open('@Model.Image.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">Danh mục sản phẩm</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="CategoryId" id="CategoryId">
+                                    @Html.Raw(ViewBag.cbxCategory)
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">Trạng thái:</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="StatusID">
+                                    <option value="@EnumStatus.ACTIVE" @(((Model != null && Model.StatusID == EnumStatus.ACTIVE) || Model == null) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
+                                    <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                            <label class="control-label" for="first-name">
+                                Là sản phẩm mới
+                            </label>
+                            <div>
+                                <input type="hidden" name="IsNew" value="@(Model == null? EnumStatus.ACTIVE : Model.IsNew)" />
+                                <div class="">
+                                    <label>
+                                        <input name="_IsNew" type="checkbox" class="js-switch" id="hienthi" @((Model == null || Model.IsNew == EnumStatus.ACTIVE) ? "checked" : "") data-switchery="true">
+                                        <script>
+                                            $("[name=_IsNew]").change(function () {
+                                                if ($(this).prop("checked")) {
+                                                    $("[name=IsNew]").val('@EnumStatus.ACTIVE');
+                                                } else {
+                                                    $("[name=IsNew]").val('@EnumStatus.INACTIVE');
+                                        }
+                                    })
+                                        </script>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12 productCategoy">
+                            <label class="control-label" for="first-name">Kích thước</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="size" id="size" multiple onchange="selectCategory()">
+                                    @Html.Raw(ViewBag.cbxSize)
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12 conditionType">
+                            <label class="control-label" for="first-name">Nguyên liệu</label>
+                            <div id="productId">
+                                <select class="ctr-select" data-live-search="true" name="ingredient" id="ingredient" multiple>
+                                    @Html.Raw(ViewBag.cbxIngredient)
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Bước thực hiện</label>
+                            <div>
+                                <table class="table table-bordered" id="tableStep">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" width="60">STT</th>
+                                            <th class="text-center" width="60">Tên</th>
+                                            <th class="text-center" width="200">Nội dung</th>
+                                            <th class="text-center" width="200">Ảnh minh hoạ</th>
+                                            <th class="text-center" width="200">
+                                                <a class="btn btn-xs btn-primary" onclick="AddStep('plus')"><i class="fa fa-plus"></i>Thêm mới</a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listStep"></tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Công thức</label>
+                            <div>
+                                <table class="table table-bordered" id="tableFormula">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" width="60">STT</th>
+                                            <th class="text-center" width="200">Size</th>
+                                            <th class="text-center" width="200">Tên nguyên liệu</th>
+                                            <th class="text-center" width="200">Giá trị </th>
+                                            <th class="text-center" width="200">Đơn vị</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listFormula"></tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+                <div class="modal-footer">
+                    <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function AddStep(remove) {
+        var table = document.getElementById("tableStep");
+        var tbodyRowCount = table.tBodies[0].rows.length;
+        var type = 'plus';
+        if (remove == undefined || remove == '') {
+            type = 'minus';
+        }
+        var sampleData = "";
+        var arr = [];
+        for (var i = 0; i < tbodyRowCount; i++) {
+            var index = i + 1;
+            var obj = {
+                Name: $('[name=name' + index + ']').val(),
+                Image: $('[name=_LogoStep' + index + ']').val(),
+                Description: $('[name=description' + index + ']').val(),
+                SortOrder: $('[name=sort' + index + ']').text(),
+            };
+            arr.push(obj);
+
+        }
+        console.log('arr',arr);
+        $("#listStep").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
+        $("#listStep").load("@Url.Action("ListStep", "Products", new {area ="Admin"})?productId=@(Model == null? Guid.Empty : Model.ProductId)" + "&length=" + (tbodyRowCount + 1) + "&type=" + type + "&sampleData=" + arr);
+    }
+    function ProductSelect() {
+        $("#listProduct").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
+        $("#listProduct").load("@Url.Action("ListSelect", "FlashSale", new {area ="Admin"})?productId=" + $('[name=productId]').val() + "&flashSaleId=@(Model == null ? Guid.Empty:Model.ProductId)");
+    }
+    $(document).on("change", "[name=productId]", function () {
+        ProductSelect();
+    });
+    $(document).on("change", "[name=Type]", function () {
+        $('#listProduct input').keyup();
+    });
+</script>
+<script>
+    mnActive = "mn-flashsale";
+    $(document).ready(function () {
+        $(".ctr-select").selectpicker({
+            width: '100%',
+            showTick: true,
+        });
+        //ProductSelect();
+    });
+
+    function validateNumber(e) {
+        if ((e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 44)
+            return true;
+        else
+            return false;
+    }
+    function initLoad() {
+        $('.conditionType').attr('hidden', 'true');
+        $('.conditionOrder').attr('hidden', 'true');
+        $('.valueDiscount').attr('hidden', 'true');
+        $('.productCategoy').attr('hidden', 'true');
+        $('.product').attr('hidden', 'true');
+        $('.conditionTotalOrder').attr('hidden', 'true');
+
+    }
+    function selectDiscountType() {
+        var discountSelect = $('#DiscountType').val();
+        initLoad();
+        if (discountSelect == '') {
+
+        }else
+        if (discountSelect == @EnumPromotionDiscountType.VOUCHER) {
+            // giam gia san pham
+            $('.conditionType').attr('hidden', false);
+            $('.conditionOrder').attr('hidden', false);
+            $('.valueDiscount').attr('hidden', false);
+            $('.conditionTotalOrder').attr('hidden', false);
+        } else {
+            selectCategory();
+            $('.productCategoy').attr('hidden', false);
+            $('.product').attr('hidden', false);
+            $('.valueDiscount').attr('hidden', false);
+        }
+    }
+    function selectCategory() {
+        debugger;
+        var product = $('[name=productId]').val();
+        $("#productId").html("");
+        $("#productId").load("@Url.Action("GetProductByCategory", "Product", new {area ="Admin"})?id=" + $('#CategoryId').val() + "&product=" + product + "&selectId=productId" + "&isMulti=multipe");
+        $(".ctr-select").selectpicker({
+            width: '100%',
+            showTick: true,
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $('#frm-capnhat1').formValidation({
+            framework: 'bootstrap',
+            excluded: ':disabled',
+            fields: {
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Dữ liệu bắt buộc'
+                        },
+                    }
+                },
+                Value: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Dữ liệu bắt buộc'
+                        },
+                    }
+                },
+                StatusID: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Dữ liệu bắt buộc'
+                        },
+                    }
+                },
+                Type: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Dữ liệu bắt buộc'
+                        },
+                    }
+                },
+                //StartDate: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: 'Dữ liệu bắt buộc'
+                //        },
+                //    }
+                //},
+                //ExpireDate: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: 'Dữ liệu bắt buộc'
+                //        },
+                //    }
+                //},
+
+
+                Value: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Dữ liệu bắt buộc'
+                        },
+                        callback: {
+                            callback: function (value) {
+                                var type = $('#Type').val();
+                                debugger
+                                if (type == @EnumPromotionType.PERCENT) {
+                                    if (value > 100) {
+                                        return {
+                                            valid: false,
+                                            message: 'Giá trị voucher giảm giá nhỏ hơn 100'
+                                        }
+                                    }
+                                    if (isNaN(value)) {
+                                        return {
+                                            valid: false,
+                                            message: 'Giá trị voucher dạng số và lớn hơn 0'
+                                        }
+                                    }
+                                    if (value <= 0) {
+                                        return {
+                                            valid: false,
+                                            message: 'Giá trị voucher dạng số và lớn hơn 0'
+                                        }
+                                    }
+                                } else {
+                                    if (isNaN(value)) {
+                                        return {
+                                            valid: false,
+                                            message: 'Giá trị giảm trừ dạng số và lớn hơn 0'
+                                        }
+                                    }
+                                    if (value <= 0) {
+                                        return {
+                                            valid: false,
+                                            message: 'Giá trị giảm trừ dạng số và lớn hơn 0'
+                                        }
+                                    }
+                                }
+                                return true;
+                            }
+                        },
+                    }
+                },
+                ConditionType: {
+                    validators: {
+                        callback: {
+                            callback: function (value) {
+                                var discountSelect = $('#DiscountType').val();
+                                if (discountSelect == @EnumPromotionDiscountType.VOUCHER) {
+                                    if ($('#ConditionType').val() == '' || $('#ConditionType').val() == null) {
+                                        return {
+                                            valid: false,
+                                            message: 'Dữ liệu bắt buộc'
+                                        }
+                                    }
+                                }
+                                return true;
+                            }
+                        },
+                    }
+                }
+            }
+
+
+        }).on('success.form.fv', function (e) {
+            //document.getElementById("btn-save1").disabled = true;
+            e.preventDefault();
+            debugger;
+            var formData = new FormData(document.getElementById('frm-capnhat1'));
+
+            var table = document.getElementById("tableProduct");
+            var tbodyRowCount = table.tBodies[0].rows.length;
+            var arr = [];
+            for (var i = 0; i < tbodyRowCount; i++) {
+                var index = i + 1;
+
+
+
+                var obj = {
+                    productId: $('[name=tbProductId' + index + ']').val(),
+                    total: $('[name=Total' + index + ']').val(),
+                    value: $('[name=Value' + index + ']').val(),
+                };
+                arr.push(obj);
+
+            }
+            debugger;
+            formData.set("details", JSON.stringify(arr));
+            $.ajax({
+                url: '@Url.Action("Update", "Products", new { area = "Admin" })',
+                type: 'POST',
+                dataType: 'json',
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                async: false,
+                cache: false,
+                data: formData,
+                success: function (data) {
+                    debugger;
+                    if (data.isSuccess) {
+                        alertify.success(data.message);
+                        window.location.href = '@Url.Action("MainPage", "Products", new { area = "Admin" })';
+                    }
+                    else {
+                        alertify.error(data.message);
+                        //document.getElementById("btn-save1").disabled = false;
+                        //$("#btn-save1").removeClass("disabled");
+                    }
+                }
+            });
+
+
+        });
+    });
+
+</script>

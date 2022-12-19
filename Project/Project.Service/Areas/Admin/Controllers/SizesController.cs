@@ -18,7 +18,7 @@ namespace Project.Service.Areas.Admin.Controllers
     public class SizesController : BaseController
     {
         AppDbContext _db = new AppDbContext();
-        [Route("banner/main-page")]
+        [Route("size/main-page")]
         public ActionResult MainPage()
         {
             var nd_dv = GetUserLogin;
@@ -28,7 +28,7 @@ namespace Project.Service.Areas.Admin.Controllers
             return View();
         }
 
-        [Route("banner/list")]
+        [Route("size/list")]
         public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
         {
             var nd_dv = GetUserLogin;
@@ -56,7 +56,7 @@ namespace Project.Service.Areas.Admin.Controllers
             return PartialView(list == null ? list : list.Skip(sotrang * tongsodong).Take(tongsodong));
         }
 
-        [Route("banner/update")]
+        [Route("size/update")]
         public ActionResult Update(int? id)
         {
             var nd_dv = GetUserLogin;
@@ -67,7 +67,7 @@ namespace Project.Service.Areas.Admin.Controllers
             return PartialView(size);
         }
 
-        [Route("banner/update")]
+        [Route("size/update")]
         [HttpPost]
         public ActionResult Update(Size size, HttpPostedFileBase _Logo = null)
         {
@@ -104,7 +104,7 @@ namespace Project.Service.Areas.Admin.Controllers
 
         }
 
-        [Route("banner/delete")]
+        [Route("size/delete")]
         public ActionResult Delete(int id)
         {
             var nd_dv = GetUserLogin;
@@ -119,7 +119,7 @@ namespace Project.Service.Areas.Admin.Controllers
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
 
-        [Route("banner/change-status")]
+        [Route("size/change-status")]
         public ActionResult Change_Status(int id)
         {
             var nd_dv = GetUserLogin;

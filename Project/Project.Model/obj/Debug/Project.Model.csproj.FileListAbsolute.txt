@@ -104,3 +104,5 @@ F:\Nhat\project\Project\Project.Model\obj\Debug\Project.Model.csproj.CoreCompile
 F:\Nhat\project\Project\Project.Model\obj\Debug\Project.Model.csproj.CopyComplete
 F:\Nhat\project\Project\Project.Model\obj\Debug\Project.Model.dll
 F:\Nhat\project\Project\Project.Model\obj\Debug\Project.Model.pdb
+F:\Nhat\project\Project\Project.Model\obj\Debug\Project.Model.Migrations.init.resources
+F:\Nhat\project\Project\Project.Model\obj\Debug\Project.Model.csproj.GenerateResource.cache

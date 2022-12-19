@@ -7990,6 +7990,14 @@
     <Content Include="Areas\Admin\Views\Categories\List.cshtml" />
     <Content Include="Areas\Admin\Views\Categories\MainPage.cshtml" />
     <Content Include="Areas\Admin\Views\Categories\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Sizes\List.cshtml" />
+    <Content Include="Areas\Admin\Views\Sizes\MainPage.cshtml" />
+    <Content Include="Areas\Admin\Views\Sizes\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\GetProductByCategory.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\List.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\MainPage.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\ListStep.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -8016,8 +8024,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Base\" />
-    <Folder Include="Areas\Admin\Views\Products\" />
-    <Folder Include="Areas\Admin\Views\Sizes\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

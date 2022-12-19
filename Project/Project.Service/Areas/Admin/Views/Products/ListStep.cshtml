@@ -1,0 +1,92 @@
+﻿
+@using Common.Constants
+@using Project.Model.DbSet
+@model IEnumerable<ProductDirection>
+@{
+    int stt = 0;
+    Layout = null;
+    int length = ViewBag.Total;
+}
+
+@if (Model != null && Model.Count() > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center"><span name="sort@(stt)">@(++stt)</span></td>
+            <td class="text-center" hidden><input type="hidden" value="@item.ProductDirectionId" name="tbStepId@(stt)" id="tbStepId@(stt)" /></td>
+            <td class="text-center">
+                <textarea name="name@(stt)" id="name@(stt)">@item.Name</textarea>
+            </td>
+            <td class="text-center">
+                <textarea name="description@(stt)" id="description@(stt)">@item.Description</textarea>
+            </td>
+            <td class="text-center">
+                <div>
+                    <div style="margin-bottom:10px">
+                        <input type="file" class="form-control" name="_Logo" />
+                    </div>
+                    @if (item.Image != null)
+                    {
+                        <div class="col-md-55">
+                            <div class="thumbnail" style="height:auto;">
+                                <div class="image view view-first">
+                                    <img id="_Logo" src="@item.Image.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
+                                    <div class="mask">
+                                        <p></p>
+                                        <div class="tools tools-bottom">
+                                            <a href="javascript: window.open('@item.Image.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
+                    }
+
+                </div>
+            </td>
+        </tr>
+
+    }
+}
+@{ try
+    {
+        for (var i = 0; i < length; i++)
+        {
+            <tr>
+                <td class="text-center"><span name="sort@(stt)">@(++stt)</span></td>
+                <td class="text-center" hidden><input type="hidden" value="@Guid.NewGuid()" name="tbStepId@(stt)" id="tbStepId@(stt)" /></td>
+                <td class="text-center">
+                    <textarea name="name@(stt)" id="name@(stt)"></textarea>
+                </td>
+                <td class="text-center">
+                    <textarea name="description@(stt)" id="description@(stt)"></textarea>
+                </td>
+                <td class="text-center">
+                    <div>
+                        <div style="margin-bottom:10px">
+                            <input type="file" class="form-control" name="_LogoStep@(stt)" />
+                        </div>
+                    </div>
+                </td>
+                <th class="text-center" width="200">
+                    <a class="btn btn-xs btn-danger" onclick="AddStep()"><i class="fa fa-plus"></i>Xoá</a>
+                </th>
+            </tr>
+        }
+    }
+    catch (Exception e)
+    {
+
+    }
+}
+
+
+
+
+
