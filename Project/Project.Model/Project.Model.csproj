@@ -31,8 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,12 +51,42 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigKey.cs" />
+    <Compile Include="DbSet\AppConfig.cs" />
+    <Compile Include="DbSet\Category.cs" />
+    <Compile Include="DbSet\District.cs" />
+    <Compile Include="DbSet\Ingredient.cs" />
+    <Compile Include="AppDbContext.cs" />
+    <Compile Include="DbSet\Product.cs" />
+    <Compile Include="DbSet\ProductDirection.cs" />
+    <Compile Include="DbSet\ProductIngredient.cs" />
+    <Compile Include="DbSet\ProductSize.cs" />
+    <Compile Include="DbSet\Province.cs" />
+    <Compile Include="DbSet\Size.cs" />
+    <Compile Include="DbSet\Slider.cs" />
+    <Compile Include="DbSet\Token.cs" />
+    <Compile Include="DbSet\User.cs" />
+    <Compile Include="DbSet\Ward.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Respone\AuthorizeRespone.cs" />
+    <Compile Include="Respone\CategoryResponse.cs" />
+    <Compile Include="Respone\CxResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configuration\ConfigDbSet\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{d2e7b62c-2918-4981-b035-c14d528f8978}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

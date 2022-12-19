@@ -1,5 +1,6 @@
 ﻿using Common.ActionFilters;
 using Common.Constants;
+using Project.Model;
 using Project.Model.Respone;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Project.Service.Controllers
     [ValidationFilter]
     public class BaseController : ApiController
     {
-        //protected AppDbContext db = new AppDbContext();
+        protected AppDbContext db = new AppDbContext();
         //protected Users getUserPrincipal(string token)
         //{
         //    try

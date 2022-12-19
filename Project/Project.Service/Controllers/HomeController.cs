@@ -1,18 +1,22 @@
-﻿using System;
+﻿using Project.Model.DbSet;
+using Project.Model.Respone;
+using Swashbuckle.Swagger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 
 namespace Project.Service.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        public ActionResult Index()
+        [HttpGet]
+        [ActionName("test")]
+        public IHttpActionResult Index()
         {
-            ViewBag.Title = "Home Page";
-
-            return View();
+            var size = db.Sizes.ToList();
+            return Ok(new CxResponse<List<Size>>(size, "ok"));
         }
     }
 }
