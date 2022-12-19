@@ -5,7 +5,6 @@
 @{
     int stt = 0;
     Layout = null;
-    int length = ViewBag.Total;
 }
 
 @if (Model != null && Model.Count() > 0)
@@ -54,37 +53,26 @@
 
     }
 }
-@{ try
-    {
-        for (var i = 0; i < length; i++)
-        {
-            <tr>
-                <td class="text-center"><span name="sort@(stt)">@(++stt)</span></td>
-                <td class="text-center" hidden><input type="hidden" value="@Guid.NewGuid()" name="tbStepId@(stt)" id="tbStepId@(stt)" /></td>
-                <td class="text-center">
-                    <textarea name="name@(stt)" id="name@(stt)"></textarea>
-                </td>
-                <td class="text-center">
-                    <textarea name="description@(stt)" id="description@(stt)"></textarea>
-                </td>
-                <td class="text-center">
-                    <div>
-                        <div style="margin-bottom:10px">
-                            <input type="file" class="form-control" name="_LogoStep@(stt)" />
-                        </div>
-                    </div>
-                </td>
-                <th class="text-center" width="200">
-                    <a class="btn btn-xs btn-danger" onclick="AddStep()"><i class="fa fa-plus"></i>Xoá</a>
-                </th>
-            </tr>
-        }
-    }
-    catch (Exception e)
-    {
-
-    }
-}
+<tr>
+    <td class="text-center"><span name="sort@(stt)">@(++stt)</span></td>
+    <td class="text-center" hidden><input type="hidden" value="@Guid.NewGuid()" name="tbStepId@(stt)" id="tbStepId@(stt)" /></td>
+    <td class="text-center">
+        <textarea name="name@(stt)" id="name@(stt)"></textarea>
+    </td>
+    <td class="text-center">
+        <textarea name="description@(stt)" id="description@(stt)"></textarea>
+    </td>
+    <td class="text-center">
+        <div>
+            <div style="margin-bottom:10px">
+                <input type="file" class="form-control" name="_LogoStep@(stt)" />
+            </div>
+        </div>
+    </td>
+    <th class="text-center" width="200">
+        <a class="btn btn-xs btn-danger" onclick="AddStep()"><i class="fa fa-plus"></i>Xoá</a>
+    </th>
+</tr>
 
 
 

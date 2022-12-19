@@ -1,6 +1,7 @@
 ﻿using Common.Constants;
 using Common.Helpers;
 using Common.Resources;
+using Newtonsoft.Json;
 using Project.Model;
 using Project.Model.DbSet;
 using Project.Model.Model;
@@ -272,19 +273,15 @@ namespace Project.Service.Areas.Admin.Controllers
 
 
         [Route("san-pham/list-step")]
-        public ActionResult ListStep(Guid? productId, Guid? directionId,int? length, string type, List<ProductDirection> sampleData )
+        public ActionResult ListStep(Guid? productId, Guid? directionId, string type, string sampleData)
         {
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
                 return RedirectToAction("Index", "Home", new { area = "" });
-            var listDirection = _db.ProductDirections.Where(x=>x.ProductId == productId).OrderBy(x=>x.SortOrder).ToList();
-            if (type.Equals("plus"))
-            {
-                ViewBag.Total = length;
-            }else
-            {
-                ViewBag.Total = length - 1;
-            }
+            var listDirection = _db.ProductDirections.Where(x => x.ProductId == productId).OrderBy(x => x.SortOrder).ToList();
+            var data = JsonConvert.DeserializeObject<List<ProductDirection>>(sampleData);
+
+            listDirection.AddRange(data);
             return PartialView(listDirection);
         }
     }

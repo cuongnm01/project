@@ -201,7 +201,7 @@
         }
         console.log('arr',arr);
         $("#listStep").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
-        $("#listStep").load("@Url.Action("ListStep", "Products", new {area ="Admin"})?productId=@(Model == null? Guid.Empty : Model.ProductId)" + "&length=" + (tbodyRowCount + 1) + "&type=" + type + "&sampleData=" + arr);
+        $("#listStep").load("@Url.Action("ListStep", "Products", new {area ="Admin"})?productId=@(Model == null? Guid.Empty : Model.ProductId)" + "&length=" + (tbodyRowCount + 1) + "&type=" + type + "&sampleData=" + JSON.stringify(arr));
     }
     function ProductSelect() {
         $("#listProduct").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
