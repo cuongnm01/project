@@ -18,7 +18,6 @@ namespace Project.Service.Areas.Admin.Controllers
                 UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
                 return nd_dv;
 
-
             }
         }
     }

@@ -1,0 +1,183 @@
+﻿@using Project.Model.Model
+@using Project.Model.Configuration
+@{
+    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
+}
+<div class="col-md-3 left_col">
+    <div class="left_col scroll-view">
+        <div class="navbar nav_title" style="border: 0;">
+            <a href="@Url.Action("MainPage","Home")" class="site_title"><i class="fa fa-home"></i> <span>Dược phẩm Hati</span></a>
+        </div>
+        <div class="clearfix"></div>
+        <!-- menu profile quick info -->
+        <div class="profile clearfix">
+            <div class="profile_pic">
+                <img src="@(!string.IsNullOrEmpty(nd_dv.Users.Avatar) ? nd_dv.Users.Avatar.Replace("~/","/") : "/Files/images/system/no_pic.jpg")" alt="@string.Format("{0}", nd_dv.Users.FullName)" class="img-circle profile_img">
+            </div>
+            <div class="profile_info">
+                <span>Xin chào,</span>
+                <h2>@string.Format("{0}", nd_dv.Users.FullName)</h2>
+            </div>
+        </div>
+        <!-- /menu profile quick info -->
+        <br />
+        <!-- sidebar menu -->
+        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+                <ul class="nav side-menu">
+                    <li class="mn-slider">
+                        <a><i class="fa fa-sliders"></i> Banner<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-notifications"> <a href="@Url.Action("MainPage","Slider")"> Banner</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-user">
+                        <a><i class="fa fa-graduation-cap"></i>Người dùng<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-customer"><a href="@Url.Action("Customer_MainPage","Users")">Khách hàng</a></li>
+                            <li class="mn-employee"><a href="@Url.Action("Employee_MainPage","Users")">Nhân viên</a></li>
+                            <li class="mn-agency"><a href="@Url.Action("Agency_MainPage","Users")">Đại lý</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="mn-notifications">
+                        <a><i class="fa fa-bell"></i> Thông báo<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-notifications"><a href="@Url.Action("MainPage","Notification")">Danh sách</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="mn-news">
+                        <a><i class="fa fa-newspaper-o"></i> Tin tức<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-news"><a href="@Url.Action("MainPage","News")">Danh sách</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-store">
+                        <a><i class="fa fa-graduation-cap"></i> Sản phẩm<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-product-categories"><a href="@Url.Action("MainPage","Categories")">Danh mục sản phẩm</a></li>
+                            <li class="mn-products"><a href="@Url.Action("MainPage","Product")">Sản phẩm</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-promotion">
+                        <a><i class="fa fa-graduation-cap"></i> Khuyến mại<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-promotion"><a href="@Url.Action("MainPage","Promotion", new { area="Admin"})">Danh sách khuyến mại</a></li>
+                            <li class="mn-promotion-config"><a href="@Url.Action("Update","Promotion", new { area="Admin"})">Cấu hình khuyến mại</a></li>
+                            <li class="mn-flashsale"><a href="@Url.Action("MainPage","FlashSale", new { area="Admin"})">FlashSale</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-file">
+                        <a><i class="fa fa-random"></i>Hạng tài khoản<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-rank"><a href="@Url.Action("MainPage","Rank")">Danh sách</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="mn-store">
+                        <a><i class="fa fa-graduation-cap"></i> Cửa hàng<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-store"><a href="@Url.Action("MainPage","Stores", new { area="Admin"})">Danh sách cửa hàng</a></li>
+                            <li class="mn-store-role"><a href="@Url.Action("MainPage","Stores_Role", new { area="Admin"})">Bộ phận cửa hàng</a></li>
+                            <li class="mn-time-keepings"><a href="@Url.Action("MainPage","TimeKeepings", new { area="Admin"})">Chấm công</a></li>
+                            <li class="mn-user-salarys"><a href="@Url.Action("MainPage","User_Salarys", new { area="Admin"})">Thưởng phạt</a></li>
+                            <li class="mn-salarys"><a href="@Url.Action("MainPage","Salarys", new { area="Admin"})">Lương</a></li>
+
+                            <li class="mn-premises-details"><a href="@Url.Action("MainPage","Premises_Details", new { area="Admin"})">Sơ đồ bàn</a></li>
+                            <li class="mn-premises-tables"><a href="@Url.Action("MainPage","Premises_Tables", new { area="Admin"})">Quản lý bàn</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li class="mn-partners">
+                        <a><i class="fa fa-graduation-cap"></i> Cộng tác viên<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-partners"><a href="@Url.Action("MainPage","Partners", new { area="Admin"})">Danh sách CTV</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-product-categories">
+                        <a><i class="fa fa-graduation-cap"></i> Sản phẩm<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-product-categories"><a href="@Url.Action("MainPage","ProductCategories", new { area="Admin"})">Danh mục sản phẩm</a></li>
+                            <li class="mn-products"><a href="@Url.Action("MainPage","Products", new { area="Admin"})">Danh sách sản phẩm</a></li>
+                            <li class="mn-material-categories"><a href="@Url.Action("MainPage","MaterialCategories", new { area="Admin"})">Danh mục nguyên liệu</a></li>
+                            <li class="mn-materials"><a href="@Url.Action("MainPage","Materials", new { area="Admin"})">Danh sách nguyên liệu</a></li>
+                            <li class="mn-pricings"><a href="@Url.Action("MainPage","Pricings", new { area="Admin"})">Bảng giá</a></li>
+                            <li class="mn-units"><a href="@Url.Action("MainPage","Units", new { area="Admin"})">Đơn vị tính</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-orders">
+                        <a><i class="fa fa-graduation-cap"></i> Đơn hàng<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-order-type"><a href="@Url.Action("MainPage","OrderType", new { area="Admin"})">Loại đặt hàng</a></li>
+                            <li class="mn-orders"><a href="@Url.Action("MainPage","Orders", new { area="Admin"})">Danh sách đơn hàng</a></li>
+                            <li class="mn-order-rating"><a href="@Url.Action("MainPage","Order_Ratings", new { area="Admin"})">Đánh giá đơn hàng</a></li>
+                            <li class="mn-transfertable-histories"><a href="@Url.Action("MainPage","TransferTable_Histories", new { area="Admin"})">Lịch sử chuyển bàn</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-storage">
+                        <a><i class="fa fa-graduation-cap"></i> Kho<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-storage-products"><a href="@Url.Action("MainPage","StorageProducts", new { area="Admin"})">Danh sách sản phẩm </a></li>
+                            <li class="mn-storage-materials"><a href="@Url.Action("MainPage","StorageMaterials", new { area="Admin"})">Danh sách nguyên liệu</a></li>
+                            <li class="mn-storage-histories"><a href="@Url.Action("MainPage","StorageHistories", new { area="Admin"})">Lịch sử nhập xuất</a></li>
+                            <li class="mn-product-drop"><a href="@Url.Action("MainPage","Product_Drop", new { area="Admin"})">Quản lý đồ bỏ</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-expensive">
+                        <a><i class="fa fa-graduation-cap"></i> Thu chi<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-order-types"><a href="@Url.Action("MainPage","RevenuesType", new { area="Admin"})">Danh mục thu chi</a></li>
+                            <li class="mn-orderss"><a href="@Url.Action("MainPage","Revenues", new { area="Admin"})">Danh sách thu chi</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-chats">
+                        <a><i class="fa fa-graduation-cap"></i> Chat<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-chat-template"><a href="@Url.Action("MainPage","Chat_Template", new { area="Admin"})">Bộ câu hỏi mặc định</a></li>
+                            <li class="mn-chats"><a href="@Url.Action("MainPage","Chats", new { area="Admin"})">Chat</a></li>
+                        </ul>
+                    </li>
+                    <li class="mn-users">
+                        <a><i class="fa fa-graduation-cap"></i> Cấu hình<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="mn-config"><a href="@Url.Action("Config","Config", new { area="Admin"})">Cấu hình</a></li>
+                            <li class="mn-policy"><a href="@Url.Action("Policy","Config", new { area="Admin"})">Chính sách bảo mật</a></li>
+                            <li class="mn-policy-promotion"><a href="@Url.Action("PromotionPolicy","Config", new { area="Admin"})">Chính sách ưu đãi</a></li>
+                            <li class="mn-aboutus"><a href="@Url.Action("AboutUs","Config", new { area="Admin"})">Về chúng tôi</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /sidebar menu -->
+    </div>
+</div>
+<!-- top navigation -->
+<div class="top_nav">
+    <div class="nav_menu">
+        <nav>
+            <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <img src="@(!string.IsNullOrEmpty(nd_dv.Users.Avatar) ? nd_dv.Users.Avatar.Replace("~/","/") : "/Files/images/system/no_pic.jpg")" alt="@string.Format("{0}", nd_dv.Users.FullName)">@string.Format("{0}", nd_dv.Users.FullName)
+                        <span class=" fa fa-angle-down"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                        <li><a href="@Url.Action("Info","User", new { area = "Admin"})"> Thông tin cá nhân</a></li>
+                        <li>
+                            <a class="" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("ChangePassword","Account", new { area = ""})', function (e) { $('#modal-qltaikhoan').modal('show'); });"> Đổi mật khẩu</a>
+                        </li>
+                        <li><a href="@Url.Action("Logout","Account", new { area = ""})"><i class="fa fa-sign-out pull-right"></i> Đăng xuất</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<!-- /top navigation -->

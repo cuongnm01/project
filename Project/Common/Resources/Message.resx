@@ -219,6 +219,9 @@
   <data name="F_ROLE" xml:space="preserve">
     <value>Quyền truy cập</value>
   </data>
+  <data name="F_SIZE" xml:space="preserve">
+    <value>Kích thước</value>
+  </data>
   <data name="F_SLIDER" xml:space="preserve">
     <value>Slider</value>
   </data>

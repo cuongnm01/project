@@ -367,6 +367,15 @@ namespace Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kích thước.
+        /// </summary>
+        public static string F_SIZE {
+            get {
+                return ResourceManager.GetString("F_SIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Slider.
         /// </summary>
         public static string F_SLIDER {
