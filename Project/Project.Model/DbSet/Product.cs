@@ -34,5 +34,7 @@ namespace Project.Model.DbSet
 
         [StringLength(500)]
         public string VideoDescription { get; set; }
+        public int? StatusID { get; set; }
+        public DateTime? CreateDate { get; set; }
     }
 }

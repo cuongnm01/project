@@ -13,5 +13,7 @@ namespace Project.Model.DbSet
         public Guid? ProductId { get; set; }
 
         public int? SizeId { get; set; }
+        public int? StatusID { get; set; }
+        public DateTime? CreateDate { get; set; }
     }
 }
