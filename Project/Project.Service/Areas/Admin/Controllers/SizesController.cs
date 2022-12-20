@@ -38,10 +38,9 @@ namespace Project.Service.Areas.Admin.Controllers
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
-            var list = (from a in _db.Sliders.ToList()
-                            //where status == null ? true : a.StatusID == status
-                        select a);
-            //.OrderByDescending(x => x.cre);
+            var list = (from a in _db.Sizes.ToList()
+                            where status == null ? true : a.StatusID == status
+                        select a).OrderByDescending(x => x.CreateDate);
 
             int tongso = list.Count();
 
