@@ -1,0 +1,175 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+@model User
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">
+                Cập nhật nhân viên
+            </h4>
+        </div>
+        <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
+            <div class="modal-body">
+                <input type="hidden" id="UserID" name="UserID" value="@(Model != null? Model.UserID.ToString():"0")">
+                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                        <label class="control-label" for="first-name">Hình ảnh :</label>
+                        <div>
+                            <div style="margin-bottom:10px">
+                                <input type="file" class="form-control" name="_Logo" />
+                            </div>
+                            @if (Model != null && Model.Avatar != null)
+                            {
+                                <div class="col-md-55">
+                                    <div class="thumbnail" style="height:auto;">
+                                        <div class="image view view-first">
+                                            <img id="_Logo" src="@Model.Avatar.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
+                                            <div class="mask">
+                                                <p></p>
+                                                <div class="tools tools-bottom">
+                                                    <a href="javascript: window.open('@Model.Avatar.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                        <label class="control-label" for="first-name">Thứ tự</label>
+                        <div>
+                            <select class="ctr-select" data-live-search="true" name="STT">
+                                @Html.Raw(ViewBag.cbxSTT)
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">Trạng thái:</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="StatusID">
+                                    <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
+                                    <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
+                                </select>
+                            </div>
+                        </div>
+                </div>
+                @*<div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Mô tả ngắn</label>
+                            <div>
+                                <textarea class="form-control" id="Note" name="Note">@(Model != null ? Model.Note : "")</textarea>
+                            </div>
+
+                        </div>
+                    </div>*@
+
+            </div>
+            <div class="clearfix"></div>
+            <div class="modal-footer">
+                <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".ctr-select").selectpicker({
+            width: '100%',
+            showTick: true,
+        });
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        $('#frm-capnhat1').formValidation({
+            framework: 'bootstrap',
+            excluded: ':disabled',
+            fields: {
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Dữ liệu bắt buộc'
+                        },
+                    }
+                },
+                Address: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Dữ liệu bắt buộc'
+                        },
+                    }
+                },
+                _Logo: {
+                    validators: {
+                        file: {
+                            extension: 'jpeg,jpg,png',
+                            type: 'image/jpeg,image/png',
+                            maxSize: 5242880,
+                            message: 'Hệ thống chỉ hỗ trợ sử dụng file ảnh jpg,png'
+                        },
+                    }
+                },
+                Phone: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Dữ liệu bắt buộc'
+                        },
+                        callback: {
+                            callback: function (value, validator, $field) {
+                                var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+                                if (value.length != 0 && vnf_regex.test(value) == false) {
+                                    return {
+                                        valid: false,
+                                        message: 'Sai định dạng'
+                                    }
+                                }
+                                return true;
+                            }
+                        },
+                    }
+                },
+            }
+        }).on('success.form.fv', function (e) {
+            document.getElementById("btn-save1").disabled = true;
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("Update", "Users", new { area = "Admin" })',
+                type: 'POST',
+                dataType: 'json',
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                async: false,
+                cache: false,
+                data: new FormData(document.getElementById('frm-capnhat1')),
+                success: function (data) {
+                    debugger;
+                    if (data.isSuccess) {
+                        alertify.success(data.message);
+                        window.location.href = '@Url.Action("MainPage", "Users", new { area = "Admin" })';
+                    }
+                    else {
+                        alertify.error(data.message);
+                        document.getElementById("btn-save1").disabled = false;
+                        $("#btn-save1").removeClass("disabled");
+                    }
+                }
+            });
+        });
+    });
+
+</script>
