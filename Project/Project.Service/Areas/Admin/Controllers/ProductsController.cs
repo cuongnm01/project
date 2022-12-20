@@ -272,17 +272,75 @@ namespace Project.Service.Areas.Admin.Controllers
         }
 
 
-        [Route("san-pham/list-step")]
-        public ActionResult ListStep(Guid? productId, Guid? directionId, string type, string sampleData)
+
+
+        [Route("san-pham/update-step")]
+        public ActionResult UpdateStep(Guid? productId, Guid? directionId)
         {
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
                 return RedirectToAction("Index", "Home", new { area = "" });
-            var listDirection = _db.ProductDirections.Where(x => x.ProductId == productId).OrderBy(x => x.SortOrder).ToList();
-            var data = JsonConvert.DeserializeObject<List<ProductDirection>>(sampleData);
+            var productDirection = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == directionId);
+            return PartialView(productDirection);
+        }
+        [Route("san-pham/update-step")]
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult UpdateStep(ProductDirection direction, HttpPostedFileBase _LogoStep = null, Guid? ProductTempId = null)
+        {
+            if (direction.ProductDirectionId == Guid.Empty)
+            {
+                direction.ProductDirectionId = Guid.NewGuid();
+                direction.CreateDate = DateTime.Now;
+                direction.StatusID = EnumStatus.ACTIVE;
+                direction.ProductId = ProductTempId;
+                direction.Code = Helpers.CreateCode6Char();
+                if (_LogoStep != null)
+                {
+                    string rootPathImage = string.Format("~/Files/products/{0}", DateTime.Now.ToString("dd/MM/yyyy"));
+                    string filePathImage = Path.Combine(Request.MapPath(rootPathImage));
+                    string[] fileImage = _LogoStep.uploadFile(rootPathImage, filePathImage);
+                    direction.Image = fileImage[1];
+                }
 
-            listDirection.AddRange(data);
-            return PartialView(listDirection);
+                _db.ProductDirections.Add(direction);
+                _db.SaveChanges();
+
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
+            }
+            else
+            {
+                // up date
+                var old = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == direction.ProductDirectionId);
+                if (old == null)
+                {
+                    return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
+                }
+                if (_LogoStep != null)
+                {
+                    string rootPathImage = string.Format("~/Files/products/{0}", DateTime.Now.ToString("dd/MM/yyyy"));
+                    string filePathImage = Path.Combine(Request.MapPath(rootPathImage));
+                    string[] fileImage = _LogoStep.uploadFile(rootPathImage, filePathImage);
+                    old.Image = fileImage[1];
+                }
+                old.Name = direction.Name;
+                old.SortOrder = direction.SortOrder;
+                old.Description = direction.Description;
+                //old.ProductId = direction.ProductId;
+                _db.SaveChanges();
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+            }
+        }
+
+
+        [Route("san-pham/list-step")]
+        public ActionResult ListStep(Guid? productId)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("Index", "Home", new { area = "" });
+            var productDirection = _db.ProductDirections.Where(x => x.ProductId == productId);
+            return PartialView(productDirection);
         }
     }
 }

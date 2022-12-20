@@ -18,7 +18,8 @@
             </div>
             <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
                 <div class="modal-body">
-                    <input type="hidden" id="Id" name="Id" value="@(Model != null? Model.ProductId.ToString():Guid.Empty.ToString())">
+                    <input type="hidden" id="ProductId" name="ProductId" value="@(Model != null? Model.ProductId.ToString():Guid.Empty.ToString())">
+                    <input type="hidden" id="ProductTempId" name="ProductTempId" value="@(Model != null? Model.ProductId.ToString():Guid.NewGuid().ToString())">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <label class="control-label" for="first-name">Tên sản phẩm</label>
@@ -131,8 +132,9 @@
                                             <th class="text-center" width="60">Tên</th>
                                             <th class="text-center" width="200">Nội dung</th>
                                             <th class="text-center" width="200">Ảnh minh hoạ</th>
+                                            <th class="text-center" width="200">Trạng thái</th>
                                             <th class="text-center" width="200">
-                                                <a class="btn btn-xs btn-primary" onclick="AddStep('plus')"><i class="fa fa-plus"></i>Thêm mới</a>
+                                                <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("UpdateStep","Products", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i>Thêm mới</a>
                                             </th>
                                         </tr>
                                     </thead>
@@ -154,6 +156,7 @@
                                             <th class="text-center" width="200">Tên nguyên liệu</th>
                                             <th class="text-center" width="200">Giá trị </th>
                                             <th class="text-center" width="200">Đơn vị</th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody id="listFormula"></tbody>
@@ -178,31 +181,13 @@
 
 
 <script>
-
-    function AddStep(remove) {
-        var table = document.getElementById("tableStep");
-        var tbodyRowCount = table.tBodies[0].rows.length;
-        var type = 'plus';
-        if (remove == undefined || remove == '') {
-            type = 'minus';
-        }
-        var sampleData = "";
-        var arr = [];
-        for (var i = 0; i < tbodyRowCount; i++) {
-            var index = i + 1;
-            var obj = {
-                Name: $('[name=name' + index + ']').val(),
-                Image: $('[name=_LogoStep' + index + ']').val(),
-                Description: $('[name=description' + index + ']').val(),
-                SortOrder: $('[name=sort' + index + ']').text(),
-            };
-            arr.push(obj);
-
-        }
-        console.log('arr',arr);
-        $("#listStep").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
-        $("#listStep").load("@Url.Action("ListStep", "Products", new {area ="Admin"})?productId=@(Model == null? Guid.Empty : Model.ProductId)" + "&length=" + (tbodyRowCount + 1) + "&type=" + type + "&sampleData=" + JSON.stringify(arr));
+    var dataStep = '';
+   
+    function LoadStep() {
+         $("#listStep").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
+        $("#listStep").load("@Url.Action("ListStep", "Products", new {area ="Admin"})?productId=" + $('[name=ProductTempId]').val());
     }
+
     function ProductSelect() {
         $("#listProduct").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
         $("#listProduct").load("@Url.Action("ListSelect", "FlashSale", new {area ="Admin"})?productId=" + $('[name=productId]').val() + "&flashSaleId=@(Model == null ? Guid.Empty:Model.ProductId)");
@@ -215,7 +200,7 @@
     });
 </script>
 <script>
-    mnActive = "mn-flashsale";
+    mnActive = "mn-product";
     $(document).ready(function () {
         $(".ctr-select").selectpicker({
             width: '100%',
