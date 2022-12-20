@@ -1,0 +1,59 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@model IEnumerable<ProductIngredient>
+@{
+    int stt = 0;
+    List<Size> size = (List<Size>)ViewBag.Size;
+    List<Ingredient> ingredients = (List<Ingredient>)ViewBag.Ingredient;
+    int index = 0;
+
+}
+
+
+@if (size != null && size.Count() > 0)
+{
+    foreach (var item in size)
+    {
+        <tr>
+            <td class="text-center" rowspan="@ingredients.Count">@(++index)</td>
+            <td class="text-center" rowspan="@ingredients.Count">
+                <span class="">@item.Name</span>
+            </td>
+            @if (ingredients.Count > 0)
+            {
+                <td class="text-center" hidden><input type="hidden" value="@item.SizeId" name="tbSizeId@(++stt)" id="tbSizeId@(stt)" /></td>
+                <td class="text-center" hidden><input type="hidden" value="@ingredients.FirstOrDefault().IngredientId" name="tbIngredientId@(stt)" id="tbIngredientId@(stt)" /></td>
+                <td class="text-center">
+                    <span class="text-center">@ingredients.FirstOrDefault().Name</span>
+                </td>
+                <td class="text-center">
+                    <input type="text" value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId).Value.ToString():"" )" onkeypress="return validateNumber(event)" name="value@(stt)" id="value@(stt)" />
+                </td>
+                <td class="text-center">
+                    <input type="text" value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId).Unit.ToString():"" )" name="unit@(stt)" id="unit@(stt)" />
+                </td>
+            }
+        </tr>
+        for (var i = 1; i < ingredients.Count; i++)
+        {
+            <tr>
+                <td class="text-center" hidden><input type="hidden" value="@item.SizeId" name="tbSizeId@(++stt)" id="tbSizeId@(stt)" /></td>
+                <td class="text-center" hidden><input type="hidden" value="@ingredients[i].IngredientId" name="tbIngredientId@(stt)" id="tbIngredientId@(stt)" /></td>
+                <td class="text-center">
+                    <span class="text-center">@ingredients[i].Name</span>
+                </td>
+                <td class="text-center">
+                    <input type="text" value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId).Value.ToString():"" )" onkeypress="return validateNumber(event)" name="value@(stt)" id="value@(stt)" />
+                </td>
+                <td class="text-center">
+                    <input type="text"value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId).Unit.ToString():"" )" name="unit@(stt)" id="unit@(stt)" />
+                </td>
+
+            </tr>
+        }
+
+    }
+}
+
+
+

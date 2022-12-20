@@ -136,7 +136,7 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/update")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Update(Product products, string Price = "", HttpPostedFileBase _Logo = null, HttpPostedFileBase _BackGround = null, HttpPostedFileBase _videoUrl = null)
+        public ActionResult Update(Product products, Guid? ProductTempId = null, string Price = "", HttpPostedFileBase _Logo = null, HttpPostedFileBase _BackGround = null, HttpPostedFileBase _videoUrl = null, string ingredient = "")
         {
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
@@ -146,6 +146,19 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT_CATEGORY)));
             }
+            List<ProductIngredient> listIngredients = new List<ProductIngredient>();
+            if (!string.IsNullOrEmpty(ingredient))
+            {
+                listIngredients = JsonConvert.DeserializeObject<List<ProductIngredient>>(ingredient);
+
+            }
+            List<ProductSize> listProductSize = new List<ProductSize>();
+            List<int?> sizeIds = new List<int?>();
+            if (listIngredients.Count > 0)
+            {
+                sizeIds = listIngredients.Select(x => x.SizeId).Distinct().ToList();
+            }
+
             if (products.ProductId == Guid.Empty)
             {
                 //var checkTontai = _db.Sliders.FirstOrDefault(x => x.StatusID == EnumStatus.ACTIVE && x.STT == slider.STT);
@@ -153,7 +166,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 //    return Json(new { kq = "err", msg = Translate.SLIDER_STT_IS_USED }, JsonRequestBehavior.AllowGet);
 
                 // tao moi
-                products.ProductId = Guid.NewGuid();
+                products.ProductId = ProductTempId.Value;
                 products.Code = Helpers.CreateCode6Char();
                 products.StatusID = EnumStatus.ACTIVE;
                 products.CreateDate = DateTime.Now;
@@ -179,6 +192,37 @@ namespace Project.Service.Areas.Admin.Controllers
                 //    string[] fileImage = _videoUrl.uploadFile(rootPathImage, filePathImage);
                 //    products.Image = fileImage[1];
                 //}
+                if (listIngredients.Count > 0)
+                {
+                    foreach (var item in listIngredients)
+                    {
+                        item.ProductId = ProductTempId.Value;
+                        item.ProductIngredientId = Guid.NewGuid();
+                    }
+                    _db.ProductIngredients.AddRange(listIngredients);
+                }
+                for (var i = 0; i < sizeIds.Count; i++)
+                {
+                    var ids = sizeIds[i].Value;
+                    var size = _db.Sizes.FirstOrDefault(x => x.SizeId == ids);
+                    if (size == null)
+                    {
+                        return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SIZE)));
+                    }
+                    var productSize = new ProductSize
+                    {
+                        ProductId = ProductTempId,
+                        StatusID = EnumStatus.ACTIVE,
+                        CreateDate = DateTime.Now,
+                        ProductSizeId = Guid.NewGuid(),
+                        SizeId = size.SizeId,
+                    };
+                    listProductSize.Add(productSize);
+                }
+                if (listProductSize.Count > 0)
+                {
+                    _db.ProductSizes.AddRange(listProductSize);
+                }
                 _db.Products.Add(products);
                 _db.SaveChanges();
 
@@ -206,6 +250,48 @@ namespace Project.Service.Areas.Admin.Controllers
                     string[] fileImage = _BackGround.uploadFile(rootPathImage, filePathImage);
                     old.Background = fileImage[1];
                 }
+                var proudctIngredientOld = _db.ProductIngredients.Where(x => x.ProductId == old.ProductId).ToList();
+                if (proudctIngredientOld.Count() > 0)
+                {
+                    _db.ProductIngredients.RemoveRange(proudctIngredientOld);
+                }
+                if (listIngredients.Count > 0)
+                {
+                    foreach (var item in listIngredients)
+                    {
+                        item.ProductId = ProductTempId.Value;
+                        item.ProductIngredientId = Guid.NewGuid();
+                    }
+                    _db.ProductIngredients.AddRange(listIngredients);
+                }
+                var proudctSizeOld = _db.ProductSizes.Where(x => x.ProductId == old.ProductId).ToList();
+                if (proudctSizeOld.Count() > 0)
+                {
+                    _db.ProductSizes.RemoveRange(proudctSizeOld);
+                }
+                for (var i = 0; i < sizeIds.Count; i++)
+                {
+                    var ids = sizeIds[i].Value;
+                    var size = _db.Sizes.FirstOrDefault(x => x.SizeId == ids);
+                    if (size == null)
+                    {
+                        return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SIZE)));
+                    }
+                    var productSize = new ProductSize
+                    {
+                        ProductId = ProductTempId,
+                        StatusID = EnumStatus.ACTIVE,
+                        CreateDate = DateTime.Now,
+                        ProductSizeId = Guid.NewGuid(),
+                        SizeId = size.SizeId,
+                    };
+                    listProductSize.Add(productSize);
+                }
+                if (listProductSize.Count > 0)
+                {
+                    _db.ProductSizes.AddRange(listProductSize);
+                }
+
                 old.CategoryId = products.CategoryId;
                 old.Name = products.Name;
                 old.IsNew = products.IsNew;
@@ -270,8 +356,6 @@ namespace Project.Service.Areas.Admin.Controllers
             return PartialView();
             //return Json(new CxResponse<object>(obj));
         }
-
-
 
 
         [Route("san-pham/update-step")]
@@ -339,8 +423,45 @@ namespace Project.Service.Areas.Admin.Controllers
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
                 return RedirectToAction("Index", "Home", new { area = "" });
-            var productDirection = _db.ProductDirections.Where(x => x.ProductId == productId);
+            var productDirection = _db.ProductDirections.Where(x => x.ProductId == productId).OrderBy(x => x.SortOrder);
             return PartialView(productDirection);
+        }
+
+
+        [Route("san-pham/ingredient")]
+        public ActionResult Ingredient(Guid? productId = null, string sizeId = "", string ingredientId = "")
+        {
+            var product = _db.Products.FirstOrDefault(x => x.ProductId == productId);
+            sizeId = sizeId.Replace("null", "");
+            ingredientId = ingredientId.Replace("null", "");
+            var listProductIngredient = new List<ProductIngredient>();
+            if (productId != null)
+            {
+                listProductIngredient = _db.ProductIngredients.Where(x => x.ProductId == productId).ToList();
+            }
+            var listIngredientId = ingredientId.Split(',').ToList();
+            var listSizeId = sizeId.Split(',').ToList();
+            var listIngredient = _db.Ingredients.Where(x => listIngredientId.Contains(x.IngredientId.ToString())).ToList();
+            var listSize = _db.Sizes.Where(x => listSizeId.Contains(x.SizeId.ToString())).ToList();
+            ViewBag.Size = listSize;
+            ViewBag.Ingredient = listIngredient;
+            return PartialView(listProductIngredient);
+        }
+
+
+        [Route("san-pham/delete-step")]
+        public ActionResult DeleteStep(Guid id)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("Index", "Home", new { area = "" });
+
+            var productsDirection = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == id);
+            if (productsDirection == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
+            _db.ProductDirections.Remove(productsDirection);
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)),JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -8003,6 +8003,8 @@
     <Content Include="Areas\Admin\Views\Users\MainPage.cshtml" />
     <Content Include="Areas\Admin\Views\Users\List.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Ingredient.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\UpdateStep.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

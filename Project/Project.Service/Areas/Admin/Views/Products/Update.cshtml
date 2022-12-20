@@ -62,6 +62,47 @@
                         </div>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Background :</label>
+                            <div>
+                                <div style="margin-bottom:10px">
+                                    <input type="file" class="form-control" name="_BackGround" />
+                                </div>
+                                @if (Model != null && Model.Background != null)
+                                {
+                                    <div class="col-md-55">
+                                        <div class="thumbnail" style="height:auto;">
+                                            <div class="image view view-first">
+                                                <img id="_Logo" src="@Model.Background.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
+                                                <div class="mask">
+                                                    <p></p>
+                                                    <div class="tools tools-bottom">
+                                                        <a href="javascript: window.open('@Model.Background.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img id="_BackGround" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Video Url</label>
+                            <div>
+                                <input class="form-control" id="VideoUrl" name="VideoUrl" type="text" value="@(Model != null? Model.VideoUrl : "")">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label class="control-label" for="first-name">Danh mục sản phẩm</label>
                             <div>
@@ -104,10 +145,10 @@
 
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12 productCategoy">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label class="control-label" for="first-name">Kích thước</label>
                             <div>
-                                <select class="ctr-select" data-live-search="true" name="size" id="size" multiple onchange="selectCategory()">
+                                <select class="ctr-select" data-live-search="true" name="size" id="size" multiple onchange="selectSize()">
                                     @Html.Raw(ViewBag.cbxSize)
                                 </select>
                             </div>
@@ -115,7 +156,7 @@
                         <div class="form-group col-md-6 col-sm-6 col-xs-12 conditionType">
                             <label class="control-label" for="first-name">Nguyên liệu</label>
                             <div id="productId">
-                                <select class="ctr-select" data-live-search="true" name="ingredient" id="ingredient" multiple>
+                                <select class="ctr-select" data-live-search="true" name="ingredient" id="ingredient" multiple onchange="selectIngredient()">
                                     @Html.Raw(ViewBag.cbxIngredient)
                                 </select>
                             </div>
@@ -156,7 +197,7 @@
                                             <th class="text-center" width="200">Tên nguyên liệu</th>
                                             <th class="text-center" width="200">Giá trị </th>
                                             <th class="text-center" width="200">Đơn vị</th>
-                                          
+
                                         </tr>
                                     </thead>
                                     <tbody id="listFormula"></tbody>
@@ -182,15 +223,19 @@
 
 <script>
     var dataStep = '';
-   
+
     function LoadStep() {
          $("#listStep").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
         $("#listStep").load("@Url.Action("ListStep", "Products", new {area ="Admin"})?productId=" + $('[name=ProductTempId]').val());
     }
 
-    function ProductSelect() {
-        $("#listProduct").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
-        $("#listProduct").load("@Url.Action("ListSelect", "FlashSale", new {area ="Admin"})?productId=" + $('[name=productId]').val() + "&flashSaleId=@(Model == null ? Guid.Empty:Model.ProductId)");
+    function selectSize() {
+        $("#listFormula").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
+        $("#listFormula").load("@Url.Action("Ingredient", "Products", new {area ="Admin"})?sizeId=" + $('[name=size]').val() + "&ingredientId=" + $('[name=ingredient]').val() + "&productId=@(Model != null ? Model.ProductId : Guid.Empty)" );
+    }
+    function selectIngredient() {
+         $("#listFormula").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
+        $("#listFormula").load("@Url.Action("Ingredient", "Products", new {area ="Admin"})?sizeId=" + $('[name=size]').val() + "&ingredientId=" + $('[name=ingredient]').val()  + "&productId=@(Model != null ? Model.ProductId : Guid.Empty)");
     }
     $(document).on("change", "[name=productId]", function () {
         ProductSelect();
@@ -206,7 +251,9 @@
             width: '100%',
             showTick: true,
         });
-        //ProductSelect();
+        selectSize();
+        selectIngredient();
+        LoadStep();
     });
 
     function validateNumber(e) {
@@ -215,42 +262,30 @@
         else
             return false;
     }
-    function initLoad() {
-        $('.conditionType').attr('hidden', 'true');
-        $('.conditionOrder').attr('hidden', 'true');
-        $('.valueDiscount').attr('hidden', 'true');
-        $('.productCategoy').attr('hidden', 'true');
-        $('.product').attr('hidden', 'true');
-        $('.conditionTotalOrder').attr('hidden', 'true');
-
-    }
-    function selectDiscountType() {
-        var discountSelect = $('#DiscountType').val();
-        initLoad();
-        if (discountSelect == '') {
-
-        }else
-        if (discountSelect == @EnumPromotionDiscountType.VOUCHER) {
-            // giam gia san pham
-            $('.conditionType').attr('hidden', false);
-            $('.conditionOrder').attr('hidden', false);
-            $('.valueDiscount').attr('hidden', false);
-            $('.conditionTotalOrder').attr('hidden', false);
-        } else {
-            selectCategory();
-            $('.productCategoy').attr('hidden', false);
-            $('.product').attr('hidden', false);
-            $('.valueDiscount').attr('hidden', false);
-        }
-    }
-    function selectCategory() {
-        debugger;
-        var product = $('[name=productId]').val();
-        $("#productId").html("");
-        $("#productId").load("@Url.Action("GetProductByCategory", "Product", new {area ="Admin"})?id=" + $('#CategoryId').val() + "&product=" + product + "&selectId=productId" + "&isMulti=multipe");
-        $(".ctr-select").selectpicker({
-            width: '100%',
-            showTick: true,
+    function XoaStep(obj) {
+        alertify.confirm('Xác nhận xoá', function (e) {
+            if (e) {
+                $.ajax({
+                    url: '@Url.Action("DeleteStep", "Products", new { area = "Admin" })',
+                    type: 'GET',
+                    dataType: 'json',
+                    mimeType: "multipart/form-data",
+                    contentType: false,
+                    async: false,
+                    cache: false,
+                    data: { id: obj.attr("data-id") },
+                    success: function (data) {
+                        if (data.isSuccess) {
+                            debugger;
+                            alertify.success(data.message);
+                            LoadStep();
+                        }
+                        else {
+                            alertify.error(data.message);
+                        }
+                    }
+                });
+            }
         });
     }
 </script>
@@ -281,29 +316,13 @@
                         },
                     }
                 },
-                Type: {
+                CategoryId: {
                     validators: {
                         notEmpty: {
                             message: 'Dữ liệu bắt buộc'
                         },
                     }
                 },
-                //StartDate: {
-                //    validators: {
-                //        notEmpty: {
-                //            message: 'Dữ liệu bắt buộc'
-                //        },
-                //    }
-                //},
-                //ExpireDate: {
-                //    validators: {
-                //        notEmpty: {
-                //            message: 'Dữ liệu bắt buộc'
-                //        },
-                //    }
-                //},
-
-
                 Value: {
                     validators: {
                         notEmpty: {
@@ -351,24 +370,44 @@
                         },
                     }
                 },
-                ConditionType: {
+                _Logo: {
                     validators: {
-                        callback: {
-                            callback: function (value) {
-                                var discountSelect = $('#DiscountType').val();
-                                if (discountSelect == @EnumPromotionDiscountType.VOUCHER) {
-                                    if ($('#ConditionType').val() == '' || $('#ConditionType').val() == null) {
-                                        return {
-                                            valid: false,
-                                            message: 'Dữ liệu bắt buộc'
-                                        }
-                                    }
-                                }
-                                return true;
-                            }
+
+                        file: {
+                            extension: 'jpeg,jpg,png',
+                            type: 'image/jpeg,image/png',
+                            maxSize: 5242880,
+                            message: 'Hệ thống chỉ hỗ trợ sử dụng file ảnh jpg,png'
                         },
+    @if (!(Model != null && Model.Image != null))
+    {
+        <text>
+                            notEmpty: {
+                                message: 'Dữ liệu bắt buộc'
+                            },
+        </text>
+    }
                     }
-                }
+                },
+                _BackGround: {
+                    validators: {
+
+                        file: {
+                            extension: 'jpeg,jpg,png',
+                            type: 'image/jpeg,image/png',
+                            maxSize: 5242880,
+                            message: 'Hệ thống chỉ hỗ trợ sử dụng file ảnh jpg,png'
+                        },
+    @if (!(Model != null && Model.Background != null))
+    {
+        <text>
+                            notEmpty: {
+                                message: 'Dữ liệu bắt buộc'
+                            },
+        </text>
+    }
+                    }
+                },
             }
 
 
@@ -378,24 +417,27 @@
             debugger;
             var formData = new FormData(document.getElementById('frm-capnhat1'));
 
-            var table = document.getElementById("tableProduct");
+            var table = document.getElementById("tableFormula");
             var tbodyRowCount = table.tBodies[0].rows.length;
             var arr = [];
             for (var i = 0; i < tbodyRowCount; i++) {
                 var index = i + 1;
-
-
-
                 var obj = {
-                    productId: $('[name=tbProductId' + index + ']').val(),
-                    total: $('[name=Total' + index + ']').val(),
-                    value: $('[name=Value' + index + ']').val(),
+                    SizeId: '',
+                    IngredientId: '',
+                    Value: '',
+                    Unit : ''
                 };
+                obj.sizeId = $('[name=tbSizeId' + index + ']').val()
+                obj.ingredientId = $('[name=tbIngredientId' + index + ']').val();
+                obj.value = $('[name=value' + index + ']').val();
+                obj.unit = $('[name=unit' + index + ']').val();
                 arr.push(obj);
 
             }
+            console.log(arr);
             debugger;
-            formData.set("details", JSON.stringify(arr));
+            formData.set("ingredient", JSON.stringify(arr));
             $.ajax({
                 url: '@Url.Action("Update", "Products", new { area = "Admin" })',
                 type: 'POST',
