@@ -8,7 +8,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Danh sách danh mục sản phẩm <span id="permission-name"></span><span id="idtongso">(0)</span></h2>
+                <h2>Danh sách<span id="permission-name"> Nguyên liệu</span><span id="idtongso">(0)</span></h2>
                 <div class="clearfix"></div>
             </div>
             <div class="">
@@ -27,7 +27,7 @@
                 <input id="nhomquyenid" type="hidden" value="@EnumStatus.ACTIVE" />
                 <ul class="nav nav-tabs bar_tabs nhomquyen" role="tablist">
                     <li role="presentation" class="active"><a href="#" id="@EnumStatus.ACTIVE" data-name="@EnumStatus.ToString(EnumStatus.ACTIVE)" role="tab" data-toggle="tab" aria-expanded="false">@EnumStatus.ToString(EnumStatus.ACTIVE)</a></li>
-                    <li role="presentation" class=""><a href="#" id="@EnumStatus.INACTIVE" data-name="@EnumStatus.ToString(EnumStatus.INACTIVE)" role="tab" data-toggle="tab" aria-expanded="false">@EnumStatus.ToString(EnumStatus.INACTIVE)</a></li>
+                    <li role="presentation" class=""><a href="#" id="@EnumStatus.INACTIVE" data-name="@EnumStatus.ToString(EnumStatus.INACTIVE)" role="tab" data-toggle="tab" aria-expanded="false">Ẩn</a></li>
 
                 </ul>
                 <table class="table table-bordered">
@@ -35,15 +35,11 @@
                         <tr>
                             <th class="text-center" width="60">STT</th>
                             <th class="text-center" width="200">Tiêu đề</th>
-                            <th class="text-center" width="200">Icon</th>
-                            @*<th class="text-center" width="200">Hiển thị trang chủ</th>*@
-                            <th class="text-center" width="200">Thứ tự</th>
-                            <th class="text-center" width="200">Ngày lập</th>
-                            <th class="text-center" width="200">Trạng thái</th>
+                            <th class="text-center" width="200">Ảnh</th>
                             <th width="150" class="text-center">
                                 @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
                                 {
-                                    <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Categories",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i>Thêm mới</a>
+                                    <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i>Thêm mới</a>
                                 }
                             </th>
                         </tr>
@@ -89,7 +85,7 @@
 <div class="modal" tabindex="-1" role="dialog" id="modal-giaodich"></div>
 
 <script>
-    mnActive = "mn-product-categories";
+    mnActive = "mn-ingredient";
     $(document).ready(function () {
         $(".ctr-select").selectpicker({
             width: '100%',
@@ -103,7 +99,7 @@
 <script>
     function DanhSach() {
         $("#list").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
-        $("#list").load("@Url.Action("List", "Categories", new { area = "Admin" })?keyword=" + encodeURI($("[name=tuKhoa]").val()) + "&tongsodong=" + $('[name=tongsodong]').val() + "&status=" + $("#nhomquyenid").val());
+        $("#list").load("@Url.Action("List", "Ingredient", new {area ="Admin"})?keyword=" + encodeURI($("[name=tuKhoa]").val()) + "&tongsodong=" + $('[name=tongsodong]').val() + "&status=" + $("#nhomquyenid").val());
     }
 </script>
 <script>
@@ -183,7 +179,7 @@
             }
         }
         $("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
-        $("#list").load("@Url.Action("List", "Categories", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&status=" + $('#nhomquyenid').val());
+        $("#list").load("@Url.Action("List", "Ingredient", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&status=" + $('#nhomquyenid').val());
     }
 </script>
 <script>
@@ -191,7 +187,7 @@
         alertify.confirm('Xác nhận xoá', function (e) {
             if (e) {
             $.ajax({
-                url: '@Url.Action("Delete", "Categories", new { area = "Admin" })',
+                url: '@Url.Action("Delete", "Ingredient", new { area = "Admin" })',
                 type: 'GET',
                 dataType: 'json',
                 mimeType: "multipart/form-data",
@@ -218,41 +214,7 @@
         alertify.confirm('Xác nhận thay đổi trạng thái', function (e) {
             if (e) {
                 $.ajax({
-                    url: '@Url.Action("Change_Status", "Categories", new { area = "Admin" })',
-                    type: 'GET',
-                    dataType: 'json',
-                    mimeType: "multipart/form-data",
-                    contentType: false,
-                    async: false,
-                    cache: false,
-                    data: { id: obj.attr("data-id") },
-                    success: function (data) {
-                        debugger;
-                        console.log(data);
-                        if (data.isSuccess) {
-                            alertify.success(data.message);
-                            if (data.data == @EnumStatus.ACTIVE)
-                                obj.html('<i class="fa fa-unlock" style="font-size:22px;"></i>');
-                            else
-                                obj.html('<i class="fa fa-lock" style="font-size:22px;"></i>');
-                            DanhSach();
-                        }
-                        else {
-                            alertify.error(data.message);
-                        }
-                    }
-                });
-            }
-        });
-    }
-</script>
-<script>
-    function CapNhatTrangThaiHienThi(obj) {
-        debugger;
-        alertify.confirm('Xác nhận thay đổi trạng thái', function (e) {
-            if (e) {
-                $.ajax({
-                    url: '@Url.Action("ChangeStatusDisplay", "Categories", new { area = "Admin" })',
+                    url: '@Url.Action("Change_Status", "Ingredient", new { area = "Admin" })',
                     type: 'GET',
                     dataType: 'json',
                     mimeType: "multipart/form-data",
@@ -262,7 +224,6 @@
                     data: { id: obj.attr("data-id") },
                     success: function (data) {
                         if (data.isSuccess) {
-                            debugger;
                             alertify.success(data.message);
                             if (data.data == @EnumStatus.ACTIVE)
                                 obj.html('<i class="fa fa-unlock" style="font-size:22px;"></i>');
