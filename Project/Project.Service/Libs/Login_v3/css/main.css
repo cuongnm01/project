@@ -37,16 +37,16 @@
 	box-sizing: border-box;
 }
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #E2B746 !important;
+    color: #00B0AD !important;
     opacity: 1; /* Firefox */
 }
 
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #E2B746;
+    color: #00B0AD;
 }
 
 ::-ms-input-placeholder { /* Microsoft Edge */
-    color: #E2B746;
+    color: #00B0AD;
 }
 body, html {
 	height: 100%;
@@ -197,7 +197,7 @@ iframe {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(255,255,255,0.9);
+/*  background-color: rgba(255,255,255,0.9);*/
 }
 
 .wrap-login100 {
@@ -240,7 +240,7 @@ iframe {
 .login100-form-title {
     font-family: 'Roboto', sans-serif;
     font-size: 30px;
-    color:  #E1B820;
+    color:  #00B0AD;
     line-height: 1.2;
     text-align: center;
     text-transform: uppercase;
@@ -261,14 +261,14 @@ iframe {
 .input100 {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
-    color:  #E1B820;
+    color:  #00B0AD;
     line-height: 1.2;
     display: block;
     width: 100%;
     height: 45px;
     background: transparent;
     padding: 0 5px 0 38px;
-    border-bottom: 2px solid  #E1B820;
+    border-bottom: 2px solid  #00B0AD;
 }
 
 /*---------------------------------------------*/ 
@@ -294,13 +294,13 @@ iframe {
         -o-transition: all 0.4s;
         -moz-transition: all 0.4s;
         transition: all 0.4s;
-        background: #E2B746;
+        background: #00B0AD;
     }
 
     .focus-input100::after {
         font-family: Material-Design-Iconic-Font;
         font-size: 22px;
-        color:  #E1B820;
+        color:  #00B0AD;
         content: attr(data-placeholder);
         display: block;
         width: 100%;
@@ -443,7 +443,7 @@ iframe {
         width: 100%;
         height: 100%;
         border-radius: 25px;
-        background-color:  #E1B820;
+        background-color:  #00B0AD;
         color: #fff;
         top: 0;
         left: 0;

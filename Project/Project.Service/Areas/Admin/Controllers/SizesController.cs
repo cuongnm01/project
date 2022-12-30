@@ -113,7 +113,7 @@ namespace Project.Service.Areas.Admin.Controllers
             var size = _db.Sizes.FirstOrDefault(x => x.SizeId == id);
             if (size == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SIZE)));
-            //slider.sta = EnumStatus.DELETE;
+            size.StatusID = EnumStatus.DELETE;
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }

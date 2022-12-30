@@ -34,9 +34,8 @@
                     <thead>
                         <tr>
                             <th class="text-center" width="60">STT</th>
-                            <th class="text-center" width="200">Tiêu đề</th>
                             <th class="text-center" width="200">Ảnh</th>
-                            <th width="150" class="text-center">
+                            <th width="150" style="max-width:200px" class="text-center">
                                 @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
                                 {
                                     <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Slider", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i>Thêm mới</a>

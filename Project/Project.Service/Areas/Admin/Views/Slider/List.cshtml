@@ -11,7 +11,6 @@
     {
 <tr>
     <td class="text-center">@(++stt)</td>
-    <td class="text-center">@(item.Title)</td>
     <td class="text-center"><img width="50" src="@(string.IsNullOrEmpty(item.Url)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Url.Replace("~","")) " /></td>
     <td class="text-center clickable-td">
         <div class="dropdown">

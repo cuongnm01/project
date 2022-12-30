@@ -8005,6 +8005,9 @@
     <Content Include="Areas\Admin\Views\Users\Update.cshtml" />
     <Content Include="Areas\Admin\Views\Products\Ingredient.cshtml" />
     <Content Include="Areas\Admin\Views\Products\UpdateStep.cshtml" />
+    <Content Include="Areas\Admin\Views\Ingredient\List.cshtml" />
+    <Content Include="Areas\Admin\Views\Ingredient\MainPage.cshtml" />
+    <Content Include="Areas\Admin\Views\Ingredient\Update.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

@@ -135,6 +135,7 @@ namespace Project.Service.Areas.Admin.Controllers
             if (slider == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
             //slider.sta = EnumStatus.DELETE;
+            _db.Sliders.Remove(slider);
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }

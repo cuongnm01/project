@@ -62,9 +62,7 @@
                     <div class="form-group col-md-12 col-sm-12 col-xs-12">
                         <label class="control-label" for="first-name">Thứ tự</label>
                         <div>
-                            <select class="ctr-select" data-live-search="true" name="STT">
-                                @Html.Raw(ViewBag.cbxSTT)
-                            </select>
+                            <input type="text" class="form-control" id="SortOrder" name="SortOrder" value="@Model.SortOrder" />
                         </div>
                     </div>
                     @*<div class="form-group col-md-4 col-sm-4 col-xs-12">
