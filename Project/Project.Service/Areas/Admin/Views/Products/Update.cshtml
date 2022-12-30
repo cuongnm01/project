@@ -10,126 +10,65 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2>@Message.F_PRODUCT </h2>
-                <div class="clearfix"></div>
-            </div>
-            <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
-                <div class="modal-body">
-                    <input type="hidden" id="ProductId" name="ProductId" value="@(Model != null? Model.ProductId.ToString():Guid.Empty.ToString())">
-                    <input type="hidden" id="ProductTempId" name="ProductTempId" value="@(Model != null? Model.ProductId.ToString():Guid.NewGuid().ToString())">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>@Message.F_PRODUCT </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
+                    <div class="modal-body">
+                        <input type="hidden" id="ProductId" name="ProductId" value="@(Model != null? Model.ProductId.ToString():Guid.Empty.ToString())">
+                        <input type="hidden" id="ProductTempId" name="ProductTempId" value="@(Model != null? Model.ProductId.ToString():Guid.NewGuid().ToString())">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <label class="control-label" for="first-name">Tên sản phẩm</label>
-                            <div>
-                                <input class="form-control" id="Name" name="Name" type="text" value="@(Model != null? Model.Name : "")">
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                            <label class="control-label" for="first-name">Hình ảnh :</label>
-                            <div>
-                                <div style="margin-bottom:10px">
-                                    <input type="file" class="form-control" name="_Logo" />
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Tên sản phẩm</label>
+                                <div>
+                                    <input class="form-control" id="Name" name="Name" type="text" value="@(Model != null? Model.Name : "")">
                                 </div>
-                                @if (Model != null && Model.Image != null)
-                                {
-                                    <div class="col-md-55">
-                                        <div class="thumbnail" style="height:auto;">
-                                            <div class="image view view-first">
-                                                <img id="_Logo" src="@Model.Image.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
-                                                <div class="mask">
-                                                    <p></p>
-                                                    <div class="tools tools-bottom">
-                                                        <a href="javascript: window.open('@Model.Image.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
-                                }
 
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                            <label class="control-label" for="first-name">Background :</label>
-                            <div>
-                                <div style="margin-bottom:10px">
-                                    <input type="file" class="form-control" name="_BackGround" />
-                                </div>
-                                @if (Model != null && Model.Background != null)
-                                {
-                                    <div class="col-md-55">
-                                        <div class="thumbnail" style="height:auto;">
-                                            <div class="image view view-first">
-                                                <img id="_Logo" src="@Model.Background.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
-                                                <div class="mask">
-                                                    <p></p>
-                                                    <div class="tools tools-bottom">
-                                                        <a href="javascript: window.open('@Model.Background.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <img id="_BackGround" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
-                                }
 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <label class="control-label" for="first-name">Video Url</label>
-                            <div>
-                                <input class="form-control" id="VideoUrl" name="VideoUrl" type="text" value="@(Model != null? Model.VideoUrl : "")">
-                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Video Url</label>
+                                <div>
+                                    <input class="form-control" id="VideoUrl" name="VideoUrl" type="text" value="@(Model != null? Model.VideoUrl : "")">
+                                </div>
 
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                            <label class="control-label" for="first-name">Danh mục sản phẩm</label>
-                            <div>
-                                <select class="ctr-select" data-live-search="true" name="CategoryId" id="CategoryId">
-                                    @Html.Raw(ViewBag.cbxCategory)
-                                </select>
                             </div>
                         </div>
-                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
-                            <label class="control-label" for="first-name">Trạng thái:</label>
-                            <div>
-                                <select class="ctr-select" data-live-search="true" name="StatusID">
-                                    <option value="@EnumStatus.ACTIVE" @(((Model != null && Model.StatusID == EnumStatus.ACTIVE) || Model == null) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
-                                    <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
-                                </select>
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                <label class="control-label" for="first-name">Danh mục sản phẩm</label>
+                                <div>
+                                    <select class="ctr-select" data-live-search="true" name="CategoryId" id="CategoryId">
+                                        @Html.Raw(ViewBag.cbxCategory)
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group col-md-2 col-sm-2 col-xs-12">
-                            <label class="control-label" for="first-name">
-                                Là sản phẩm mới
-                            </label>
-                            <div>
-                                <input type="hidden" name="IsNew" value="@(Model == null? EnumStatus.ACTIVE : Model.IsNew)" />
-                                <div class="">
-                                    <label>
-                                        <input name="_IsNew" type="checkbox" class="js-switch" id="hienthi" @((Model == null || Model.IsNew == EnumStatus.ACTIVE) ? "checked" : "") data-switchery="true">
-                                        <script>
+                            <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                                <label class="control-label" for="first-name">Trạng thái:</label>
+                                <div>
+                                    <select class="ctr-select" data-live-search="true" name="StatusID">
+                                        <option value="@EnumStatus.ACTIVE" @(((Model != null && Model.StatusID == EnumStatus.ACTIVE) || Model == null) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
+                                        <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                                <label class="control-label" for="first-name">
+                                    Là sản phẩm mới
+                                </label>
+                                <div>
+                                    <input type="hidden" name="IsNew" value="@(Model == null? EnumStatus.ACTIVE : Model.IsNew)" />
+                                    <div class="">
+                                        <label>
+                                            <input name="_IsNew" type="checkbox" class="js-switch" id="hienthi" @((Model == null || Model.IsNew == EnumStatus.ACTIVE) ? "checked" : "") data-switchery="true">
+                                            <script>
                                             $("[name=_IsNew]").change(function () {
                                                 if ($(this).prop("checked")) {
                                                     $("[name=IsNew]").val('@EnumStatus.ACTIVE');
@@ -137,87 +76,207 @@
                                                     $("[name=IsNew]").val('@EnumStatus.INACTIVE');
                                         }
                                     })
-                                        </script>
-                                    </label>
+                                            </script>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="modal-footer">
+                        <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>@Message.F_PRODUCT </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <input type="hidden" id="ProductId" name="ProductId" value="@(Model != null? Model.ProductId.ToString():Guid.Empty.ToString())">
+                <input type="hidden" id="ProductTempId" name="ProductTempId" value="@(Model != null? Model.ProductId.ToString():Guid.NewGuid().ToString())">
+
+                <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
+                    <div class="modal-body">
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Hình ảnh :</label>
+                                <div>
+                                    <div style="margin-bottom:10px">
+                                        <input type="file" class="form-control" name="_Logo" />
+                                    </div>
+                                    @if (Model != null && Model.Image != null)
+                                    {
+                                        <div class="col-md-55">
+                                            <div class="thumbnail" style="height:auto;">
+                                                <div class="image view view-first">
+                                                    <img id="_Logo" src="@Model.Image.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
+                                                    <div class="mask">
+                                                        <p></p>
+                                                        <div class="tools tools-bottom">
+                                                            <a href="javascript: window.open('@Model.Image.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Background :</label>
+                                <div>
+                                    <div style="margin-bottom:10px">
+                                        <input type="file" class="form-control" name="_BackGround" />
+                                    </div>
+                                    @if (Model != null && Model.Background != null)
+                                    {
+                                        <div class="col-md-55">
+                                            <div class="thumbnail" style="height:auto;">
+                                                <div class="image view view-first">
+                                                    <img id="_Logo" src="@Model.Background.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
+                                                    <div class="mask">
+                                                        <p></p>
+                                                        <div class="tools tools-bottom">
+                                                            <a href="javascript: window.open('@Model.Background.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <img id="_BackGround" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
+                                    }
+
                                 </div>
                             </div>
                         </div>
 
                     </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                            <label class="control-label" for="first-name">Kích thước</label>
-                            <div>
-                                <select class="ctr-select" data-live-search="true" name="size" id="size" multiple onchange="selectSize()">
-                                    @Html.Raw(ViewBag.cbxSize)
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12 conditionType">
-                            <label class="control-label" for="first-name">Nguyên liệu</label>
-                            <div id="productId">
-                                <select class="ctr-select" data-live-search="true" name="ingredient" id="ingredient" multiple onchange="selectIngredient()">
-                                    @Html.Raw(ViewBag.cbxIngredient)
-                                </select>
-                            </div>
-                        </div>
+                    <div class="clearfix"></div>
+                    <div class="modal-footer">
+                        <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
                     </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                            <label class="control-label" for="first-name">Bước thực hiện</label>
-                            <div>
-                                <table class="table table-bordered" id="tableStep">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" width="60">STT</th>
-                                            <th class="text-center" width="60">Tên</th>
-                                            <th class="text-center" width="200">Nội dung</th>
-                                            <th class="text-center" width="200">Ảnh minh hoạ</th>
-                                            <th class="text-center" width="200">Trạng thái</th>
-                                            <th class="text-center" width="200">
-                                                <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("UpdateStep","Products", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i>Thêm mới</a>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="listStep"></tbody>
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                            <label class="control-label" for="first-name">Công thức</label>
-                            <div>
-                                <table class="table table-bordered" id="tableFormula">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" width="60">STT</th>
-                                            <th class="text-center" width="200">Size</th>
-                                            <th class="text-center" width="200">Tên nguyên liệu</th>
-                                            <th class="text-center" width="200">Giá trị </th>
-                                            <th class="text-center" width="200">Đơn vị</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="listFormula"></tbody>
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="clearfix"></div>
-                <div class="modal-footer">
-                    <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
-                </div>
-            </form>
-
-
+                </form>
+            </div>
         </div>
     </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>@Message.F_PRODUCT </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
+                    <div class="modal-body">
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Bước thực hiện</label>
+                                <div>
+                                    <table class="table table-bordered" id="tableStep">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" width="60">STT</th>
+                                                <th class="text-center" width="60">Tên</th>
+                                                <th class="text-center" width="200">Nội dung</th>
+                                                <th class="text-center" width="200">Ảnh minh hoạ</th>
+                                                <th class="text-center" width="200">Trạng thái</th>
+                                                <th class="text-center" width="200">
+                                                    <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("UpdateStep","Products", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i>Thêm mới</a>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="listStep"></tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="modal-footer">
+                        <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>@Message.F_PRODUCT </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
+                    <div class="modal-body">
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                <label class="control-label" for="first-name">Kích thước</label>
+                                <div>
+                                    <select class="ctr-select" data-live-search="true" name="size" id="size" multiple onchange="selectSize()">
+                                        @Html.Raw(ViewBag.cbxSize)
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-6 col-xs-12 conditionType">
+                                <label class="control-label" for="first-name">Nguyên liệu</label>
+                                <div id="productId">
+                                    <select class="ctr-select" data-live-search="true" name="ingredient" id="ingredient" multiple onchange="selectIngredient()">
+                                        @Html.Raw(ViewBag.cbxIngredient)
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Công thức</label>
+                                <div>
+                                    <table class="table table-bordered" id="tableFormula">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" width="60">STT</th>
+                                                <th class="text-center" width="200">Size</th>
+                                                <th class="text-center" width="200">Tên nguyên liệu</th>
+                                                <th class="text-center" width="200">Giá trị </th>
+                                                <th class="text-center" width="200">Đơn vị</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="listFormula"></tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="modal-footer">
+                        <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+   
 </div>
 
 

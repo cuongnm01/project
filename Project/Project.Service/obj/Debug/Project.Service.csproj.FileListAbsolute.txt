@@ -510,3 +510,11 @@ E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Text.Encodi
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Threading.Tasks.Extensions.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Microsoft.Bcl.AsyncInterfaces.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\obj\Debug\Project.Service.csproj.CopyComplete
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.dll
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.SqlServer.dll
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.ValueTuple.dll
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\Project.Model.dll.config
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.xml
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.SqlServer.xml
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.ValueTuple.xml
+C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.Threading.Tasks.Extensions.xml
