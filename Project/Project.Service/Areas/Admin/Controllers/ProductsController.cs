@@ -74,6 +74,73 @@ namespace Project.Service.Areas.Admin.Controllers
             return PartialView(list == null ? list : list.Skip(sotrang * tongsodong).Take(tongsodong));
         }
 
+
+        [Route("san-pham/insert")]
+        public ActionResult Insert(Guid? id)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("Index", "Home", new { area = "" });
+            var products = _db.Products.FirstOrDefault(x => x.ProductId == id);
+            var category = _db.Categorys
+                .Where(x => x.StatusID == EnumStatus.ACTIVE)
+                .ToList();
+            string cbxCategory = "<option value=\"\">Danh mục sản phẩm</option>";
+            foreach (var item in category)
+            {
+                cbxCategory += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.CategoryId, item.Name, products != null && products.CategoryId == item.CategoryId ? "selected" : "");
+            }
+            ViewBag.cbxCategory = cbxCategory;
+            return PartialView(products);
+        }
+
+        [Route("san-pham/insert")]
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult Insert(Product products)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("Index", "Home", new { area = "" });
+            
+            if (products.ProductId == Guid.Empty)
+            {
+                //var checkTontai = _db.Sliders.FirstOrDefault(x => x.StatusID == EnumStatus.ACTIVE && x.STT == slider.STT);
+                //if (checkTontai != null)
+                //    return Json(new { kq = "err", msg = Translate.SLIDER_STT_IS_USED }, JsonRequestBehavior.AllowGet);
+
+                // tao moi
+                products.Code = Helpers.CreateCode6Char();
+                products.StatusID = EnumStatus.ACTIVE;
+                products.CreateDate = DateTime.Now;
+                products.IsNew = EnumStatus.ACTIVE;
+                products.ProductId = Guid.NewGuid();
+                _db.Products.Add(products);
+                _db.SaveChanges();
+
+                return Json(new CxResponse<object>(products.ProductId,Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
+            }
+            else
+            {
+                // up date
+                var old = _db.Products.FirstOrDefault(x => x.ProductId == products.ProductId);
+                if (old == null)
+                {
+                    return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
+                }
+               
+                old.CategoryId = products.CategoryId;
+                old.Name = products.Name;
+                old.IsNew = products.IsNew;
+                old.VideoUrl = products.VideoUrl;
+                old.VideoTitle = products.VideoTitle;
+                old.VideoDescription = products.VideoDescription;
+                old.CategoryId = products.CategoryId;
+                _db.SaveChanges();
+                return Json(new CxResponse<object>(old.ProductId,Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+            }
+        }
+
         [Route("san-pham/update")]
         public ActionResult Update(Guid? id)
         {
@@ -118,7 +185,7 @@ namespace Project.Service.Areas.Admin.Controllers
             string cbxIngredient = "<option value=\"\">Danh mục nguyên liệu</option>";
             foreach (var item in ingredients)
             {
-                cbxIngredient += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.IngredientId, item.Name, products != null && listSize.Contains(item.IngredientId) ? "selected" : "");
+                cbxIngredient += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.IngredientId, item.Name, products != null && listIngredient.Contains(item.IngredientId) ? "selected" : "");
             }
             ViewBag.cbxIngredient = cbxIngredient;
 
@@ -313,10 +380,10 @@ namespace Project.Service.Areas.Admin.Controllers
 
             var products = _db.Products.FirstOrDefault(x => x.ProductId == id);
             if (products == null)
-                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
             products.StatusID = EnumStatus.DELETE;
             _db.SaveChanges();
-            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)));
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
 
         [Route("san-pham/change-status")]
@@ -328,14 +395,14 @@ namespace Project.Service.Areas.Admin.Controllers
 
             var products = _db.Products.FirstOrDefault(x => x.ProductId == id);
             if (products == null)
-                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
 
             if (products.StatusID == EnumStatus.ACTIVE)
                 products.StatusID = EnumStatus.INACTIVE;
             else
                 products.StatusID = EnumStatus.ACTIVE;
             _db.SaveChanges();
-            return Json(new CxResponse<object>(products.StatusID, Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+            return Json(new CxResponse<object>(products.StatusID, Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)),JsonRequestBehavior.AllowGet);
         }
 
         [Route("san-pham/get-by-categories")]
