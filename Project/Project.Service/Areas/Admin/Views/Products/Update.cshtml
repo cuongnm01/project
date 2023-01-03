@@ -9,6 +9,10 @@
 <script src="//code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<style>
+    td{border: 0 !important}
+</style>
+
 <div class="row">
     <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -30,17 +34,7 @@
 
                             </div>
                         </div>
-
-
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label class="control-label" for="first-name">Video Url</label>
-                                <div>
-                                    <input class="form-control" id="VideoUrl" name="VideoUrl" type="text" value="@(Model != null? Model.VideoUrl : "")">
-                                </div>
-
-                            </div>
-                        </div>
+                     
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                 <label class="control-label" for="first-name">Danh mục sản phẩm</label>
@@ -169,7 +163,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Nguyên liệu </h2>
+                        <h2>Cách thực hiện </h2>
                         <div class="clearfix"></div>
                     </div>
 
@@ -204,7 +198,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Cách thực hiện </h2>
+                        <h2>Nguyên liệu </h2>
                         <div class="clearfix"></div>
                     </div>
                     <div class="modal-body">

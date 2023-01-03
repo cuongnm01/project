@@ -5,6 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>E:\Publish\bottega</_PublishTargetUrl>
+    <History>True|2023-01-03T08:52:57.4009353Z;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/Admin/Views/Categories/List.cshtml">
@@ -17,7 +18,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:52</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Home/Login.cshtml">
-      <publishTime>12/20/2022 10:18:52</publishTime>
+      <publishTime>01/03/2023 15:01:16</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Ingredient/List.cshtml">
       <publishTime>12/20/2022 10:18:52</publishTime>
@@ -34,17 +35,20 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Areas/Admin/Views/Products/Ingredient.cshtml">
       <publishTime>12/21/2022 09:52:14</publishTime>
     </File>
+    <File Include="Areas/Admin/Views/Products/Insert.cshtml">
+      <publishTime>01/03/2023 14:47:49</publishTime>
+    </File>
     <File Include="Areas/Admin/Views/Products/List.cshtml">
-      <publishTime>12/21/2022 09:52:14</publishTime>
+      <publishTime>01/03/2023 15:37:47</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/ListStep.cshtml">
       <publishTime>12/21/2022 09:52:14</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/MainPage.cshtml">
-      <publishTime>12/21/2022 09:52:14</publishTime>
+      <publishTime>01/03/2023 15:22:36</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/Update.cshtml">
-      <publishTime>12/21/2022 09:52:14</publishTime>
+      <publishTime>01/03/2023 15:10:03</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/UpdateStep.cshtml">
       <publishTime>12/21/2022 09:52:14</publishTime>
@@ -68,7 +72,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/21/2022 15:07:56</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Slider/Update.cshtml">
-      <publishTime>12/21/2022 15:00:00</publishTime>
+      <publishTime>12/21/2022 15:34:31</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Users/List.cshtml">
       <publishTime>12/20/2022 17:46:05</publishTime>
@@ -140,19 +144,19 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:59</publishTime>
     </File>
     <File Include="bin/Project.Model.dll">
-      <publishTime>12/21/2022 14:44:01</publishTime>
+      <publishTime>01/03/2023 15:52:46</publishTime>
     </File>
     <File Include="bin/Project.Model.dll.config">
       <publishTime>12/20/2022 10:18:52</publishTime>
     </File>
     <File Include="bin/Project.Model.pdb">
-      <publishTime>12/21/2022 14:44:01</publishTime>
+      <publishTime>01/03/2023 15:52:46</publishTime>
     </File>
     <File Include="bin/Project.Service.dll">
-      <publishTime>12/21/2022 15:04:28</publishTime>
+      <publishTime>01/03/2023 15:52:49</publishTime>
     </File>
     <File Include="bin/Project.Service.pdb">
-      <publishTime>12/21/2022 15:04:28</publishTime>
+      <publishTime>01/03/2023 15:52:49</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>12/20/2022 10:18:58</publishTime>
@@ -17612,7 +17616,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:56</publishTime>
     </File>
     <File Include="Libs/theme_admin/build/css/custom.min.css">
-      <publishTime>12/20/2022 10:18:56</publishTime>
+      <publishTime>01/03/2023 15:38:23</publishTime>
     </File>
     <File Include="Libs/theme_admin/build/images/back_disabled.png">
       <publishTime>12/20/2022 10:18:56</publishTime>
@@ -18254,7 +18258,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:57</publishTime>
     </File>
     <File Include="Libs/theme_admin/vendors/bootstrap/less/tables.less">
-      <publishTime>12/20/2022 10:18:57</publishTime>
+      <publishTime>01/03/2023 15:17:28</publishTime>
     </File>
     <File Include="Libs/theme_admin/vendors/bootstrap/less/theme.less">
       <publishTime>12/20/2022 10:18:57</publishTime>
@@ -23882,10 +23886,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:57</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>12/20/2022 10:18:57</publishTime>
+      <publishTime>12/21/2022 15:31:18</publishTime>
     </File>
     <File Include="Views/Shared/_Layout_Admin.cshtml">
-      <publishTime>12/20/2022 10:18:57</publishTime>
+      <publishTime>01/03/2023 15:19:53</publishTime>
     </File>
     <File Include="Views/Shared/_NavShared_Admin.cshtml">
       <publishTime>12/21/2022 14:41:59</publishTime>

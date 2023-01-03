@@ -512,6 +512,10 @@ F:\Nhat\project\Project\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
 F:\Nhat\project\Project\Common\obj\Debug\Common.csproj.CopyComplete
 F:\Nhat\project\Project\Common\obj\Debug\Common.dll
 F:\Nhat\project\Project\Common\obj\Debug\Common.pdb
+E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.Cryptography.Algorithms.dll
+E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.SecureString.dll
+E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Helpers.dll
+E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Mvc.xml
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\Common.dll.config
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\Common.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\Common.pdb
@@ -587,13 +591,11 @@ E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Runtime.Serial
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Runtime.Serialization.Primitives.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Runtime.Serialization.Xml.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.Claims.dll
-E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.Cryptography.Algorithms.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.Cryptography.Csp.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.Cryptography.Encoding.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.Cryptography.Primitives.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.Cryptography.X509Certificates.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.Principal.dll
-E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Security.SecureString.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Text.Encoding.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Text.Encoding.Extensions.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Text.RegularExpressions.dll
@@ -636,7 +638,6 @@ E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Text.Encodings
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Text.Json.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Threading.Tasks.Extensions.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.ValueTuple.dll
-E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Helpers.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Http.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Mvc.dll
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Razor.dll
@@ -669,7 +670,6 @@ E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Threading.Task
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.ValueTuple.xml
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Helpers.xml
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Http.xml
-E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Mvc.xml
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.Razor.xml
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.WebPages.xml
 E:\SourceCode\Web\Project\project\Project\Common\bin\Debug\System.Web.WebPages.Deployment.xml

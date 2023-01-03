@@ -53,9 +53,14 @@
     <!-- Switchery -->
     <link href="~/Libs/theme_admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
     <link href="~/Libs/theme_admin/Site.css" rel="stylesheet" />
-
+    <style>
+        .table-bordered > tbody > tr > td, .table-bordered > thead > tr > th {
+            border: 0 !important;
+            border-top: 1px solid #ddd !important;
+        }
+    </style>
 </head>
-<body class="nav-md">
+<body class="nav-sm">
     <div class="container body">
         <div class="main_container">
             @RenderPage("_Navshared_Admin.cshtml")

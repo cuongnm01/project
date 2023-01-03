@@ -22,7 +22,7 @@
     <td class="text-center">
         <span class="">@item.Product.CreateDate.Value.ToString("dd/MM/yyyy")</span>
     </td>
-    <td class="text-center"><img width="50" src="@(string.IsNullOrEmpty(item.Product.Image)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Product.Image.Replace("~","")) " /></td>
+    <td class="text-center"><img width="50" height="50" src="@(string.IsNullOrEmpty(item.Product.Image)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Product.Image.Replace("~","")) " /></td>
     <td class="text-center">
         <span data-id="@item.Product.ProductId" onclick="CapNhatTrangThai($(this))" style="cursor: pointer" title="Cập nhật trạng thái">
             <i class="fa @(item.Product.StatusID == EnumStatus.ACTIVE? "fa-unlock":"fa-lock")" style="font-size:22px;"></i>
@@ -37,11 +37,11 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" href="@Url.Action("Update","Products", new {area ="Admin",id = item.Product.ProductId})"><i class="fa fa-pencil-square-o"></i>Chỉnh sửa</a>
+                    <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" href="@Url.Action("Update","Products", new {area ="Admin",id = item.Product.ProductId})"><i class="fa fa-pencil-square-o"></i> Chỉnh sửa</a>
 
                 </li>
                 <li>
-                    <a class="btn btn-xs btn-danger" data-id="@item.Product.ProductId" onclick="Xoa($(this))"><i class="fa fa-trash"></i>Xoá</a>
+                    <a class="btn btn-xs btn-danger" data-id="@item.Product.ProductId" onclick="Xoa($(this))"><i class="fa fa-trash"></i> Xoá</a>
                 </li>
             </ul>
         </div>

@@ -128,7 +128,7 @@
                         debugger;
                         if (data.isSuccess) {
                             alertify.success(data.message);
-                            window.location.href = '@Url.Action("MainPage", "Slider", new { area = "Admin" })';
+                            window.location.href = '@Url.Action("MainPage", "Products", new { area = "Admin" })';
                         }
                         else {
                             alertify.error(data.message);

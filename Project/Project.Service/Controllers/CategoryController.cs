@@ -1,4 +1,5 @@
-﻿using Project.Model.DbSet;
+﻿
+using Project.Model.DbSet;
 using Project.Model.Respone;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Web.Http;
 
 namespace Project.Service.Controllers
 {
-    public class CategoriesController : BaseController
+    public class CategoryController : BaseController
     {
         private string url = "http://bottega.sapp.asia";
 

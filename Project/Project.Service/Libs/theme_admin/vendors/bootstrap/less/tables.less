@@ -33,8 +33,8 @@ th {
         padding: @table-cell-padding;
         line-height: @line-height-base;
         vertical-align: top;
-        border-top: 1px solid @table-border-color;
-      }
+/*        border-top: 1px solid @table-border-color;
+*/      }
     }
   }
   // Bottom align for column headings
@@ -86,15 +86,15 @@ th {
 // Add borders all around the table and between all the columns.
 
 .table-bordered {
-  border: 1px solid @table-border-color;
-  > thead,
+/*  border: 1px solid @table-border-color;
+*/  > thead,
   > tbody,
   > tfoot {
     > tr {
       > th,
       > td {
-        border: 1px solid @table-border-color;
-      }
+/*        border: 1px solid @table-border-color;
+*/      }
     }
   }
   > thead > tr {
@@ -177,8 +177,8 @@ table {
     margin-bottom: (@line-height-computed * 0.75);
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
-    border: 1px solid @table-border-color;
-
+/*    border: 1px solid @table-border-color;
+*/
     // Tighten up spacing
     > .table {
       margin-bottom: 0;
