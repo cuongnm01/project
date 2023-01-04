@@ -12,14 +12,12 @@ using Common.Constants;
 
 namespace Project.Service.Controllers
 {
-    [Route("{action}")]
     public class ProductController : BaseController
     {
         private string url = "http://bottega.sapp.asia";
 
         [HttpGet]
-        [ActionName("by_category/")]
-        
+        [Route("by_category/{categoryId}")]    
         public IHttpActionResult ProductByCategory([FromUri] int categoryId = 0, int pageIndex = 1, int pageSize = 8)
         {
             try
@@ -44,8 +42,8 @@ namespace Project.Service.Controllers
         }
 
         [HttpGet]
-        [ActionName("detail")]
-        public IHttpActionResult ProductDetail([FromUri]  string code = "")
+        [Route("detail/{code}")]
+        public IHttpActionResult ProductDetail([FromUri]string code = "")
         {
             try
             {
