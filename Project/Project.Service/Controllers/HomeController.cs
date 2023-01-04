@@ -25,91 +25,10 @@ namespace Project.Service.Controllers
 
         private string url = "http://bottega.sapp.asia";
         // GET: Api/Bottega
-        [HttpPost]
-        [Route("auth/login")]
-        public IHttpActionResult Login(string username = "", string password = "", string deviceToken = "")
-        {
-            try
-            {
-                var appConfig = db.AppConfigs.FirstOrDefault();
-
-                password = password.Encode();
-                var user = db.Users.FirstOrDefault(x => (x.Phone == username || x.Email == username));
-                if (user == null)
-                    return Json(new { isSuccess = false, data = new { }, message = "Unknow account", version = "", code = "" });
-
-
-                if (user.Password != password)
-                    return Json(new { isSuccess = false, data = new { }, message = "wrong password", version = "", code = "" });
-
-                if (deviceToken != "")
-                {
-                    var listDeViceOld = db.Users.Where(x => x.UserID != user.UserID && x.DeviceToken == deviceToken);
-                    if (listDeViceOld != null && listDeViceOld.Count() > 0)
-                        listDeViceOld.ToList().ForEach(x => x.DeviceToken = "");
-                }
-
-                user.LanguageCode = "vi";
-                if (user.DeviceToken != deviceToken)
-                    user.DeviceToken = deviceToken;
-
-                Token token = new Token();
-                token.TokenID = Guid.NewGuid();
-                token.UserID = user.UserID;
-                token.CreateDate = DateTime.Now;
-                token.ExpirationDate = DateTime.Now.AddYears(1);
-                token.TokenKey = (Guid.NewGuid().ToString() + token.UserID.ToString() + token.CreateDate.ToString()).Encode().Encode();
-                db.Tokens.Add(token);
-
-                db.SaveChanges();
-
-                var obj = new
-                {
-                    token = token.TokenKey,
-                    user = new
-                    {
-                        userCode = user.UserCode ?? "",
-                        userName = user.UserName ?? "",
-                        fullName = user.FullName ?? "",
-                        avatar = !string.IsNullOrEmpty(user.Avatar) ? url + user.Avatar : "",
-                        email = user.Email ?? "",
-                    }
-                };
-
-                return Json(new { isSuccess = true, data = obj, message = "", version = "", code = "" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { isSuccess = false, data = new { }, message = "", version = "", code = "" });
-            }
-        }
-
+    
+       
         [HttpGet]
-        [Route("category/list")]
-        public IHttpActionResult category()
-        {
-            try
-            {
-                var list = db.Categorys.ToList();
-
-                var obj = (from a in list
-                           select new
-                           {
-                               id = a.CategoryId,
-                               name = a.Name ?? "",
-                               image = !string.IsNullOrEmpty(a.Image) ? url + a.Image : "",
-                           }).ToList();
-
-                return Json(new { isSuccess = true, data = list, message = "", version = "", code = "" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { isSuccess = false, data = new { }, message = "", version = "", code = "" });
-            }
-        }
-
-        [HttpGet]
-        [Route("dashboard")]
+        [Route("api/home/dashboard")]
         public IHttpActionResult Home()
         {
             try
@@ -120,7 +39,7 @@ namespace Project.Service.Controllers
                                select new
                                {
                                    id = a.SliderId,
-                                   image = !string.IsNullOrEmpty(a.Url) ? url + a.Url : "",
+                                   image = !string.IsNullOrEmpty(a.Url) ? url + a.Url.Replace("~/", "/") : "",
                                }).ToList();
 
 
@@ -132,11 +51,11 @@ namespace Project.Service.Controllers
                                 {
                                     code = a.ProductId,
                                     name = a.Name,
-                                    image = !string.IsNullOrEmpty(a.Image) ? url + a.Image : "",
+                                    image = !string.IsNullOrEmpty(a.Image) ? url + a.Image.Replace("~/","/") : "",
                                     isNew = a.IsNew == 1 ? true : false,
                                 }).ToList();
 
-                return Json(new { isSuccess = true, data = new { sliders = sliders, products = product, }, message = "", version = "", code = "" });
+                return Json(new { isSuccess = true, data = new { sliders = sliders, products = products, }, message = "", version = "", code = "" });
             }
             catch (Exception ex)
             {

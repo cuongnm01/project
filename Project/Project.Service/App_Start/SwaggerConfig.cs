@@ -16,7 +16,7 @@ namespace Project.Service
             GlobalConfiguration.Configuration
                 .EnableSwagger(c =>
                 {
-                    c.SingleApiVersion("v1", "Hati.Service");
+                    c.SingleApiVersion("v1", "Bottega.Service");
                     c.ApiKey("Authorization")
                         .Description("API Key Authentication")
                         .Name("Authorization")

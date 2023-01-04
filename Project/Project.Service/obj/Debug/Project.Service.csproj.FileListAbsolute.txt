@@ -388,6 +388,7 @@ C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramewor
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.SqlServer.xml
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.ValueTuple.xml
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.Threading.Tasks.Extensions.xml
+E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Newtonsoft.Json.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.dll.config
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.pdb
@@ -484,7 +485,6 @@ E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Model.pdb
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Model.dll.config
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\EntityFramework.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\EntityFramework.SqlServer.xml
-E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Newtonsoft.Json.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Net.Http.Formatting.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Web.Helpers.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Web.Http.xml

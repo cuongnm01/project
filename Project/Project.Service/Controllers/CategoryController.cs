@@ -27,10 +27,10 @@ namespace Project.Service.Controllers
                            {
                                id = a.CategoryId,
                                name = a.Name ?? "",
-                               image = !string.IsNullOrEmpty(a.Image) ? url + a.Image : "",
+                               image = !string.IsNullOrEmpty(a.Image) ? url + a.Image.Replace("~/", "/") : "",
                            }).ToList();
 
-                return Json(new { isSuccess = true, data = list, message = "", version = "", code = "" });
+                return Json(new { isSuccess = true, data = obj, message = "", version = "", code = "" });
             }
             catch (Exception ex)
             {

@@ -17,7 +17,7 @@ namespace Project.Service.Controllers
         private string url = "http://bottega.sapp.asia";
 
         [HttpGet]
-        [Route("by_category/{categoryId}")]    
+        [Route("api/product/by_category/{categoryId}")]    
         public IHttpActionResult ProductByCategory([FromUri] int categoryId = 0, int pageIndex = 1, int pageSize = 8)
         {
             try
@@ -33,7 +33,7 @@ namespace Project.Service.Controllers
                                     isNew = a.IsNew == 1 ? true : false,
                                 }).ToList();
 
-                return Json(new { isSuccess = true, data = new { total = product.Count, products = product, }, message = "", version = "", code = "" });
+                return Json(new { isSuccess = true, data = new { total = product.Count, products = products, }, message = "", version = "", code = "" });
             }
             catch (Exception ex)
             {
@@ -42,12 +42,12 @@ namespace Project.Service.Controllers
         }
 
         [HttpGet]
-        [Route("detail/{code}")]
-        public IHttpActionResult ProductDetail([FromUri]string code = "")
+        [Route("api/product/detail/{code}")]
+        public IHttpActionResult ProductDetail([FromUri]Guid? code = null)
         {
             try
             {
-                var product = db.Products.FirstOrDefault(x => x.Code == code);
+                var product = db.Products.FirstOrDefault(x => x.ProductId == code);
                 if (product == null)
                     return Json(new { isSuccess = false, data = new { }, message = "Sản phẩm không xác định", version = "", code = "" });
 
@@ -64,19 +64,19 @@ namespace Project.Service.Controllers
                     code = product.Code,
                     name = product.Name,
                     image = !string.IsNullOrEmpty(product.Image) ? url + product.Image : "",
-                    background = !string.IsNullOrEmpty(product.Background) ? url + product.Background : "",
+                    background = !string.IsNullOrEmpty(product.Background) ? url + product.Background.Replace("~/", "/") : "",
                     isNew = product.IsNew == 1 ? true : false,
                     direction = (from a in steps
                                  select new
                                  {
                                      code = a.ProductDirectionId,
                                      name = a.Name,
-                                     image = !string.IsNullOrEmpty(a.Image) ? url + a.Image : "",
+                                     image = !string.IsNullOrEmpty(a.Image) ? url + a.Image.Replace("~/", "/") : "",
                                      description = a.Description ?? "",
                                  }).ToList(),
                     video = new
                     {
-                        url = !string.IsNullOrEmpty(product.VideoUrl) ? url + product.VideoUrl : "",
+                        url = !string.IsNullOrEmpty(product.VideoUrl) ? url + product.VideoUrl.Replace("~/", "/") : "",
                         title = product.VideoTitle ?? "",
                         description = product.VideoDescription ?? "",
                     },
@@ -92,7 +92,7 @@ namespace Project.Service.Controllers
                                    {
                                        id = a.Key.IngredientId,
                                        name = a.Key.Name,
-                                       image = !string.IsNullOrEmpty(a.Key.Image) ? url + a.Key.Image : "",
+                                       image = !string.IsNullOrEmpty(a.Key.Image) ? url + a.Key.Image.Replace("~/", "/") : "",
                                        mass = from b in a.List
                                               join c in db.Sizes on b.SizeId equals c.SizeId
                                               select new
@@ -107,7 +107,7 @@ namespace Project.Service.Controllers
 
                 };
 
-                return Json(new { isSuccess = true, data = product, obj = "", version = "", code = "" });
+                return Json(new { isSuccess = true, data = obj, version = "", code = "" });
             }
             catch (Exception ex)
             {
