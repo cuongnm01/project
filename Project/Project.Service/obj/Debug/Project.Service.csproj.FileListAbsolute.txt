@@ -380,7 +380,6 @@ F:\Nhat\project\Project\Project.Service\obj\Debug\Project.Service.csproj.CoreCom
 F:\Nhat\project\Project\Project.Service\obj\Debug\Project.Service.csproj.CopyComplete
 F:\Nhat\project\Project\Project.Service\obj\Debug\Project.Service.dll
 F:\Nhat\project\Project\Project.Service\obj\Debug\Project.Service.pdb
-E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.dll
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.SqlServer.dll
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.ValueTuple.dll
@@ -399,6 +398,7 @@ E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\csi.exe
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\csi.exe.config
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\csi.rsp
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\Microsoft.CodeAnalysis.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll

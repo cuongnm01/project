@@ -18,9 +18,9 @@ namespace Project.Service.Controllers
         private string url = "http://bottega.sapp.asia";
 
         [HttpGet]
-        [Route("by_category/{categoryId}")]
+        [ActionName("by_category/")]
         
-        public IHttpActionResult ProductByCategory(int categoryId = 0, int pageIndex = 1, int pageSize = 8)
+        public IHttpActionResult ProductByCategory([FromUri] int categoryId = 0, int pageIndex = 1, int pageSize = 8)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace Project.Service.Controllers
         }
 
         [HttpGet]
-        [Route("detail")]
+        [ActionName("detail")]
         public IHttpActionResult ProductDetail([FromUri]  string code = "")
         {
             try
