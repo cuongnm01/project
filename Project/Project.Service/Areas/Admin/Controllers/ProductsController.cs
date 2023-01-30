@@ -41,7 +41,7 @@ namespace Project.Service.Areas.Admin.Controllers
         }
 
         [Route("san-pham/list")]
-        public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, Guid? category = null, int sotrang = 1, int tongsodong = 5)
+        public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int? category = null, int sotrang = 1, int tongsodong = 5)
         {
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
@@ -52,7 +52,9 @@ namespace Project.Service.Areas.Admin.Controllers
 
             var list = (from a in _db.Products.ToList()
                         join b in _db.Categorys.ToList() on a.CategoryId equals b.CategoryId
-                        where status == null ? true : a.StatusID == status
+                        where (status == null ? true : a.StatusID == status) &&
+                                (category == null ? true : a.CategoryId == category) &&
+                                (keyword == "" ? true : a.Name.RemoveUnicode().ToLower().Contains(keyword))
                         select new ProductInfo
                         {
                             Product = a,
@@ -85,7 +87,7 @@ namespace Project.Service.Areas.Admin.Controllers
             var category = _db.Categorys
                 .Where(x => x.StatusID == EnumStatus.ACTIVE)
                 .ToList();
-            string cbxCategory = "<option value=\"\">Danh mục sản phẩm</option>";
+            string cbxCategory = "<option value=\"\">Recipe Books</option>";
             foreach (var item in category)
             {
                 cbxCategory += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.CategoryId, item.Name, products != null && products.CategoryId == item.CategoryId ? "selected" : "");
@@ -102,7 +104,7 @@ namespace Project.Service.Areas.Admin.Controllers
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
                 return RedirectToAction("Index", "Home", new { area = "" });
-            
+
             if (products.ProductId == Guid.Empty)
             {
                 //var checkTontai = _db.Sliders.FirstOrDefault(x => x.StatusID == EnumStatus.ACTIVE && x.STT == slider.STT);
@@ -118,7 +120,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 _db.Products.Add(products);
                 _db.SaveChanges();
 
-                return Json(new CxResponse<object>(products.ProductId,Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
+                return Json(new CxResponse<object>(products.ProductId, Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
             }
             else
             {
@@ -128,7 +130,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 {
                     return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
                 }
-               
+
                 old.CategoryId = products.CategoryId;
                 old.Name = products.Name;
                 old.IsNew = products.IsNew;
@@ -137,7 +139,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 old.VideoDescription = products.VideoDescription;
                 old.CategoryId = products.CategoryId;
                 _db.SaveChanges();
-                return Json(new CxResponse<object>(old.ProductId,Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+                return Json(new CxResponse<object>(old.ProductId, Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
             }
         }
 
@@ -152,7 +154,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 .ToList();
             var products = _db.Products.FirstOrDefault(x => x.ProductId == id);
 
-            string cbxCategory = "<option value=\"\">Danh mục sản phẩm</option>";
+            string cbxCategory = "<option value=\"\">Recipe Books</option>";
             foreach (var item in category)
             {
                 cbxCategory += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.CategoryId, item.Name, products != null && products.CategoryId == item.CategoryId ? "selected" : "");
@@ -167,7 +169,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 listProductSize = _db.ProductSizes.Where(x => x.ProductId == products.ProductId).ToList();
                 listSize = listProductSize.Select(x => x.SizeId).Where(x => x != null).ToList();
             }
-            string cbxSize = "<option value=\"\">Danh mục kích thước</option>";
+            string cbxSize = "";
             foreach (var item in sizes)
             {
                 cbxSize += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.SizeId, item.Name, products != null && listSize.Contains(item.SizeId) ? "selected" : "");
@@ -182,7 +184,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 listProductIngredient = _db.ProductIngredients.Where(x => x.ProductId == products.ProductId).ToList();
                 listIngredient = listProductIngredient.Select(x => x.IngredientId).Where(x => x != null).ToList();
             }
-            string cbxIngredient = "<option value=\"\">Danh mục nguyên liệu</option>";
+            string cbxIngredient = "";
             foreach (var item in ingredients)
             {
                 cbxIngredient += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.IngredientId, item.Name, products != null && listIngredient.Contains(item.IngredientId) ? "selected" : "");
@@ -402,7 +404,7 @@ namespace Project.Service.Areas.Admin.Controllers
             else
                 products.StatusID = EnumStatus.ACTIVE;
             _db.SaveChanges();
-            return Json(new CxResponse<object>(products.StatusID, Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)),JsonRequestBehavior.AllowGet);
+            return Json(new CxResponse<object>(products.StatusID, Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
         }
 
         [Route("san-pham/get-by-categories")]
@@ -410,7 +412,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             var products = _db.Products.Where(x => id.Contains(x.CategoryId.ToString()) && x.StatusID == EnumStatus.ACTIVE).ToList();
             string select = string.Format("<select class='ctr-select' data-live-search='true' name=\"{0}\" {1} >", selectId, string.IsNullOrEmpty(isMulti) ? "" : "multiple");
-            string cbxProduct = "<option value=\"\">Danh mục sản phẩm</option>";
+            string cbxProduct = "<option value=\"\">Recipe Books</option>";
             foreach (var item in products)
             {
                 cbxProduct += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.ProductId, item.Name, !string.IsNullOrEmpty(product) && product.Contains(item.ProductId.ToString()) ? "selected" : "");
@@ -528,7 +530,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
             _db.ProductDirections.Remove(productsDirection);
             _db.SaveChanges();
-            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)),JsonRequestBehavior.AllowGet);
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
     }
 }

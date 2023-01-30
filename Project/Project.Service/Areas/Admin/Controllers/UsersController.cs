@@ -40,7 +40,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Users.ToList()
-                        where a.PermissionID == EnumUserType.EMPLOYEE
+                        where a.PermissionID == EnumUserType.EMPLOYEE && a.StatusID == status
                         select a).OrderByDescending(x => x.CreateDate);
 
             int tongso = list.Count();
@@ -78,6 +78,23 @@ namespace Project.Service.Areas.Admin.Controllers
                     return RedirectToAction("Index", "Home", new { area = "" });
                 if (obj.UserID == Guid.Empty)
                 {
+                    var checkUserName = _db.Users.FirstOrDefault(x => x.UserName == obj.UserName);
+                    if (checkUserName != null)
+                    {
+                        return Json(new CxResponse("err", Message.MSG_EXISTS.Params(Message.F_USERNAME)));
+                    }
+
+                    var checkPhone = _db.Users.FirstOrDefault(x => x.Phone == obj.Phone);
+                    if (obj.Phone != null && checkPhone != null)
+                    {
+                        return Json(new CxResponse("err", Message.MSG_EXISTS.Params(Message.F_PHONE)));
+                    }
+
+                    var checkEmail = _db.Users.FirstOrDefault(x => x.Email == obj.Email);
+                    if (obj.Email != null && checkEmail != null)
+                    {
+                        return Json(new CxResponse("err", Message.MSG_EXISTS.Params("Email")));
+                    }
                     // tao moi
                     if (_Logo != null)
                     {
@@ -87,7 +104,9 @@ namespace Project.Service.Areas.Admin.Controllers
                         obj.Avatar = fileImage[1];
                     }
                     obj.UserID = Guid.NewGuid();
-                    //obj.UserName = EnumHelper.
+                    obj.UserCode = Helpers.CreateCode9Char();
+                    obj.Password = Base.Security.Encode(obj.Password);
+                    obj.PermissionID = EnumUserType.EMPLOYEE;
                     obj.CreateDate = DateTime.Now;
                     _db.Users.Add(obj);
                     _db.SaveChanges();
@@ -102,6 +121,25 @@ namespace Project.Service.Areas.Admin.Controllers
                     {
                         return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
                     }
+
+                    var checkUserName = _db.Users.FirstOrDefault(x => x.UserID != obj.UserID && x.UserName == obj.UserName);
+                    if(checkUserName != null)
+                    {
+                        return Json(new CxResponse("err", Message.MSG_EXISTS.Params(Message.F_USERNAME)));
+                    }
+
+                    var checkPhone = _db.Users.FirstOrDefault(x => x.UserID != obj.UserID && x.Phone == obj.Phone);
+                    if (obj.Phone != null && checkPhone != null)
+                    {
+                        return Json(new CxResponse("err", Message.MSG_EXISTS.Params(Message.F_PHONE)));
+                    }
+
+                    var checkEmail = _db.Users.FirstOrDefault(x => x.UserID != obj.UserID && x.Email == obj.Email);
+                    if (obj.Email != null && checkEmail != null)
+                    {
+                        return Json(new CxResponse("err", Message.MSG_EXISTS.Params("Email")));
+                    }
+
                     if (_Logo != null)
                     {
                         string rootPathImage = string.Format("~/Files/slider/{0}", DateTime.Now.ToString("dd/MM/yyyy"));
@@ -109,9 +147,14 @@ namespace Project.Service.Areas.Admin.Controllers
                         string[] fileImage = _Logo.uploadFile(rootPathImage, filePathImage);
                         old.Avatar = fileImage[1];
                     }
-                    old.FullName = obj.FullName;
+                    old.UserName = obj.UserName;
+                    if(obj.Password != null)
+                        old.Password = Base.Security.Encode(obj.Password);
+
                     old.Phone = obj.Phone;
                     old.Email = obj.Email;
+                    old.FullName = obj.FullName;
+                    old.StatusID = obj.StatusID;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
@@ -120,7 +163,7 @@ namespace Project.Service.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                return Json(new CxResponse(Message.MSG_EXCEPTION));
+                return Json(new CxResponse("err", Message.MSG_EXCEPTION));
             }
 
         }

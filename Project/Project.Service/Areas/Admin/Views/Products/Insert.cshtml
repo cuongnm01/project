@@ -9,7 +9,7 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">
-                @Message.F_PRODUCT
+                Recipe
             </h4>
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
@@ -18,7 +18,7 @@
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Tên sản phẩm</label>
+                        <label class="control-label" for="first-name">Name</label>
                         <div>
                             <input class="form-control" id="Name" name="Name" type="text" value="@(Model != null? Model.Name : "")">
                         </div>
@@ -28,7 +28,7 @@
 
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Danh mục sản phẩm</label>
+                        <label class="control-label" for="first-name">Book</label>
                         <div>
                             <select class="ctr-select" data-live-search="true" name="CategoryId" id="CategoryId">
                                 @Html.Raw(ViewBag.cbxCategory)
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Trạng thái:</label>
+                        <label class="control-label" for="first-name">Status:</label>
                         <div>
                             <select class="ctr-select" data-live-search="true" name="StatusID">
                                 <option value="@EnumStatus.ACTIVE" @(((Model != null && Model.StatusID == EnumStatus.ACTIVE) || Model == null) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
@@ -48,8 +48,8 @@
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
-                <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+                <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@Message.CANCEL</button>
             </div>
         </form>
     </div>
@@ -71,7 +71,7 @@
                 Name: {
                     validators: {
                         notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
+                            message: 'Required data'
                         },
                     }
                 },
@@ -93,7 +93,7 @@
                     debugger;
                     console.log(data);
                     if (data.isSuccess) {
-                        
+
                         alertify.success(data.message);
                         window.location.href = '@Url.Action("Update", "Products", new { area = "Admin"})?id=' + data.data;
                     }

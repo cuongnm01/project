@@ -1,5 +1,6 @@
 ﻿@using Common.Constants
 @using Project.Model.DbSet
+@using Common.Resources
 @model IEnumerable<Ingredient>
 @{
     int stt = 0;
@@ -16,16 +17,16 @@
             <td class="text-center clickable-td">
                 <div class="dropdown">
                     <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
-                        Thao tác
+                        Action
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new { area = "Admin", id = item.IngredientId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i>Chỉnh sửa</a>
+                            <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new { area = "Admin", id = item.IngredientId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i>@Message.ACTION_UPDATE</a>
 
                         </li>
                         <li>
-                            <a class="btn btn-xs btn-danger" data-id="@item.IngredientId" onclick="Xoa($(this))"><i class="fa fa-trash"></i>Xoá</a>
+                            <a class="btn btn-xs btn-danger" data-id="@item.IngredientId" onclick="Xoa($(this))"><i class="fa fa-trash"></i> @Message.ACTION_DELETE</a>
                         </li>
                     </ul>
                 </div>

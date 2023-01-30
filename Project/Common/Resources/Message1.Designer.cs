@@ -19,7 +19,7 @@ namespace Common.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Message {
@@ -61,7 +61,7 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xoá.
+        ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string ACTION_DELETE {
             get {
@@ -70,7 +70,7 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thêm mới.
+        ///   Looks up a localized string similar to Insert.
         /// </summary>
         public static string ACTION_INSERT {
             get {
@@ -79,7 +79,7 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chỉnh sửa.
+        ///   Looks up a localized string similar to Update.
         /// </summary>
         public static string ACTION_UPDATE {
             get {
@@ -88,11 +88,20 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xem.
+        ///   Looks up a localized string similar to View.
         /// </summary>
         public static string ACTION_VIEW {
             get {
                 return ResourceManager.GetString("ACTION_VIEW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string CANCEL {
+            get {
+                return ResourceManager.GetString("CANCEL", resourceCulture);
             }
         }
         
@@ -363,6 +372,15 @@ namespace Common.Resources {
         public static string F_ROLE {
             get {
                 return ResourceManager.GetString("F_ROLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string F_SEARCH {
+            get {
+                return ResourceManager.GetString("F_SEARCH", resourceCulture);
             }
         }
         
@@ -696,6 +714,15 @@ namespace Common.Resources {
         public static string MSG_USER_NOT_UPDATE {
             get {
                 return ResourceManager.GetString("MSG_USER_NOT_UPDATE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string SAVE {
+            get {
+                return ResourceManager.GetString("SAVE", resourceCulture);
             }
         }
     }

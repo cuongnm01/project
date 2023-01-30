@@ -169,7 +169,7 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kích hoạt.
+        ///   Looks up a localized string similar to Active.
         /// </summary>
         public static string STATUS_ACTIVE {
             get {
@@ -178,7 +178,7 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Huỷ.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string STATUS_CANCEL {
             get {
@@ -187,7 +187,7 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kết thúc.
+        ///   Looks up a localized string similar to Finish.
         /// </summary>
         public static string STATUS_FINISH {
             get {
@@ -196,7 +196,7 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chờ duyệt.
+        ///   Looks up a localized string similar to Inactive.
         /// </summary>
         public static string STATUS_INACTIVE {
             get {

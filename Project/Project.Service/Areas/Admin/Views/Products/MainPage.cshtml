@@ -1,5 +1,6 @@
 ﻿@using Common.Constants
 @using Project.Model.Model
+@using Common.Resources
 @{
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     UserInfo nd_dv = (UserInfo)ViewBag.User;
@@ -8,25 +9,25 @@
     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Danh sách sản phẩm <span id="idtongso">(0)</span></h2>
+                <h2>Recipes <span id="idtongso">(0)</span></h2>
                 <div class="clearfix"></div>
             </div>
             <div class="">
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-md-3 col-sm-3 col-xs-12">
                         <div>
-                            <input class="form-control" placeholder="Tìm kiếm..." name="tuKhoa" />
+                            <input class="form-control" placeholder="Search..." name="tuKhoa" />
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-md-3 col-sm-3 col-xs-12">
                         <div>
-                            <select class="ctr-select" data-live-search="true" name="category">
+                            <select class="ctr-select" data-live-search="true" id="category" name="category">
                                 @Html.Raw(ViewBag.cbxCategory)
                             </select>
                         </div>
                     </div>
                     <div class="col-md-2 col-sm-2 col-sm-12">
-                        <a class="btn btn-primary" onclick="DanhSach();">Tìm kiếm</a>
+                        <a class="btn btn-primary" onclick="DanhSach();">Search</a>
                     </div>
                 </div>
             </div>
@@ -41,15 +42,15 @@
                     <thead>
                         <tr>
                             <th class="text-center" width="60">STT</th>
-                            <th class="text-center" width="200">Tên sản phẩm</th>
-                            <th class="text-center" width="200">Loại sản phẩm</th>
-                            <th class="text-center" width="200">Ngày tạo </th>
-                            <th class="text-center" width="200">Ảnh thu nhỏ</th>
-                            <th class="text-center" width="200">Trạng thái</th>
+                            <th class="text-center" width="200">Name</th>
+                            <th class="text-center" width="200">Book</th>
+                            <th class="text-center" width="200">Create Date</th>
+                            <th class="text-center" width="200">Image</th>
+                            <th class="text-center" width="200">Status</th>
                             <th width="150" class="text-center">
                                 @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
                                 {
-                                    <a class="btn btn-sm btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Insert","Products",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i></a>
+                                    <a class="btn btn-sm btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Insert","Products",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i> @Message.ACTION_INSERT</a>
                                 }
                             </th>
                         </tr>
@@ -72,7 +73,7 @@
                                     <img title="End page" alt="End page" style="cursor:pointer" onclick="ChoosePage(4)" src="~/Files/images/system/PgLast.gif" />
                                 </span>
                                 <span class="pull-right" style="margin-right:5px;">
-                                    <label for="" id="">Số dòng trên trang:</label>
+                                    <label for="" id="">Page:</label>
                                     <select name="tongsodong" onchange="ChoosePage(5)" class="DDControl" style="height:30px;">
                                         <option value="5">5</option>
                                         <option value="10">10</option>
@@ -109,7 +110,7 @@
 <script>
     function DanhSach() {
         $("#list").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
-        $("#list").load("@Url.Action("List", "Products", new {area ="Admin"})?keyword=" + encodeURI($("[name=tuKhoa]").val()) + "&tongsodong=" + $('[name=tongsodong]').val() + "&status=" + $("#nhomquyenid").val());
+        $("#list").load("@Url.Action("List", "Products", new {area ="Admin"})?keyword=" + encodeURI($("[name=tuKhoa]").val()) + "&tongsodong=" + $('[name=tongsodong]').val() + "&status=" + $("#nhomquyenid").val() + "&category=" + $("#category").val());
     }
 </script>
 <script>
@@ -128,7 +129,6 @@
         $(this).parent("li").addClass("active");
         //get nhom quyen
         $("#nhomquyenid").val($(this).attr("id"));
-        $("#permission-name").text($(this).attr("data-name"));
         //call function get danh sach
         DanhSach();
         return false;
@@ -189,12 +189,12 @@
             }
         }
         $("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
-        $("#list").load("@Url.Action("List", "Products", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&status=" + $('#nhomquyenid').val());
+        $("#list").load("@Url.Action("List", "Products", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&status=" + $('#nhomquyenid').val() + "&category=" + $("#category").val());
     }
 </script>
 <script>
     function Xoa(obj) {
-        alertify.confirm('Xác nhận xoá', function (e) {
+        alertify.confirm('Confirm', function (e) {
             if (e) {
             $.ajax({
                 url: '@Url.Action("Delete", "Products", new { area = "Admin" })',
@@ -221,7 +221,7 @@
 </script>
 <script>
     function CapNhatTrangThai(obj) {
-        alertify.confirm('Xác nhận thay đổi trạng thái', function (e) {
+        alertify.confirm('Confirm', function (e) {
             if (e) {
                 $.ajax({
                     url: '@Url.Action("Change_Status", "Products", new { area = "Admin" })',

@@ -154,16 +154,16 @@
     <value>Giảm giá theo số tiền cụ thể</value>
   </data>
   <data name="STATUS_ACTIVE" xml:space="preserve">
-    <value>Kích hoạt</value>
+    <value>Active</value>
   </data>
   <data name="STATUS_CANCEL" xml:space="preserve">
-    <value>Huỷ</value>
+    <value>Cancel</value>
   </data>
   <data name="STATUS_FINISH" xml:space="preserve">
-    <value>Kết thúc</value>
+    <value>Finish</value>
   </data>
   <data name="STATUS_INACTIVE" xml:space="preserve">
-    <value>Chờ duyệt</value>
+    <value>Inactive</value>
   </data>
   <data name="USER_TYPE_ADMIN" xml:space="preserve">
     <value>Quản trị</value>

@@ -8,15 +8,15 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">
-                @Message.F_SLIDER
+                Banner
             </h4>
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
             <div class="modal-body">
-                <input type="hidden" id="Id" name="Id" value="@(Model != null? Model.SliderId.ToString():"0")">
+                <input type="hidden" id="SliderId" name="SliderId" value="@(Model != null? Model.SliderId.ToString():"0")">
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Hình ảnh :</label>
+                        <label class="control-label" for="first-name">Image:</label>
                         <div>
                             <div style="margin-bottom:10px">
                                 <input type="file" class="form-control" name="_Logo" />
@@ -46,36 +46,19 @@
 
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Thứ tự</label>
+                        <label class="control-label" for="first-name">Sort Order</label>
                         <div>
                             <input type="text" class="form-control" id="SortOrder" name="SortOrder" value="@(Model != null ? Model.SortOrder.ToString() :"")" />
                         </div>
                     </div>
-                    @*<div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Trạng thái:</label>
-                        <div>
-                            <select class="ctr-select" data-live-search="true" name="StatusID">
-                                <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
-                                <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
-                            </select>
-                        </div>
-                    </div>*@
+                
                 </div>
-                @*<div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Mô tả ngắn</label>
-                        <div>
-                            <textarea class="form-control" id="Note" name="Note">@(Model != null ? Model.Note : "")</textarea>
-                        </div>
-
-                    </div>
-                </div>*@
 
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
-                <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+                <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@Message.CANCEL</button>
             </div>
         </form>
     </div>
@@ -93,65 +76,23 @@
         $('#frm-capnhat1').formValidation({
             framework: 'bootstrap',
             excluded: ':disabled',
-            fields: {
-                Name: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
-                        },
-                    }
-                },
-                Address: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
-                        },
-                    }
-                },
-                STT: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
-                        },
-                    }
-                },
-
+            fields: {      
                 _Logo: {
                     validators: {
-
                         file: {
                             extension: 'jpeg,jpg,png',
                             type: 'image/jpeg,image/png',
                             maxSize: 5242880,
-                            message: 'Hệ thống chỉ hỗ trợ sử dụng file ảnh jpg,png'
+                            message: 'The system only supports the use of jpg, png image files'
                         },
-    @if (!(Model != null && Model.Url != null))
-    {
-        <text>
-                            notEmpty: {
-                                message: 'Dữ liệu bắt buộc'
-                            },
-        </text>
-    }
-                    }
-                },
-                Phone: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
-                        },
-                        callback: {
-                            callback: function (value, validator, $field) {
-                                var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
-                                if (value.length != 0 && vnf_regex.test(value) == false) {
-                                    return {
-                                        valid: false,
-                                        message: 'Sai định dạng'
-                                    }
-                                }
-                                return true;
-                            }
-                        },
+                        @if (!(Model != null && Model.Url != null))
+                        {
+                            <text>
+                                notEmpty: {
+                                    message: 'Required data'
+                                },
+                            </text>
+                        }
                     }
                 },
             }

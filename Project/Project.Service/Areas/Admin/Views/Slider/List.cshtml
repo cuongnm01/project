@@ -15,16 +15,16 @@
     <td class="text-center clickable-td">
         <div class="dropdown">
             <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
-                Thao tác
+                Action
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Slider", new { area = "Admin", id = item.SliderId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i>Chỉnh sửa</a>
+                    <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Slider", new { area = "Admin", id = item.SliderId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i> Edit</a>
 
                 </li>
                 <li>
-                    <a class="btn btn-xs btn-danger" data-id="@item.SliderId" onclick="Xoa($(this))"><i class="fa fa-trash"></i>Xoá</a>
+                    <a class="btn btn-xs btn-danger" data-id="@item.SliderId" onclick="Xoa($(this))"><i class="fa fa-trash"></i> Delete</a>
                 </li>
             </ul>
         </div>

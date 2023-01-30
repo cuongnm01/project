@@ -21,7 +21,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Thông tin sản phẩm </h2>
+                        <h2>Recipe Info </h2>
                         <div class="clearfix"></div>
                     </div>
                     <div class="modal-body">
@@ -29,7 +29,7 @@
                         <input type="hidden" id="ProductTempId" name="ProductTempId" value="@(Model != null? Model.ProductId.ToString():Guid.NewGuid().ToString())">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label class="control-label" for="first-name">Tên sản phẩm</label>
+                                <label class="control-label" for="first-name">Name</label>
                                 <div>
                                     <input class="form-control" id="Name" name="Name" type="text" value="@(Model != null? Model.Name : "")">
                                 </div>
@@ -39,7 +39,7 @@
 
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                <label class="control-label" for="first-name">Danh mục sản phẩm</label>
+                                <label class="control-label" for="first-name">Book</label>
                                 <div>
                                     <select class="ctr-select" data-live-search="true" name="CategoryId" id="CategoryId">
                                         @Html.Raw(ViewBag.cbxCategory)
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-4 col-sm-4 col-xs-12">
-                                <label class="control-label" for="first-name">Trạng thái:</label>
+                                <label class="control-label" for="first-name">Status:</label>
                                 <div>
                                     <select class="ctr-select" data-live-search="true" name="StatusID">
                                         <option value="@EnumStatus.ACTIVE" @(((Model != null && Model.StatusID == EnumStatus.ACTIVE) || Model == null) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="form-group col-md-2 col-sm-2 col-xs-12">
                                 <label class="control-label" for="first-name">
-                                    Là sản phẩm mới
+                                    Is New
                                 </label>
                                 <div>
                                     <input type="hidden" name="IsNew" value="@(Model == null? EnumStatus.ACTIVE : Model.IsNew)" />
@@ -110,7 +110,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Hình ảnh </h2>
+                        <h2>Image </h2>
                         <div class="clearfix"></div>
                     </div>
                     <input type="hidden" id="ProductId" name="ProductId" value="@(Model != null? Model.ProductId.ToString():Guid.Empty.ToString())">
@@ -118,7 +118,7 @@
                     <div class="modal-body">
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <label class="control-label" for="first-name">Hình ảnh :</label>
+                                <label class="control-label" for="first-name">Image:</label>
                                 <div>
                                     <div style="margin-bottom:10px">
                                         <input type="file" class="form-control" name="_Logo" />
@@ -150,7 +150,7 @@
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <label class="control-label" for="first-name">Background :</label>
+                                <label class="control-label" for="first-name">Background:</label>
                                 <div>
                                     <div style="margin-bottom:10px">
                                         <input type="file" class="form-control" name="_BackGround" />
@@ -191,23 +191,23 @@
             <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Nguyên liệu </h2>
+                        <h2>Ingredient </h2>
                         <div class="clearfix"></div>
                     </div>
                     <div class="modal-body">
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                <label class="control-label" for="first-name">Kích thước</label>
+                                <label class="control-label" for="first-name">Size</label>
                                 <div>
-                                    <select class="ctr-select" data-live-search="true" name="size" id="size" multiple onchange="selectSize()">
+                                    <select class="ctr-select" data-live-search="true" title="Choose size" name="size" id="size" multiple onchange="selectSize()">
                                         @Html.Raw(ViewBag.cbxSize)
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 col-sm-6 col-xs-12 conditionType">
-                                <label class="control-label" for="first-name">Nguyên liệu</label>
+                                <label class="control-label" for="first-name">Ingredient</label>
                                 <div id="productId">
-                                    <select class="ctr-select" data-live-search="true" name="ingredient" id="ingredient" multiple onchange="selectIngredient()">
+                                    <select class="ctr-select" data-live-search="true" title="Choose Ingredient" name="ingredient" id="ingredient" multiple onchange="selectIngredient()">
                                         @Html.Raw(ViewBag.cbxIngredient)
                                     </select>
                                 </div>
@@ -215,16 +215,16 @@
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <label class="control-label" for="first-name">Công thức</label>
+                                <label class="control-label" for="first-name">Recipe</label>
                                 <div>
                                     <table class="table table-bordered" id="tableFormula">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" width="60">STT</th>
                                                 <th class="text-center" width="200">Size</th>
-                                                <th class="text-center" width="200">Tên nguyên liệu</th>
-                                                <th class="text-center" width="200">Giá trị </th>
-                                                <th class="text-center" width="200">Đơn vị</th>
+                                                <th class="text-center" width="200">Ingredient</th>
+                                                <th class="text-center" width="200">Value </th>
+                                                <th class="text-center" width="200">Unit</th>
 
                                             </tr>
                                         </thead>
@@ -242,23 +242,23 @@
             <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Cách thực hiện </h2>
+                        <h2>Steps to take </h2>
                         <div class="clearfix"></div>
                     </div>
 
                     <div class="modal-body">
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <label class="control-label" for="first-name">Bước thực hiện</label>
+                                <label class="control-label" for="first-name">Step</label>
                                 <div>
                                     <table class="table table-bordered" id="tableStep">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" width="60">STT</th>
-                                                <th class="text-center" width="60">Tên</th>
-                                                <th class="text-center" width="200">Nội dung</th>
-                                                <th class="text-center" width="200">Ảnh minh hoạ</th>
-                                                <th class="text-center" width="200">Trạng thái</th>
+                                                <th class="text-center" width="60">Name</th>
+                                                <th class="text-center" width="200">Description</th>
+                                                <th class="text-center" width="200">Image</th>
+                                                <th class="text-center" width="200">Status</th>
                                                 <th class="text-center" width="200">
                                                     <a class="btn btn-sm btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("UpdateStep","Products", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i></a>
                                                 </th>
@@ -277,8 +277,8 @@
         </div>
         <div class="clearfix"></div>
         <div class="modal-footer">
-            <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+            <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">@Message.CANCEL</button>
         </div>
     </form>
 </div>
@@ -326,7 +326,7 @@
             return false;
     }
     function XoaStep(obj) {
-        alertify.confirm('Xác nhận xoá', function (e) {
+        alertify.confirm('Confirm', function (e) {
             if (e) {
                 $.ajax({
                     url: '@Url.Action("DeleteStep", "Products", new { area = "Admin" })',

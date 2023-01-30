@@ -1,5 +1,7 @@
 ﻿@using Common.Constants
 @using Project.Model.Model
+@using Common.Resources
+
 @{
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     UserInfo nd_dv = (UserInfo)ViewBag.User;
@@ -8,14 +10,14 @@
     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Danh sách<span id="permission-name"> Nguyên liệu</span><span id="idtongso">(0)</span></h2>
+                <h2>List<span id="permission-name"> Ingredient</span><span id="idtongso">(0)</span></h2>
                 <div class="clearfix"></div>
             </div>
             <div class="">
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="col-md-10 col-sm-10 col-xs-12">
                         <div>
-                            <input class="form-control" placeholder="Tìm kiếm..." name="tuKhoa" />
+                            <input class="form-control" placeholder="Search..." name="tuKhoa" />
                         </div>
                     </div>
                     <div class="col-md-2 col-sm-2 col-sm-12">
@@ -34,12 +36,12 @@
                     <thead>
                         <tr>
                             <th class="text-center" width="60">STT</th>
-                            <th class="text-center" width="200">Tiêu đề</th>
-                            <th class="text-center" width="200">Ảnh</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center" width="200">Image</th>
                             <th width="150" class="text-center">
                                 @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
                                 {
-                                    <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i>Thêm mới</a>
+                                    <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i> @Message.ACTION_INSERT</a>
                                 }
                             </th>
                         </tr>
@@ -62,7 +64,7 @@
                                     <img title="End page" alt="End page" style="cursor:pointer" onclick="ChoosePage(4)" src="~/Files/images/system/PgLast.gif" />
                                 </span>
                                 <span class="pull-right" style="margin-right:5px;">
-                                    <label for="" id="">Số dòng trên trang:</label>
+                                    <label for="" id="">Page:</label>
                                     <select name="tongsodong" onchange="ChoosePage(5)" class="DDControl" style="height:30px;">
                                         <option value="5">5</option>
                                         <option value="10">10</option>

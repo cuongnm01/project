@@ -111,6 +111,7 @@ namespace Project.Service.Areas.Admin.Controllers
                         string[] fileImage = _Logo.uploadFile(rootPathImage, filePathImage);
                         old.Url = fileImage[1];
                     }
+                    old.SortOrder = slider.SortOrder;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));

@@ -118,16 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ACTION_DELETE" xml:space="preserve">
-    <value>Xoá</value>
+    <value>Delete</value>
   </data>
   <data name="ACTION_INSERT" xml:space="preserve">
-    <value>Thêm mới</value>
+    <value>Insert</value>
   </data>
   <data name="ACTION_UPDATE" xml:space="preserve">
-    <value>Chỉnh sửa</value>
+    <value>Update</value>
   </data>
   <data name="ACTION_VIEW" xml:space="preserve">
-    <value>Xem</value>
+    <value>View</value>
+  </data>
+  <data name="CANCEL" xml:space="preserve">
+    <value>Cancel</value>
   </data>
   <data name="F_ACCOUNT" xml:space="preserve">
     <value>Tài khoản</value>
@@ -218,6 +221,9 @@
   </data>
   <data name="F_ROLE" xml:space="preserve">
     <value>Quyền truy cập</value>
+  </data>
+  <data name="F_SEARCH" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="F_SIZE" xml:space="preserve">
     <value>Kích thước</value>
@@ -329,5 +335,8 @@
   </data>
   <data name="MSG_USER_NOT_UPDATE" xml:space="preserve">
     <value>Tài khoản đã được kích hoạt thông tin. Vui lòng sử dụng chức năng này khi được quyền truy cập</value>
+  </data>
+  <data name="SAVE" xml:space="preserve">
+    <value>Save</value>
   </data>
 </root>

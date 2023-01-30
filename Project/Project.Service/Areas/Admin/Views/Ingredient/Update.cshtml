@@ -16,7 +16,7 @@
                 <input type="hidden" id="IngredientId" name="IngredientId" value="@(Model != null? Model.IngredientId.ToString():"0")">
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Hình ảnh :</label>
+                        <label class="control-label" for="first-name"> Image:</label>
                         <div>
                             <div style="margin-bottom:10px">
                                 <input type="file" class="form-control" name="_Logo" />
@@ -38,17 +38,12 @@
                                     </div>
                                 </div>
                             }
-                            else
-                            {
-                                <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
-                            }
-
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Tên nguyên liệu:</label>
+                        <label class="control-label" for="first-name">Name:</label>
                         <div>
                             <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
                         </div>
@@ -57,13 +52,13 @@
 
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Thứ tự</label>
+                        <label class="control-label" for="first-name">Sort Order</label>
                         <div>
                             <input type="text" class="form-control" id="SortOrder" name="SortOrder" value="@Model.SortOrder" />
                         </div>
                     </div>
                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Trạng thái:</label>
+                        <label class="control-label" for="first-name">@Message.F_STATUS:</label>
                         <div>
                             <select class="ctr-select" data-live-search="true" name="StatusID">
                                 <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
@@ -75,8 +70,8 @@
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
-                <button id="btn-save1" type="submit" class="btn btn-success">Lưu</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+                <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@Message.CANCEL</button>
             </div>
         </form>
     </div>
@@ -98,7 +93,7 @@
                 Name: {
                     validators: {
                         notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
+                            message: 'Required data'
                         },
                     }
                 },
@@ -111,14 +106,14 @@
                             maxSize: 5242880,
                             message: 'Hệ thống chỉ hỗ trợ sử dụng file ảnh jpg,png'
                         },
-    @if (!(Model != null && Model.Image != null))
-    {
-        <text>
-                            notEmpty: {
-                                message: 'Dữ liệu bắt buộc'
-                            },
-        </text>
-    }
+                        @if (!(Model != null && Model.Image != null))
+                        {
+                            <text>
+                                notEmpty: {
+                                    message: 'Required data'
+                                },
+                            </text>
+                        }
                     }
                 },
 
