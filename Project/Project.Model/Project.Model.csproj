@@ -73,6 +73,10 @@
     <Compile Include="Migrations\202212191830234_init.designer.cs">
       <DependentUpon>202212191830234_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301310943392_addtb.cs" />
+    <Compile Include="Migrations\202301310943392_addtb.Designer.cs">
+      <DependentUpon>202301310943392_addtb.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ProductInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
@@ -100,6 +104,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202212191830234_init.resx">
       <DependentUpon>202212191830234_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301310943392_addtb.resx">
+      <DependentUpon>202301310943392_addtb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
