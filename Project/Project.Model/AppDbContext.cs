@@ -27,6 +27,7 @@ namespace Project.Model
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Ward> Wards { get; set; }
+        public virtual DbSet<Unit> Units { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

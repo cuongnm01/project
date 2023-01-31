@@ -683,3 +683,4 @@ E:\SourceCode\Web\Project\project\Project\Common\obj\Debug\Common.csproj.CoreCom
 E:\SourceCode\Web\Project\project\Project\Common\obj\Debug\Common.csproj.CopyComplete
 E:\SourceCode\Web\Project\project\Project\Common\obj\Debug\Common.dll
 E:\SourceCode\Web\Project\project\Project\Common\obj\Debug\Common.pdb
+E:\SourceCode\Web\Project\project\Project\Common\obj\Debug\Common.csproj.AssemblyReference.cache

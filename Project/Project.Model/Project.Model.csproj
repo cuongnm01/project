@@ -67,6 +67,7 @@
     <Compile Include="DbSet\Size.cs" />
     <Compile Include="DbSet\Slider.cs" />
     <Compile Include="DbSet\Token.cs" />
+    <Compile Include="DbSet\Unit.cs" />
     <Compile Include="DbSet\User.cs" />
     <Compile Include="DbSet\Ward.cs" />
     <Compile Include="Migrations\202212191830234_init.cs" />
