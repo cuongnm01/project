@@ -14,7 +14,6 @@
         public string Code { get; set; }
         [StringLength(500)]
         public string Name { get; set; }
-        [StringLength(500)]
         public bool? IsDefault { get; set; }
         public double? Rate { get; set; }
         public int? SortOrder { get; set; }
