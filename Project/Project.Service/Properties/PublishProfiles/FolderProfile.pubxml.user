@@ -9,25 +9,28 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/Admin/Views/Categories/List.cshtml">
-      <publishTime>01/30/2023 15:42:55</publishTime>
+      <publishTime>02/01/2023 16:06:09</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Categories/MainPage.cshtml">
-      <publishTime>01/30/2023 15:42:05</publishTime>
+      <publishTime>02/01/2023 16:07:10</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Categories/Update.cshtml">
       <publishTime>01/30/2023 17:26:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Home/AccessDenied.cshtml">
+      <publishTime>02/01/2023 15:17:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Home/Login.cshtml">
       <publishTime>01/05/2023 09:50:47</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Ingredient/List.cshtml">
-      <publishTime>01/30/2023 16:48:02</publishTime>
+      <publishTime>02/01/2023 16:09:47</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Ingredient/MainPage.cshtml">
-      <publishTime>01/30/2023 17:07:10</publishTime>
+      <publishTime>02/01/2023 16:08:43</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Ingredient/Update.cshtml">
-      <publishTime>01/30/2023 17:01:50</publishTime>
+      <publishTime>02/01/2023 11:39:13</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/GetProductByCategory.cshtml">
       <publishTime>12/20/2022 10:18:52</publishTime>
@@ -39,13 +42,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/30/2023 17:37:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/List.cshtml">
-      <publishTime>01/30/2023 17:23:16</publishTime>
+      <publishTime>02/01/2023 16:14:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/ListStep.cshtml">
       <publishTime>12/21/2022 09:52:14</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/MainPage.cshtml">
-      <publishTime>01/30/2023 16:58:55</publishTime>
+      <publishTime>02/01/2023 16:13:28</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/Update.cshtml">
       <publishTime>01/30/2023 17:26:03</publishTime>
@@ -57,31 +60,55 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:52</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Sizes/List.cshtml">
-      <publishTime>01/30/2023 16:15:55</publishTime>
+      <publishTime>02/01/2023 15:39:48</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Sizes/MainPage.cshtml">
-      <publishTime>01/30/2023 17:06:43</publishTime>
+      <publishTime>02/01/2023 15:37:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Sizes/Update.cshtml">
       <publishTime>01/30/2023 16:18:26</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Slider/List.cshtml">
-      <publishTime>01/30/2023 15:55:12</publishTime>
+      <publishTime>02/01/2023 15:35:48</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Slider/MainPage.cshtml">
-      <publishTime>01/30/2023 15:54:56</publishTime>
+      <publishTime>02/01/2023 15:30:27</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Slider/Update.cshtml">
       <publishTime>01/30/2023 16:22:20</publishTime>
     </File>
+    <File Include="Areas/Admin/Views/Unit/List.cshtml">
+      <publishTime>02/01/2023 16:21:06</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Unit/MainPage.cshtml">
+      <publishTime>02/01/2023 16:16:48</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Unit/Update.cshtml">
+      <publishTime>02/01/2023 11:35:29</publishTime>
+    </File>
     <File Include="Areas/Admin/Views/Users/List.cshtml">
-      <publishTime>01/30/2023 17:09:04</publishTime>
+      <publishTime>02/01/2023 16:46:19</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Users/List_Manager.cshtml">
+      <publishTime>02/01/2023 16:45:25</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Users/MainPage.cshtml">
-      <publishTime>01/30/2023 17:09:14</publishTime>
+      <publishTime>02/01/2023 16:45:35</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Users/MainPage_Manager.cshtml">
+      <publishTime>02/01/2023 16:44:12</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Users/Role_Permission.cshtml">
+      <publishTime>02/01/2023 14:59:06</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Users/Role_Permission_List.cshtml">
+      <publishTime>02/01/2023 14:47:03</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Users/Update.cshtml">
       <publishTime>01/30/2023 17:22:13</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Users/Update_Manager.cshtml">
+      <publishTime>02/01/2023 14:30:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Web.config">
       <publishTime>12/20/2022 10:18:52</publishTime>
@@ -99,13 +126,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/27/2022 10:48:38</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>01/30/2023 17:29:13</publishTime>
+      <publishTime>02/01/2023 16:49:43</publishTime>
     </File>
     <File Include="bin/Common.dll.config">
       <publishTime>12/20/2022 10:18:52</publishTime>
     </File>
     <File Include="bin/Common.pdb">
-      <publishTime>01/30/2023 17:29:13</publishTime>
+      <publishTime>02/01/2023 16:49:43</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>10/23/2017 20:15:18</publishTime>
@@ -144,19 +171,19 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:59</publishTime>
     </File>
     <File Include="bin/Project.Model.dll">
-      <publishTime>01/30/2023 17:33:53</publishTime>
+      <publishTime>02/01/2023 16:49:43</publishTime>
     </File>
     <File Include="bin/Project.Model.dll.config">
-      <publishTime>12/20/2022 10:18:52</publishTime>
+      <publishTime>01/31/2023 17:07:07</publishTime>
     </File>
     <File Include="bin/Project.Model.pdb">
-      <publishTime>01/30/2023 17:33:53</publishTime>
+      <publishTime>02/01/2023 16:49:43</publishTime>
     </File>
     <File Include="bin/Project.Service.dll">
-      <publishTime>01/30/2023 17:38:28</publishTime>
+      <publishTime>02/01/2023 16:50:45</publishTime>
     </File>
     <File Include="bin/Project.Service.pdb">
-      <publishTime>01/30/2023 17:38:28</publishTime>
+      <publishTime>02/01/2023 16:50:45</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>12/20/2022 10:18:58</publishTime>
@@ -373,6 +400,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>12/20/2022 10:18:59</publishTime>
+    </File>
+    <File Include="Content/access-denied.css">
+      <publishTime>02/01/2023 15:50:38</publishTime>
     </File>
     <File Include="Content/bootstrap-theme.css">
       <publishTime>12/20/2022 10:18:52</publishTime>
@@ -23876,6 +23906,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Scripts/modernizr-2.8.3.js">
       <publishTime>12/20/2022 10:18:57</publishTime>
     </File>
+    <File Include="Views/Home/AccessDenied.cshtml">
+      <publishTime>02/01/2023 15:51:26</publishTime>
+    </File>
     <File Include="Views/Home/Index.cshtml">
       <publishTime>12/20/2022 10:18:57</publishTime>
     </File>
@@ -23892,7 +23925,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>01/30/2023 15:34:15</publishTime>
     </File>
     <File Include="Views/Shared/_NavShared_Admin.cshtml">
-      <publishTime>01/30/2023 15:41:48</publishTime>
+      <publishTime>02/01/2023 15:24:21</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>12/20/2022 10:18:57</publishTime>

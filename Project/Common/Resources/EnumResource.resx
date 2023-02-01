@@ -169,7 +169,7 @@
     <value>Quản trị</value>
   </data>
   <data name="USER_TYPE_AGENCY" xml:space="preserve">
-    <value>Đại lý</value>
+    <value>Quản lý</value>
   </data>
   <data name="USER_TYPE_CUSTOMER" xml:space="preserve">
     <value>Khách hàng</value>

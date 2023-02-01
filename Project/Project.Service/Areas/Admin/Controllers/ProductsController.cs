@@ -23,9 +23,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/main-page")]
         public ActionResult MainPage()
         {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
             ViewBag.User = nd_dv;
             var category = _db.Categorys
                 //.Where(x => x.StatusID == EnumStatus.ACTIVE)
@@ -43,9 +45,6 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/list")]
         public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int? category = null, int sotrang = 1, int tongsodong = 5)
         {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
 
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
@@ -80,9 +79,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/insert")]
         public ActionResult Insert(Guid? id)
         {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
             var products = _db.Products.FirstOrDefault(x => x.ProductId == id);
             var category = _db.Categorys
                 .Where(x => x.StatusID == EnumStatus.ACTIVE)
@@ -101,9 +102,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult Insert(Product products)
         {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             if (products.ProductId == Guid.Empty)
             {
@@ -146,9 +148,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/update")]
         public ActionResult Update(Guid? id)
         {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
             var category = _db.Categorys
                 .Where(x => x.StatusID == EnumStatus.ACTIVE)
                 .ToList();
@@ -207,9 +211,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult Update(Product products, Guid? ProductTempId = null, string Price = "", HttpPostedFileBase _Logo = null, HttpPostedFileBase _BackGround = null, HttpPostedFileBase _videoUrl = null, string ingredient = "")
         {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
             var category = _db.Categorys.FirstOrDefault(x => x.CategoryId == products.CategoryId);
             if (category == null)
             {
@@ -376,9 +382,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/delete")]
         public ActionResult Delete(Guid id)
         {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var products = _db.Products.FirstOrDefault(x => x.ProductId == id);
             if (products == null)
@@ -391,9 +398,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/change-status")]
         public ActionResult Change_Status(Guid id)
         {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var products = _db.Products.FirstOrDefault(x => x.ProductId == id);
             if (products == null)
@@ -430,9 +438,6 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/update-step")]
         public ActionResult UpdateStep(Guid? productId, Guid? directionId)
         {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
             var productDirection = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == directionId);
             return PartialView(productDirection);
         }
@@ -489,9 +494,6 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/list-step")]
         public ActionResult ListStep(Guid? productId)
         {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
             var productDirection = _db.ProductDirections.Where(x => x.ProductId == productId).OrderBy(x => x.SortOrder);
             return PartialView(productDirection);
         }
@@ -521,10 +523,6 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("san-pham/delete-step")]
         public ActionResult DeleteStep(Guid id)
         {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
-
             var productsDirection = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == id);
             if (productsDirection == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));

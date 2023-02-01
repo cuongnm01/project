@@ -10,6 +10,8 @@ namespace Project.Model.Model
     public class UserInfo
     {
         public User Users { get; set; }
+        public List<User_Permission> User_Permissions { get; set; }
+        public int AccessDenied { get; set; }
     }
 
     public class LoginRequest

@@ -21,9 +21,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("banner/main-page")]
         public ActionResult MainPage()
         {
+            CheckPermission(EnumFunctions.Banners, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
             ViewBag.User = nd_dv;
             return View();
         }
@@ -31,17 +33,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("banner/list")]
         public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
         {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
-
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Sliders.ToList()
-                            //where status == null ? true : a.StatusID == status
                         select a);
-            //.OrderByDescending(x => x.cre);
 
             int tongso = list.Count();
 
@@ -59,9 +55,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("banner/update")]
         public ActionResult Update(int? id)
         {
+            CheckPermission(EnumFunctions.Banners, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var listSlider = _db.Sliders.ToList();
             var slider = _db.Sliders.FirstOrDefault(x => x.SliderId == id);
@@ -74,15 +71,13 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             try
             {
+                CheckPermission(EnumFunctions.Banners, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                    return RedirectToAction("Index", "Home", new { area = "" });
+                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                    return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
                 if (slider.SliderId == 0)
                 {
-                    //var checkTontai = _db.Sliders.FirstOrDefault(x => x.StatusID == EnumStatus.ACTIVE && x.STT == slider.STT);
-                    //if (checkTontai != null)
-                    //    return Json(new { kq = "err", msg = Translate.SLIDER_STT_IS_USED }, JsonRequestBehavior.AllowGet);
-
                     // tao moi
                     if (_Logo != null)
                     {
@@ -128,14 +123,14 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("banner/delete")]
         public ActionResult Delete(int id)
         {
+            CheckPermission(EnumFunctions.Banners, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var slider = _db.Sliders.FirstOrDefault(x => x.SliderId == id);
             if (slider == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
-            //slider.sta = EnumStatus.DELETE;
             _db.Sliders.Remove(slider);
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
@@ -146,16 +141,11 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var slider = _db.Sliders.FirstOrDefault(x => x.SliderId == id);
             if (slider == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
-
-            //if (slider.StatusID == EnumStatus.ACTIVE)
-            //    slider.StatusID = EnumStatus.INACTIVE;
-            //else
-            //    slider.StatusID = EnumStatus.ACTIVE;
 
             _db.SaveChanges();
             return Json(new CxResponse<object>(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);

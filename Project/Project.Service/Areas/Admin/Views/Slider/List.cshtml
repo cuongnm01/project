@@ -1,36 +1,46 @@
 ﻿@using Common.Constants
 @using Project.Model.DbSet
+@using Project.Model.Model
+@using Project.Model.Configuration;
+
+
 @model IEnumerable<Slider>
 @{
     int stt = 0;
-
+    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
 }
 @if (Model != null && Model.Count() > 0)
 {
     foreach (var item in Model)
     {
-<tr>
-    <td class="text-center">@(++stt)</td>
-    <td class="text-center"><img width="50" src="@(string.IsNullOrEmpty(item.Url)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Url.Replace("~","")) " /></td>
-    <td class="text-center clickable-td">
-        <div class="dropdown">
-            <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
-                Action
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Slider", new { area = "Admin", id = item.SliderId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i> Edit</a>
+        <tr>
+            <td class="text-center">@(++stt)</td>
+            <td class="text-center"><img width="50" src="@(string.IsNullOrEmpty(item.Url)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Url.Replace("~","")) " /></td>
+            <td class="text-center clickable-td">
+                <div class="dropdown">
+                    <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
+                        Action
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Banners && (x.Fulls == EnumStatus.ACTIVE || x.Updates == EnumStatus.ACTIVE)) != null)
+                        {
+                            <li>
+                                <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Slider", new { area = "Admin", id = item.SliderId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                            </li>
+                        }
+                        @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Banners && (x.Fulls == EnumStatus.ACTIVE || x.Deletes == EnumStatus.ACTIVE)) != null)
+                        {
+                            <li>
+                                <a class="btn btn-xs btn-danger" data-id="@item.SliderId" onclick="Xoa($(this))"><i class="fa fa-trash"></i> Delete</a>
+                            </li>
+                        }
 
-                </li>
-                <li>
-                    <a class="btn btn-xs btn-danger" data-id="@item.SliderId" onclick="Xoa($(this))"><i class="fa fa-trash"></i> Delete</a>
-                </li>
-            </ul>
-        </div>
+                    </ul>
+                </div>
 
-    </td>
-</tr>
+            </td>
+        </tr>
 
     }
 }

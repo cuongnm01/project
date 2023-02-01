@@ -21,9 +21,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("danh-muc-san-pham/main-page")]
         public ActionResult MainPage()
         {
+            CheckPermission(EnumFunctions.Recipe_Book, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
             ViewBag.User = nd_dv;
             return View();
         }
@@ -31,10 +33,7 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("danh-muc-san-pham/list")]
         public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
         {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
-
+            
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
@@ -58,9 +57,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("danh-muc-san-pham/update")]
         public ActionResult Update(int? id)
         {
+            CheckPermission(EnumFunctions.Recipe_Book, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var new_record = new Category();
             new_record.SortOrder = _db.Categorys.Count() + 1;
@@ -74,9 +74,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Update(Category productCategory, HttpPostedFileBase _Logo = null)
         {
+            CheckPermission(EnumFunctions.Recipe_Book, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             if (productCategory.CategoryId == 0)
             {
@@ -120,9 +121,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("danh-muc-san-pham/delete")]
         public ActionResult Delete(int id)
         {
+            CheckPermission(EnumFunctions.Recipe_Book, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var category = _db.Categorys.FirstOrDefault(x => x.CategoryId == id);
             if (category == null)
@@ -136,9 +138,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("danh-muc-san-pham/change-status")]
         public ActionResult Change_Status(int id)
         {
+            CheckPermission(EnumFunctions.Recipe_Book, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var category = _db.Categorys.FirstOrDefault(x => x.CategoryId == id);
             if (category == null)

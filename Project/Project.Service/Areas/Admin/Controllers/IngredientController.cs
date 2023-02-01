@@ -22,20 +22,18 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("ingredient/main-page")]
         public ActionResult MainPage()
         {
+            CheckPermission(EnumFunctions.Ingredient, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
             ViewBag.User = nd_dv;
             return View();
         }
 
         [Route("ingredient/list")]
         public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
-        {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
-
+        { 
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
@@ -60,9 +58,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("ingredient/update")]
         public ActionResult Update(int? id)
         {
+            CheckPermission(EnumFunctions.Ingredient, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var listIngredients = _db.Ingredients.ToList();
             var slider = _db.Ingredients.FirstOrDefault(x => x.IngredientId == id);
@@ -75,9 +74,11 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             try
             {
+                CheckPermission(EnumFunctions.Ingredient, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                    return RedirectToAction("Index", "Home", new { area = "" });
+                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                    return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
                 if (obj.IngredientId == 0)
                 {
                     //var checkTontai = _db.Sliders.FirstOrDefault(x => x.StatusID == EnumStatus.ACTIVE && x.STT == slider.STT);
@@ -130,9 +131,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("ingredient/delete")]
         public ActionResult Delete(int id)
         {
+            CheckPermission(EnumFunctions.Ingredient, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var obj = _db.Ingredients.FirstOrDefault(x => x.IngredientId == id);
             if (obj == null)
@@ -145,9 +147,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("ingredient/change-status")]
         public ActionResult Change_Status(int id)
         {
+            CheckPermission(EnumFunctions.Ingredient, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var obj = _db.Ingredients.FirstOrDefault(x => x.IngredientId == id);
             if (obj == null)

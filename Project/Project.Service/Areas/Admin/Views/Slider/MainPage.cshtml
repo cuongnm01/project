@@ -23,20 +23,14 @@
                     </div>
                 </div>
             </div>
-            <div class="x_content table-responsive">
-                @*<input id="nhomquyenid" type="hidden" value="@EnumStatus.ACTIVE" />
-                <ul class="nav nav-tabs bar_tabs nhomquyen" role="tablist">
-                    <li role="presentation" class="active"><a href="#" id="@EnumStatus.ACTIVE" data-name="@EnumStatus.ToString(EnumStatus.ACTIVE)" role="tab" data-toggle="tab" aria-expanded="false">@EnumStatus.ToString(EnumStatus.ACTIVE)</a></li>
-                    <li role="presentation" class=""><a href="#" id="@EnumStatus.INACTIVE" data-name="@EnumStatus.ToString(EnumStatus.INACTIVE)" role="tab" data-toggle="tab" aria-expanded="false">@EnumStatus.ToString(EnumStatus.INACTIVE)</a></li>
-
-                </ul>*@
+            <div class="x_content table-responsive">  
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th class="text-center" width="60">Order</th>
                             <th class="text-center">Image</th>
                             <th width="150" style="max-width:200px" class="text-center">
-                                @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
+                                @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x=>x.Functions == EnumFunctions.Banners && (x.Fulls == EnumStatus.ACTIVE || x.Updates == EnumStatus.ACTIVE)) != null)
                                 {
                                     <a class="btn btn-sm btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Slider", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i> Add</a>
                                 }

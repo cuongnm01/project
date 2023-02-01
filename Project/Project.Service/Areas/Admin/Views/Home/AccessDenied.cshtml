@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Access Denied";
+    Layout = null;
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<link href="~/Libs/alertify/alertify.core.css" rel="stylesheet" />
+<link href="~/Libs/alertify/alertify.default.css" rel="stylesheet" />
+<script>
+    $(document).ready(function () {
+        alertify.alert("You do not have permission to access this function. Please contact Admin!", function () {
+                window.location.href='@Url.Action("Index", "Home", new { area="" })'
+            });
+    })
+</script>
+
+<script src="~/Libs/alertify/alertify.min.js"></script>

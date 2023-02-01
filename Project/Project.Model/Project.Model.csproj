@@ -68,6 +68,7 @@
     <Compile Include="DbSet\Token.cs" />
     <Compile Include="DbSet\Unit.cs" />
     <Compile Include="DbSet\User.cs" />
+    <Compile Include="DbSet\User_Permission.cs" />
     <Compile Include="DbSet\Ward.cs" />
     <Compile Include="Migrations\202212191830234_init.cs" />
     <Compile Include="Migrations\202212191830234_init.designer.cs">
@@ -76,6 +77,10 @@
     <Compile Include="Migrations\202301310943392_addtb.cs" />
     <Compile Include="Migrations\202301310943392_addtb.Designer.cs">
       <DependentUpon>202301310943392_addtb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302010748563_addPermissionTbl.cs" />
+    <Compile Include="Migrations\202302010748563_addPermissionTbl.Designer.cs">
+      <DependentUpon>202302010748563_addPermissionTbl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ProductInfo.cs" />
@@ -107,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202301310943392_addtb.resx">
       <DependentUpon>202301310943392_addtb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302010748563_addPermissionTbl.resx">
+      <DependentUpon>202302010748563_addPermissionTbl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

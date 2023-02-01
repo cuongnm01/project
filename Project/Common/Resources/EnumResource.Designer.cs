@@ -214,7 +214,7 @@ namespace Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đại lý.
+        ///   Looks up a localized string similar to Quản lý.
         /// </summary>
         public static string USER_TYPE_AGENCY {
             get {

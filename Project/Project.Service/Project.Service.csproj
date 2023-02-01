@@ -153,6 +153,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Areas\Admin\Controllers\SizesController.cs" />
     <Compile Include="Areas\Admin\Controllers\SliderController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UnitController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -169,6 +170,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\access-denied.css" />
     <Content Include="favicon.ico" />
     <Content Include="Files\images\default\default_large.png" />
     <Content Include="Files\images\default\user_empty.jpg" />
@@ -8010,6 +8012,15 @@
     <Content Include="Areas\Admin\Views\Ingredient\MainPage.cshtml" />
     <Content Include="Areas\Admin\Views\Ingredient\Update.cshtml" />
     <Content Include="Areas\Admin\Views\Products\Insert.cshtml" />
+    <Content Include="Areas\Admin\Views\Unit\MainPage.cshtml" />
+    <Content Include="Areas\Admin\Views\Unit\List.cshtml" />
+    <Content Include="Areas\Admin\Views\Unit\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\MainPage_Manager.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\List_Manager.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Update_Manager.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role_Permission.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role_Permission_List.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\AccessDenied.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -8032,6 +8043,7 @@
     <Content Include="Views\Shared\_Layout_Admin.cshtml" />
     <Content Include="Views\Shared\_NavShared_Admin.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -33,7 +33,7 @@
                             <th class="text-center" width="200">Sort Orders</th>
                             <th class="text-center" width="200">Create Date</th>
                             <th width="150" class="text-center">
-                                @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
+                                @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Recipe_Book && (x.Fulls == EnumStatus.ACTIVE || x.Updates == EnumStatus.ACTIVE)) != null)
                                 {
                                     <a class="btn btn-sm btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Categories",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i> Add</a>
                                 }

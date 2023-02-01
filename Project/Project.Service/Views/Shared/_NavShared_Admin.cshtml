@@ -34,7 +34,8 @@
                     <li class="mn-size">
                         <a><i class="fa fa-sliders"></i> Size<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li class="mn-notifications"> <a href="@Url.Action("MainPage","Sizes")"> Size</a></li>
+                            <li class="mn-sizes"> <a href="@Url.Action("MainPage","Sizes")"> Size</a></li>
+                            <li class="mn-unit"> <a href="@Url.Action("MainPage","Unit")"> Unit</a></li>
                         </ul>
                     </li>
                     <li class="mn-ingredient">
@@ -46,6 +47,7 @@
                     <li class="mn-employee">
                         <a><i class="fa fa-graduation-cap"></i> Account<span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
+                            <li class="mn-manager"><a href="@Url.Action("MainPage_Manager","Users")">Manager</a></li>
                             <li class="mn-employee"><a href="@Url.Action("MainPage","Users")">Employee</a></li>
                         </ul>
                     </li>
@@ -81,7 +83,7 @@
                         @*<li>
                             <a class="" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("ChangePassword","Account", new { area = ""})', function (e) { $('#modal-qltaikhoan').modal('show'); });"> Đổi mật khẩu</a>
                         </li>*@
-                        <li><a href="@Url.Action("Logout","Account", new { area = ""})"><i class="fa fa-sign-out pull-right"></i> Logout</a></li>
+                        <li><a href="@Url.Action("Logout","Home", new { area = ""})"><i class="fa fa-sign-out pull-right"></i> Logout</a></li>
                     </ul>
                 </li>
             </ul>

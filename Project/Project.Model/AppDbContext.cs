@@ -28,6 +28,7 @@ namespace Project.Model
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Ward> Wards { get; set; }
         public virtual DbSet<Unit> Units { get; set; }
+        public virtual DbSet<User_Permission> User_Permission { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

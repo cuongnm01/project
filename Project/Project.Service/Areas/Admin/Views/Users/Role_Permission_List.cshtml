@@ -1,0 +1,35 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+
+@model User
+@{
+    Layout = "";
+    List<int> role = (List<int>)ViewBag.role;
+    List<User_Permission> role_Details = (List<User_Permission>)ViewBag.role_Details;
+    int stt = 0;
+}
+@if (role != null && role.Count() > 0)
+{
+    foreach (var item in role)
+    {
+        var itemRole = role_Details.FirstOrDefault(x => x.Functions == item);
+        <tr>
+            <td class="text-center">@(++stt)</td>
+            <td>@EnumFunctions.ToString(item)</td>
+            <td class="text-center">
+                <input type="checkbox" name="foo" data-id="@Model.UserID" data-functions="@item" data-options="@EnumOptions.VIEW" value="@(itemRole != null && itemRole.Views == EnumStatus.ACTIVE ? 2 : 1)" @( itemRole != null && itemRole.Views == EnumStatus.ACTIVE ? "checked" : "") onclick="select_function($(this));">
+            </td>
+            <td class="text-center">
+                <input type="checkbox" name="foo" data-id="@Model.UserID" data-functions="@item" data-options="@EnumOptions.ADD" value="@(itemRole != null && itemRole.Updates == EnumStatus.ACTIVE ? 2 : 1)" @( itemRole != null && itemRole.Updates == EnumStatus.ACTIVE ? "checked" : "") onclick="select_function($(this));">
+            </td>
+            <td class="text-center">
+                <input type="checkbox" name="foo" data-id="@Model.UserID" data-functions="@item" data-options="@EnumOptions.DELETE" value="@(itemRole != null && itemRole.Deletes == EnumStatus.ACTIVE ? 2 : 1)" @( itemRole != null && itemRole.Deletes == EnumStatus.ACTIVE ? "checked" : "") onclick="select_function($(this));">
+            </td>
+            <td class="text-center">
+                <input type="checkbox" name="foo" data-id="@Model.UserID" data-functions="@item" data-options="@EnumOptions.FULL" value="@(itemRole != null && itemRole.Fulls == EnumStatus.ACTIVE ? 2 : 1)" @( itemRole != null && itemRole.Fulls == EnumStatus.ACTIVE ? "checked" : "") onclick="select_function($(this));">
+            </td>
+        </tr>
+    }
+}
+

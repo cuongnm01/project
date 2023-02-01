@@ -1,4 +1,5 @@
 ﻿using Base;
+using Common.Constants;
 using Common.Helpers;
 using Common.Resources;
 using Project.Model;
@@ -20,7 +21,12 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             return RedirectToAction("Login");
         }
-       
+
+        public ActionResult AccessDenied()
+        {
+            return View();
+        }
+
 
         [AllowAnonymous]
         [Route("login")]
@@ -40,12 +46,14 @@ namespace Project.Service.Areas.Admin.Controllers
                 p = p.Encode();
                 var users = (from a in _db.Users
                              where a.UserName == u && a.Password == p 
+                             && ( a.PermissionID == EnumUserType.ADMIN || a.PermissionID == EnumUserType.MANAGER)
                              select a).FirstOrDefault();
                 if (users != null)
                 {
                     // login thanh cong
                     UserInfo userInfo = new UserInfo();
                     userInfo.Users = users;
+                    userInfo.User_Permissions = _db.User_Permission.Where(x => x.UserID == users.UserID).ToList();
                     Session[ConfigKey.SESSION_LOGIN] = userInfo;
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.F_LOGIN)));
                 }

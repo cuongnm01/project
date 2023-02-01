@@ -65,7 +65,7 @@ namespace Common.Constants
     {
         public const int ADMIN = 1;
         public const int EMPLOYEE = 2;
-        public const int AGENCY = 3;
+        public const int MANAGER = 3;
         public const int CUSTOMER = 4;
         public static string ToString(int? value)
         {
@@ -75,7 +75,7 @@ namespace Common.Constants
                     return EnumResource.USER_TYPE_ADMIN;
                 case EMPLOYEE:
                     return EnumResource.USER_TYPE_EMPLOYEE;
-                case AGENCY:
+                case MANAGER:
                     return EnumResource.USER_TYPE_AGENCY;
                 case CUSTOMER:
                     return EnumResource.USER_TYPE_CUSTOMER;
@@ -223,5 +223,67 @@ namespace Common.Constants
         public const int TOTAL_MAX = int.MaxValue;
 
 
+    }
+
+    public class EnumFunctions
+    {
+        public const int Banners = 1;
+        public const int Sizes = 2;
+        public const int Unit = 3;
+        public const int Ingredient = 4;
+        public const int Employee = 5;
+        public const int Manager = 6;
+        public const int Recipe_Book = 7;
+        public const int Recipe = 8;
+       
+        public static string ToString(int? value)
+        {
+            switch (value)
+            {
+                case Banners:
+                    return "Banners";
+                case Sizes:
+                    return "Sizes";
+                case Unit:
+                    return "Unit";
+                case Ingredient:
+                    return "Ingredient";
+                case Employee:
+                    return "Employee";
+                case Manager:
+                    return "Manager";
+                case Recipe_Book:
+                    return "Recipe Book";
+                case Recipe:
+                    return "Recipe";
+                default:
+                    return "";
+            }
+        }
+    }
+
+    public class EnumOptions
+    {
+        public const int FULL = 1;
+        public const int VIEW = 2;
+        public const int ADD = 3;
+        public const int DELETE = 4;
+
+        public static string ToString(int? value)
+        {
+            switch (value)
+            {
+                case FULL:
+                    return "Full access";
+                case VIEW:
+                    return "View";
+                case ADD:
+                    return "Insert/Update";
+                case DELETE:
+                    return "Delete";
+                default:
+                    return "";
+            }
+        }
     }
 }

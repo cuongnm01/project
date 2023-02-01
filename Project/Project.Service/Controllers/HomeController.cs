@@ -126,6 +126,5 @@ namespace Project.Service.Controllers
             }
         }
 
-       
     }
 }

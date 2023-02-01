@@ -1,0 +1,38 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+
+@model User
+@{
+    Layout = "";
+}
+<div class="modal-dialog" style="width:70%;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Permission</h4>
+        </div>
+        <div class="modal-body">
+            <input id="UserID" name="UserID" type="hidden" value="@Model.UserID" />
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="60">STT</th>
+                        <th class="text-center">Function</th>
+                        <th class="text-center" width="200">View</th>
+                        <th class="text-center" width="200">Insert/Update</th>
+                        <th class="text-center" width="200">Delete</th>
+                        <th class="text-center" width="200">Full access</th>
+                    </tr>
+                </thead>
+                <tbody id="danhsach_phanquyen"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        DanhSach_PhanQuyen('@Model.UserID');
+    });
+</script>

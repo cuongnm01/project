@@ -21,9 +21,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("size/main-page")]
         public ActionResult MainPage()
         {
+            CheckPermission(EnumFunctions.Sizes, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
             ViewBag.User = nd_dv;
             return View();
         }
@@ -31,10 +33,6 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("size/list")]
         public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
         {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
-
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
@@ -58,9 +56,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("size/update")]
         public ActionResult Update(int? id)
         {
+            CheckPermission(EnumFunctions.Sizes, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var size = _db.Sizes.FirstOrDefault(x => x.SizeId == id);
             return PartialView(size);
@@ -72,9 +71,11 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             try
             {
+                CheckPermission(EnumFunctions.Sizes, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                    return RedirectToAction("Index", "Home", new { area = "" });
+                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                    return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
                 if (size.SizeId == 0)
                 {
                     _db.Sizes.Add(size);
@@ -106,9 +107,11 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("size/delete")]
         public ActionResult Delete(int id)
         {
+            CheckPermission(EnumFunctions.Sizes, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
 
             var size = _db.Sizes.FirstOrDefault(x => x.SizeId == id);
             if (size == null)
@@ -123,16 +126,11 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("Index", "Home", new { area = "" });
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var size = _db.Sizes.FirstOrDefault(x => x.SizeId == id);
             if (size == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SIZE)));
-
-            //if (slider.StatusID == EnumStatus.ACTIVE)
-            //    slider.StatusID = EnumStatus.INACTIVE;
-            //else
-            //    slider.StatusID = EnumStatus.ACTIVE;
 
             _db.SaveChanges();
             return Json(new CxResponse<object>(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);

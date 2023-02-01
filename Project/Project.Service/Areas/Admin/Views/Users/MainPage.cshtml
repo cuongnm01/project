@@ -41,7 +41,7 @@
                             <th class="text-center" width="200">Phone</th>
                             <th class="text-center" width="200">Email</th>
                             <th width="150" class="text-center">
-                                @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
+                                @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Employee && (x.Fulls == EnumStatus.ACTIVE || x.Updates == EnumStatus.ACTIVE)) != null)
                                 {
                                     <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Users", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i> @Message.ACTION_INSERT</a>
                                 }

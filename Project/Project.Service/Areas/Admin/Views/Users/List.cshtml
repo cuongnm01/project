@@ -1,41 +1,49 @@
 ﻿@using Common.Constants
 @using Project.Model.DbSet
 @using Common.Resources
+@using Project.Model.Model
+@using Project.Model.Configuration;
+
 
 @model IEnumerable<User>
 @{
     int stt = 0;
-
+    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
 }
 @if (Model != null && Model.Count() > 0)
 {
     foreach (var item in Model)
     {
-<tr>
-    <td class="text-center">@(++stt)</td>
-    <td class="text-center"><img width="50" src="@(string.IsNullOrEmpty(item.Avatar)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Avatar.Replace("~","")) " /></td>
-    <td class="text-center">@(item.FullName)</td>
-    <td class="text-center">@(item.Phone)</td>
-    <td class="text-center">@(item.Email)</td>
-    <td class="text-center clickable-td">
-        <div class="dropdown">
-            <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
-                Action
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Users", new { area = "Admin", id = item.UserID})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i> @Message.ACTION_UPDATE</a>
+        <tr>
+            <td class="text-center">@(++stt)</td>
+            <td class="text-center"><img width="50" src="@(string.IsNullOrEmpty(item.Avatar)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Avatar.Replace("~","")) " /></td>
+            <td class="text-center">@(item.FullName)</td>
+            <td class="text-center">@(item.Phone)</td>
+            <td class="text-center">@(item.Email)</td>
+            <td class="text-center clickable-td">
+                <div class="dropdown">
+                    <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
+                        Action
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Employee && (x.Fulls == EnumStatus.ACTIVE || x.Updates == EnumStatus.ACTIVE)) != null)
+                        {
+                            <li>
+                                <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Users", new { area = "Admin", id = item.UserID})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i> @Message.ACTION_UPDATE</a>
+                            </li>
+                        }
+                        @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Employee && (x.Fulls == EnumStatus.ACTIVE || x.Deletes == EnumStatus.ACTIVE)) != null)
+                        {
+                            <li>
+                                <a class="btn btn-xs btn-danger" data-id="@item.UserID" onclick="Xoa($(this))"><i class="fa fa-trash"></i> @Message.ACTION_DELETE</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
 
-                </li>
-                <li>
-                    <a class="btn btn-xs btn-danger" data-id="@item.UserID" onclick="Xoa($(this))"><i class="fa fa-trash"></i> @Message.ACTION_DELETE</a>
-                </li>
-            </ul>
-        </div>
-
-    </td>
-</tr>
+            </td>
+        </tr>
 
     }
 }
