@@ -16,12 +16,17 @@ namespace Project.Service.Controllers
         private string url = "http://bottega.sapp.asia";
 
         [HttpGet]
-        [Route("api/product/by_category/{categoryId}")]    
-        public IHttpActionResult ProductByCategory([FromUri] int categoryId = 0, int pageIndex = 1, int pageSize = 8)
+        [Route("api/product/list")]
+        public IHttpActionResult ProductByCategory(string keyword = "", int pageIndex = 1, int pageSize = 8)
         {
             try
             {
-                var product = db.Products.Where(x => x.CategoryId == categoryId).ToList();
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    keyword = keyword.ToLower();
+                }
+
+                var product = db.Products.Where(x=>x.Name.ToLower().Contains(keyword)).OrderBy(x => x.CreateDate).ToList();
 
                 var products = (from a in product
                                 select new
@@ -30,7 +35,32 @@ namespace Project.Service.Controllers
                                     name = a.Name,
                                     image = GetBaseUrl + a.Image.GetImage(),
                                     isNew = a.IsNew == 1 ? true : false,
-                                }).ToList();
+                                }).Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList();
+
+                return Json(new { isSuccess = true, data = new { total = product.Count, products = products, }, message = "", version = "", code = "" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { isSuccess = false, data = new { }, message = "", version = "", code = "" });
+            }
+        }
+
+        [HttpGet]
+        [Route("api/product/by_category/{categoryId}")]    
+        public IHttpActionResult ProductByCategory([FromUri] int categoryId = 0, int pageIndex = 1, int pageSize = 8)
+        {
+            try
+            {
+                var product = db.Products.Where(x => x.CategoryId == categoryId).OrderBy(x=>x.CreateDate).ToList();
+
+                var products = (from a in product
+                                select new
+                                {
+                                    code = a.ProductId,
+                                    name = a.Name,
+                                    image = GetBaseUrl + a.Image.GetImage(),
+                                    isNew = a.IsNew == 1 ? true : false,
+                                }).Skip(pageSize * (pageIndex -1)).Take(pageSize).ToList();
 
                 return Json(new { isSuccess = true, data = new { total = product.Count, products = products, }, message = "", version = "", code = "" });
             }
