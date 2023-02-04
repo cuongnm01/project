@@ -56,6 +56,7 @@
     <Compile Include="DbSet\AppConfig.cs" />
     <Compile Include="DbSet\Category.cs" />
     <Compile Include="DbSet\District.cs" />
+    <Compile Include="DbSet\IngredientGroup.cs" />
     <Compile Include="DbSet\Ingredient.cs" />
     <Compile Include="AppDbContext.cs" />
     <Compile Include="DbSet\Product.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="DbSet\Size.cs" />
     <Compile Include="DbSet\Slider.cs" />
     <Compile Include="DbSet\Token.cs" />
+    <Compile Include="DbSet\UnitGroup.cs" />
     <Compile Include="DbSet\Unit.cs" />
     <Compile Include="DbSet\User.cs" />
     <Compile Include="DbSet\User_Permission.cs" />
@@ -81,6 +83,10 @@
     <Compile Include="Migrations\202302010748563_addPermissionTbl.cs" />
     <Compile Include="Migrations\202302010748563_addPermissionTbl.Designer.cs">
       <DependentUpon>202302010748563_addPermissionTbl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302040432388_UpdateGroupTbl.cs" />
+    <Compile Include="Migrations\202302040432388_UpdateGroupTbl.Designer.cs">
+      <DependentUpon>202302040432388_UpdateGroupTbl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ProductInfo.cs" />
@@ -115,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302010748563_addPermissionTbl.resx">
       <DependentUpon>202302010748563_addPermissionTbl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302040432388_UpdateGroupTbl.resx">
+      <DependentUpon>202302040432388_UpdateGroupTbl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

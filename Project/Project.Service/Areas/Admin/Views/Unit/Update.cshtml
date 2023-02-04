@@ -16,13 +16,21 @@
                 <input type="hidden" id="UnitId" name="UnitId" value="@(Model != null? Model.UnitId:0)">
 
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                        <label class="control-label" for="first-name">Group</label>
+                        <div>
+                            <select class="ctr-select" data-live-search="true" name="UnitGroupId" id="UnitGroupId">
+                                @Html.Raw(ViewBag.cbxCategory)
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-4 col-xs-12">
                         <label class="control-label" for="first-name">Code</label>
                         <div>
                             <input type="text" class="form-control" id="Code" name="Code" value="@(Model != null && !string.IsNullOrEmpty(Model.Code)? Model.Code :"")" />
                         </div>
                     </div>
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group col-md-4 col-sm-4 col-xs-12">
                         <label class="control-label" for="first-name">Name</label>
                         <div>
                             <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />

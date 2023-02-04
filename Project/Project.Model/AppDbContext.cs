@@ -17,6 +17,7 @@ namespace Project.Model
         public virtual DbSet<Category> Categorys { get; set; }
         public virtual DbSet<District> Districts { get; set; }
         public virtual DbSet<Ingredient> Ingredients { get; set; }
+        public virtual DbSet<IngredientGroup> IngredientGroups { get; set; }
         public virtual DbSet<ProductDirection> ProductDirections { get; set; }
         public virtual DbSet<ProductIngredient> ProductIngredients { get; set; }
         public virtual DbSet<Product> Products { get; set; }
@@ -28,6 +29,8 @@ namespace Project.Model
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Ward> Wards { get; set; }
         public virtual DbSet<Unit> Units { get; set; }
+        public virtual DbSet<UnitGroup> UnitGroups { get; set; }
+
         public virtual DbSet<User_Permission> User_Permission { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

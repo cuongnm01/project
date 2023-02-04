@@ -17,10 +17,11 @@ namespace Project.Model.DbSet
         public int? IngredientId { get; set; }
 
         public double? Value { get; set; }
+        public int? UnitId { get; set; }
 
         [StringLength(50)]
         public string Unit { get; set; }
-
+        public double? Price { get; set; }
         public int? SortOrder { get; set; }
         public int? StatusID { get; set; }
         public DateTime? CreateDate { get; set; }

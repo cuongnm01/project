@@ -8,7 +8,7 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">
-                Công thức
+                Steps
             </h4>
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat2">
@@ -17,7 +17,7 @@
                 <input type="hidden" id="ProductTempId" name="ProductTempId">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Tên Step</label>
+                        <label class="control-label" for="first-name">Name</label>
                         <div>
                             <input class="form-control" id="Name" name="Name" type="text" value="@(Model != null? Model.Name : "")">
                         </div>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Hình ảnh :</label>
+                        <label class="control-label" for="first-name">Image : (104x104)</label>
                         <div>
                             <div style="margin-bottom:10px">
                                 <input type="file" class="form-control" name="_LogoStep" />
@@ -59,13 +59,13 @@
 
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Thứ tự</label>
+                        <label class="control-label" for="first-name">Sort Order</label>
                         <div>
                             <input class="form-control" id="SortOrder" name="SortOrder" type="number" value="@(Model != null? Model.SortOrder.ToString() : "")">
                         </div>
                     </div>
                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Trạng thái:</label>
+                        <label class="control-label" for="first-name">Status:</label>
                         <div>
                             <select class="ctr-select" data-live-search="true" name="StatusID">
                                 <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                         <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                            <label class="control-label" for="first-name">Nội dung</label>
+                            <label class="control-label" for="first-name">Content</label>
                             <div>
                                 <textarea class="form-control"  name="Description">@(Model != null ? Model.Description : "")</textarea>
                             </div>
@@ -87,8 +87,8 @@
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
-                <button id="btn-saveStep" type="button" onclick="saveStep()" class="btn btn-success">Lưu</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Thoát</button>
+                <button id="btn-saveStep" type="button" onclick="saveStep()" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
             </div>
         </form>
     </div>

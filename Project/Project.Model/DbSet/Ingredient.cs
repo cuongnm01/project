@@ -9,6 +9,7 @@ namespace Project.Model.DbSet
     public partial class Ingredient
     {
         public int IngredientId { get; set; }
+        public int IngredientGroupId { get; set; }
 
         [StringLength(500)]
         public string Name { get; set; }
@@ -19,5 +20,8 @@ namespace Project.Model.DbSet
         public int? SortOrder { get; set; }
         public int? StatusID { get; set; }
         public DateTime? CreateDate { get; set; }
+        public int? UnitGroupId { get; set; }
+        public double? Price { get; set; }
+
     }
 }

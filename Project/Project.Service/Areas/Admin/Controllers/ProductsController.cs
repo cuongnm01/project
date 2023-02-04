@@ -509,13 +509,28 @@ namespace Project.Service.Areas.Admin.Controllers
             if (productId != null)
             {
                 listProductIngredient = _db.ProductIngredients.Where(x => x.ProductId == productId).ToList();
+                foreach(var item in listProductIngredient)
+                {
+                    item.Price = 0;
+                    var unit = _db.Units.FirstOrDefault(x => x.UnitId == item.UnitId);
+                    if(unit != null)
+                    {
+                        var unitBase = _db.Units.FirstOrDefault(x => x.UnitGroupId == unit.UnitGroupId && x.IsDefault == true);
+                        var ingredient = _db.Ingredients.FirstOrDefault(x => x.IngredientId == item.IngredientId);
+                        var percent = (double)(unit.Rate / unitBase.Rate);
+                        var price =item.Value * percent * (ingredient != null && ingredient.Price != null ? ingredient.Price : 0);
+                        item.Price = price;
+                    }
+                }
             }
             var listIngredientId = ingredientId.Split(',').ToList();
             var listSizeId = sizeId.Split(',').ToList();
             var listIngredient = _db.Ingredients.Where(x => listIngredientId.Contains(x.IngredientId.ToString())).ToList();
             var listSize = _db.Sizes.Where(x => listSizeId.Contains(x.SizeId.ToString())).ToList();
+            var listUnit = _db.Units.Where(x => x.StatusID == EnumStatus.ACTIVE).ToList();
             ViewBag.Size = listSize;
             ViewBag.Ingredient = listIngredient;
+            ViewBag.Units = listUnit;
             return PartialView(listProductIngredient);
         }
 

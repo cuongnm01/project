@@ -8021,6 +8021,12 @@
     <Content Include="Areas\Admin\Views\Users\Role_Permission.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Role_Permission_List.cshtml" />
     <Content Include="Areas\Admin\Views\Home\AccessDenied.cshtml" />
+    <Content Include="Areas\Admin\Views\Unit\MainPage_Group.cshtml" />
+    <Content Include="Areas\Admin\Views\Unit\List_Group.cshtml" />
+    <Content Include="Areas\Admin\Views\Unit\Update_Group.cshtml" />
+    <Content Include="Areas\Admin\Views\Ingredient\MainPage_Group.cshtml" />
+    <Content Include="Areas\Admin\Views\Ingredient\List_Group.cshtml" />
+    <Content Include="Areas\Admin\Views\Ingredient\Update_Group.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

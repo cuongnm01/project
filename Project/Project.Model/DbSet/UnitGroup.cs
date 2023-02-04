@@ -6,18 +6,12 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Unit")]
-    public partial class Unit
+    [Table("UnitGroup")]
+    public partial class UnitGroup
     {
-        public int UnitId { get; set; }
-        public int? UnitGroupId { get; set; }
-
-        [StringLength(50)]
-        public string Code { get; set; }
+        public int UnitGroupId { get; set; }
         [StringLength(500)]
         public string Name { get; set; }
-        public bool? IsDefault { get; set; }
-        public double? Rate { get; set; }
         public int? SortOrder { get; set; }
         public int? StatusID { get; set; }
         public DateTime? CreateDate { get; set; }

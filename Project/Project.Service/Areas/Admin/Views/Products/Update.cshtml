@@ -118,7 +118,7 @@
                     <div class="modal-body">
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <label class="control-label" for="first-name">Image:</label>
+                                <label class="control-label" for="first-name">Image: (257x156)</label>
                                 <div>
                                     <div style="margin-bottom:10px">
                                         <input type="file" class="form-control" name="_Logo" />
@@ -150,7 +150,7 @@
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <label class="control-label" for="first-name">Background:</label>
+                                <label class="control-label" for="first-name">Background: (1194x682)</label>
                                 <div>
                                     <div style="margin-bottom:10px">
                                         <input type="file" class="form-control" name="_BackGround" />
@@ -222,6 +222,7 @@
                                             <tr>
                                                 <th class="text-center" width="60">STT</th>
                                                 <th class="text-center" width="200">Size</th>
+                                                <th class="text-center" width="200">Cost</th>
                                                 <th class="text-center" width="200">Ingredient</th>
                                                 <th class="text-center" width="200">Value </th>
                                                 <th class="text-center" width="200">Unit</th>
@@ -489,12 +490,14 @@
                     SizeId: '',
                     IngredientId: '',
                     Value: '',
-                    Unit : ''
+                    Unit: '',
+                    UnitId:''
                 };
                 obj.sizeId = $('[name=tbSizeId' + index + ']').val()
                 obj.ingredientId = $('[name=tbIngredientId' + index + ']').val();
                 obj.value = $('[name=value' + index + ']').val();
                 obj.unit = $('[name=unit' + index + ']').val();
+                obj.unitId = $('[name=unitid' + index + ']').val();
                 arr.push(obj);
 
             }
