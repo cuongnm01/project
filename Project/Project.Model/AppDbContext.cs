@@ -32,6 +32,8 @@ namespace Project.Model
         public virtual DbSet<UnitGroup> UnitGroups { get; set; }
 
         public virtual DbSet<User_Permission> User_Permission { get; set; }
+        public virtual DbSet<User_Category> User_Category { get; set; }
+        public virtual DbSet<User_Product> User_Product { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

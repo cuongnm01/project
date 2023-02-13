@@ -8027,6 +8027,8 @@
     <Content Include="Areas\Admin\Views\Ingredient\MainPage_Group.cshtml" />
     <Content Include="Areas\Admin\Views\Ingredient\List_Group.cshtml" />
     <Content Include="Areas\Admin\Views\Ingredient\Update_Group.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role_User_Permission.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role_User_Permission_List.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

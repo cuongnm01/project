@@ -161,4 +161,4 @@ E:\SourceCode\Web\Project\project\Project\Project.Model\obj\Debug\Project.Model.
 E:\SourceCode\Web\Project\project\Project\Project.Model\obj\Debug\Project.Model.csproj.CopyComplete
 E:\SourceCode\Web\Project\project\Project\Project.Model\obj\Debug\Project.Model.dll
 E:\SourceCode\Web\Project\project\Project\Project.Model\obj\Debug\Project.Model.pdb
-E:\SourceCode\Web\Project\project\Project\Project.Model\obj\Debug\Project.Model.csproj.AssemblyReference.cache
+E:\SourceCode\Web\Project\project\Project\Project.Model\obj\Debug\Project.Model.Migrations.AddUserPermissionTbl.resources

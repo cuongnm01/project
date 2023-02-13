@@ -55,6 +55,34 @@ namespace Project.Service.Controllers
 
         //}
 
+        protected AuthorizeRespone Authorize()
+        {
+            AuthorizeRespone res = new AuthorizeRespone();
+            try
+            {
+
+                System.Net.Http.Headers.HttpRequestHeaders headers = this.Request.Headers;
+                var tokenKey = headers.GetValues("Authorization").ToList()[0].Replace("Basic ", "");
+                var token = db.Tokens.FirstOrDefault(x => x.TokenKey.Equals(tokenKey) && x.ExpirationDate >= DateTime.Now);
+                if (token == null)
+                {
+                    res.HttpStatusCode = HttpStatusCode.Unauthorized;
+                }
+                else
+                {
+                    res.HttpStatusCode = HttpStatusCode.OK;
+                    res.Token = token;
+                }
+            }
+            catch
+            {
+                res.HttpStatusCode = HttpStatusCode.Unauthorized;
+
+            }
+            return res;
+
+        }
+
         public string GetBaseUrl
         {
             get

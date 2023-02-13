@@ -21,12 +21,29 @@ namespace Project.Service.Controllers
         {
             try
             {
+                var author = Authorize();
+                if (author == null || author.HttpStatusCode != HttpStatusCode.OK)
+                {
+                    return Unauthorized();
+                }
+                var token = db.Tokens.FirstOrDefault(x => x.TokenKey.Equals(author.Token.TokenKey));
+                if (token == null || (token.ExpirationDate <= DateTime.Now))
+                {
+                    return Unauthorized();
+                }
+                var user = db.Users.FirstOrDefault(x => x.UserID == token.UserID);
+                if (user == null)
+                {
+                    return Ok(new CxResponse("err", "User not found"));
+                }
+                var userProduct = db.User_Product.Where(x => x.UserID == user.UserID && x.StatusID == EnumStatus.ACTIVE).Select(x => x.ProductId).ToList();
+
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     keyword = keyword.ToLower();
                 }
 
-                var product = db.Products.Where(x=>x.Name.ToLower().Contains(keyword)).OrderBy(x => x.CreateDate).ToList();
+                var product = db.Products.Where(x=>x.Name.ToLower().Contains(keyword) && userProduct.Contains(x.ProductId)).OrderBy(x => x.CreateDate).ToList();
 
                 var products = (from a in product
                                 select new
@@ -51,7 +68,24 @@ namespace Project.Service.Controllers
         {
             try
             {
-                var product = db.Products.Where(x => x.CategoryId == categoryId).OrderBy(x=>x.CreateDate).ToList();
+                var author = Authorize();
+                if (author == null || author.HttpStatusCode != HttpStatusCode.OK)
+                {
+                    return Unauthorized();
+                }
+                var token = db.Tokens.FirstOrDefault(x => x.TokenKey.Equals(author.Token.TokenKey));
+                if (token == null || (token.ExpirationDate <= DateTime.Now))
+                {
+                    return Unauthorized();
+                }
+                var user = db.Users.FirstOrDefault(x => x.UserID == token.UserID);
+                if (user == null)
+                {
+                    return Ok(new CxResponse("err", "User not found"));
+                }
+                var userProduct = db.User_Product.Where(x => x.UserID == user.UserID && x.StatusID == EnumStatus.ACTIVE).Select(x => x.ProductId).ToList();
+
+                var product = db.Products.Where(x => x.CategoryId == categoryId && userProduct.Contains(x.ProductId)).OrderBy(x=>x.CreateDate).ToList();
 
                 var products = (from a in product
                                 select new
@@ -76,10 +110,26 @@ namespace Project.Service.Controllers
         {
             try
             {
-                var product = db.Products.FirstOrDefault(x => x.ProductId == code);
+                var author = Authorize();
+                if (author == null || author.HttpStatusCode != HttpStatusCode.OK)
+                {
+                    return Unauthorized();
+                }
+                var token = db.Tokens.FirstOrDefault(x => x.TokenKey.Equals(author.Token.TokenKey));
+                if (token == null || (token.ExpirationDate <= DateTime.Now))
+                {
+                    return Unauthorized();
+                }
+                var user = db.Users.FirstOrDefault(x => x.UserID == token.UserID);
+                if (user == null)
+                {
+                    return Ok(new CxResponse("err", "User not found"));
+                }
+                var userProduct = db.User_Product.Where(x => x.UserID == user.UserID && x.StatusID == EnumStatus.ACTIVE).Select(x => x.ProductId).ToList();
+
+                var product = db.Products.FirstOrDefault(x => x.ProductId == code && userProduct.Contains(x.ProductId));
                 if (product == null)
                     return Json(new { isSuccess = false, data = new { }, message = "Sản phẩm không xác định", version = "", code = "" });
-
 
                 var steps = db.ProductDirections.Where(x => x.ProductId == product.ProductId).ToList();
                 var sizeIds = db.ProductIngredients.Where(x => x.ProductId == product.ProductId).Select(x => x.SizeId).Distinct().ToList();

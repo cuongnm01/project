@@ -388,7 +388,6 @@ C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramewor
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.SqlServer.xml
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.ValueTuple.xml
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.Threading.Tasks.Extensions.xml
-E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Text.Json.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.dll.config
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.pdb
@@ -508,6 +507,7 @@ E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.ValueTuple.
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Memory.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Buffers.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Microsoft.IdentityModel.Abstractions.xml
+E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Text.Json.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Numerics.Vectors.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Runtime.CompilerServices.Unsafe.xml
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\System.Text.Encodings.Web.xml

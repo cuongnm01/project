@@ -70,7 +70,9 @@
     <Compile Include="DbSet\UnitGroup.cs" />
     <Compile Include="DbSet\Unit.cs" />
     <Compile Include="DbSet\User.cs" />
+    <Compile Include="DbSet\User_Category.cs" />
     <Compile Include="DbSet\User_Permission.cs" />
+    <Compile Include="DbSet\User_Product.cs" />
     <Compile Include="DbSet\Ward.cs" />
     <Compile Include="Migrations\202212191830234_init.cs" />
     <Compile Include="Migrations\202212191830234_init.designer.cs">
@@ -87,6 +89,10 @@
     <Compile Include="Migrations\202302040432388_UpdateGroupTbl.cs" />
     <Compile Include="Migrations\202302040432388_UpdateGroupTbl.Designer.cs">
       <DependentUpon>202302040432388_UpdateGroupTbl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302130258294_AddUserPermissionTbl.cs" />
+    <Compile Include="Migrations\202302130258294_AddUserPermissionTbl.Designer.cs">
+      <DependentUpon>202302130258294_AddUserPermissionTbl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\ProductInfo.cs" />
@@ -124,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302040432388_UpdateGroupTbl.resx">
       <DependentUpon>202302040432388_UpdateGroupTbl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302130258294_AddUserPermissionTbl.resx">
+      <DependentUpon>202302130258294_AddUserPermissionTbl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -33,6 +33,12 @@
                                 <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Users", new { area = "Admin", id = item.UserID})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i> @Message.ACTION_UPDATE</a>
                             </li>
                         }
+                        @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
+                        {
+                            <li>
+                                <a class="btn btn-xs btn-primary" style="cursor:pointer;padding-right:10px;color: #fff" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Role_User_Permission", "Users", new { area = "Admin", @id= item.UserID})' , function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i> Permission</a>
+                            </li>
+                        }
                         @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Employee && (x.Fulls == EnumStatus.ACTIVE || x.Deletes == EnumStatus.ACTIVE)) != null)
                         {
                             <li>

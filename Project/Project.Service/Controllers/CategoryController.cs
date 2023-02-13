@@ -19,7 +19,26 @@ namespace Project.Service.Controllers
         {
             try
             {
-                var list = db.Categorys.ToList();
+                var author = Authorize();
+                if (author == null || author.HttpStatusCode != HttpStatusCode.OK)
+                {
+                    return Unauthorized();
+                }
+                var token = db.Tokens.FirstOrDefault(x => x.TokenKey.Equals(author.Token.TokenKey));
+                if (token == null || (token.ExpirationDate <= DateTime.Now))
+                {
+                    return Unauthorized();
+                }
+                var user = db.Users.FirstOrDefault(x => x.UserID == token.UserID);
+                if (user == null)
+                {
+                    return Ok(new CxResponse("err", "User not found"));
+                }
+
+
+                var userCategory = db.User_Category.Where(x => x.UserID == user.UserID).Select(x => x.CategoryId).ToList();
+
+                var list = db.Categorys.Where(x=> userCategory.Contains(x.CategoryId)).ToList();
 
                 var obj = (from a in list
                            select new

@@ -470,5 +470,138 @@ namespace Project.Service.Areas.Admin.Controllers
         }
         #endregion
 
+        #region permission
+        [Route("employee/permission")]
+        public ActionResult Role_User_Permission(Guid? id = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var user = _db.Users.FirstOrDefault(x => x.UserID == id);
+
+            var category = _db.Categorys.ToList();
+            ViewBag.categories = category;
+
+            var user_Category = _db.User_Category.Where(x => x.UserID == id).OrderBy(x => x.CategoryId).Select(x=>x.CategoryId).ToList();
+            ViewBag.userCategories = user_Category;
+
+            var products = from a in _db.User_Product
+                          join b in _db.Products on a.ProductId equals b.ProductId
+                          where a.UserID == id
+                          select b;
+
+            ViewBag.products = products;
+
+            var userProducts = _db.User_Product.Where(x => x.UserID == id).ToList();
+            ViewBag.userProducts = userProducts;
+
+            return PartialView(user);
+        }
+
+        [Route("employee/permission/list")]
+        public ActionResult Role_User_Permission_List(Guid? id = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var user = _db.Users.FirstOrDefault(x => x.UserID == id);
+
+
+            var category = _db.Categorys.ToList();
+            ViewBag.categories = category;
+
+            var user_Category = _db.User_Category.Where(x => x.UserID == id).OrderBy(x => x.CategoryId).Select(x => x.CategoryId).ToList();
+            ViewBag.userCategories = user_Category;
+
+            var products = (from a in _db.User_Product
+                           join b in _db.Products on a.ProductId equals b.ProductId
+                           where a.UserID == id
+                           select b).ToList();
+
+            ViewBag.products = products;
+
+            var userProducts = _db.User_Product.Where(x => x.UserID == id).ToList();
+            ViewBag.userProducts = userProducts;
+            return PartialView(user);
+        }
+
+        [Route("employee/permission/select")]
+        public ActionResult Role_User_Permission_Select_Category(Guid? id = null, int? category = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var userCategory = _db.User_Category.FirstOrDefault(x => x.UserID == id && x.CategoryId == category);
+            if(userCategory == null)
+            {
+                User_Category user_Category = new User_Category();
+                user_Category.User_CategoryID = Guid.NewGuid();
+                user_Category.CategoryId = category;
+                user_Category.UserID = id;
+                _db.User_Category.Add(user_Category);
+
+                var products = _db.Products.Where(x => x.CategoryId == category).ToList();
+                if(products != null && products.Count() > 0)
+                {
+                    List<User_Product> user_Products = new List<User_Product>();
+                    foreach(var item in products)
+                    {
+                        User_Product user_Product = new User_Product();
+                        user_Product.User_ProductID = Guid.NewGuid();
+                        user_Product.UserID = id;
+                        user_Product.ProductId = item.ProductId;
+                        user_Product.StatusID = EnumStatus.ACTIVE;
+                        user_Products.Add(user_Product);
+                    }
+                    _db.User_Product.AddRange(user_Products);
+                }
+            }
+            else
+            {
+                var products = _db.Products.Where(x => x.CategoryId == category).Select(x=>x.ProductId).ToList();
+                var userProducts = _db.User_Product.Where(x => products.Contains(x.ProductId)).ToList();
+                if(userProducts != null && userProducts.Count() > 0)
+                {
+                    _db.User_Product.RemoveRange(userProducts);
+                }
+                _db.User_Category.Remove(userCategory);
+
+            }
+            _db.SaveChanges();
+
+            return Json(new { kq = "ok", id = id, msg = "Success!" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("employee/permission/select/product")]
+        public ActionResult Role_User_Permission_Select_Product(Guid? id = null, Guid? product = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var userProduct = _db.User_Product.FirstOrDefault(x => x.UserID == id && x.ProductId == product);
+            if(userProduct == null)
+            {
+                User_Product user_Product = new User_Product();
+                user_Product.User_ProductID = Guid.NewGuid();
+                user_Product.UserID = id;
+                user_Product.ProductId = product.Value;
+                user_Product.StatusID = 1;
+                _db.User_Product.Add(user_Product);
+            }
+            else
+            {
+                userProduct.StatusID = userProduct.StatusID == 1 ? 0 : 1;
+            }
+            _db.SaveChanges();
+
+            return Json(new { kq = "ok", id = id, msg = "Success!" }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+
     }
 }

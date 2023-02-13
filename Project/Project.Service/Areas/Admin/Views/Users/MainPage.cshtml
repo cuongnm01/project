@@ -243,3 +243,55 @@
         });
     }
 </script>
+<script>
+    function DanhSach_PhanQuyen(obj) {
+        $("#danhsach_phanquyen").load("@Url.Action("Role_User_Permission_List", "Users", new { area = "Admin" })?id=" + obj );
+    }
+    function select_category(obj) {
+        $("#danhsach_phanquyen").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/id-loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
+        $.ajax({
+            url: '@Url.Action("Role_User_Permission_Select_Category", "Users", new { area = "Admin" })',
+            type: 'GET',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: false,
+            async: false,
+            cache: false,
+            data: {
+                id: obj.attr("data-id"),
+                category: obj.attr("data-category"),
+            },
+            success: function (data) {
+                if (data.kq == "ok") {
+                    DanhSach_PhanQuyen(data.id)
+                }
+                else {
+                    alertify.error(data.msg);
+                }
+            }
+        });
+    }
+     function select_product(obj) {
+        $.ajax({
+            url: '@Url.Action("Role_User_Permission_Select_Product", "Users", new { area = "Admin" })',
+            type: 'GET',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: false,
+            async: false,
+            cache: false,
+            data: {
+                id: obj.attr("data-id"),
+                product: obj.attr("data-product"),
+            },
+            success: function (data) {
+                if (data.kq == "ok") {
+                    DanhSach_PhanQuyen(data.id)
+                }
+                else {
+                    alertify.error(data.msg);
+                }
+            }
+        });
+    }
+</script>
