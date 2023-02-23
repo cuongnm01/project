@@ -518,7 +518,7 @@
                     debugger;
                     if (data.isSuccess) {
                         alertify.success(data.message);
-                        window.location.href = '@Url.Action("MainPage", "Products", new { area = "Admin" })';
+                        window.location.reload();
                     }
                     else {
                         alertify.error(data.message);

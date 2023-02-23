@@ -90,6 +90,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     productCategory.Image = fileImage[1];
                 }
                 productCategory.CreateDate = DateTime.Now;
+                productCategory.StatusID = EnumStatus.ACTIVE;
                 _db.Categorys.Add(productCategory);
                 _db.SaveChanges();
 
@@ -130,8 +131,9 @@ namespace Project.Service.Areas.Admin.Controllers
             if (category == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT_CATEGORY)));
 
-            //category.StatusID = EnumStatus.DELETE;
-            //_db.SaveChanges();
+            category.StatusID = EnumStatus.DELETE;
+            _db.Categorys.Remove(category);
+            _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
 

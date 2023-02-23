@@ -61,8 +61,12 @@ namespace Project.Service.Areas.Admin.Controllers
             if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
-            var size = _db.Sizes.FirstOrDefault(x => x.SizeId == id);
-            return PartialView(size);
+            var new_record = new Size();
+            new_record.SortOrder = _db.Categorys.Count() + 1;
+
+            var obj = _db.Sizes.FirstOrDefault(x => x.SizeId == id);
+            obj = obj == null ? new_record : obj;
+            return PartialView(obj);
         }
 
         [Route("size/update")]
@@ -78,6 +82,7 @@ namespace Project.Service.Areas.Admin.Controllers
 
                 if (size.SizeId == 0)
                 {
+                    size.StatusID = EnumStatus.ACTIVE;
                     _db.Sizes.Add(size);
                     _db.SaveChanges();
 
