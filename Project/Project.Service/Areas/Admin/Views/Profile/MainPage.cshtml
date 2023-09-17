@@ -1,0 +1,89 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+@model User
+@{
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+<!-- top navigation -->
+<div class="top_nav">
+    <div class="nav_menu">
+        <nav>
+            <div class="nav toggle">
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="cta-add-new">+ New</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                        <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Insert","Products",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/list_alt.png" width="24" /> Recipe</a></li>
+                        <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Categories",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/book.png" width="24" /> Recipe Book</a></li>
+                        <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/ingredient_group.png" width="24" /> Ingredient</a></li>
+                        <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/ingredient_group.png" width="24" /> Ingredient Group</a></li>
+                        <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit</a></li>
+                        <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit Group</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<!-- /top navigation -->
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2 style="color: #1E4D5B; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal;">Profile</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="" style="background-color: #fff; padding: 20px 0;">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-3">
+                            <img src="@((Model != null && Model.Avatar != null) ? @Model.Avatar.Replace("~/", "/") : "/Files/images/system/cover_default.png" )" style="width: 200px; height: 200px; object-fit: cover; border-radius: 100px" />
+                        </div>
+                        <div class="col-md-9" style="padding-top: 30px;">
+                            <h1>@Model.FullName</h1>
+                            <h3>@Model.Email</h3>
+                            <a style="cursor: pointer; color: #2F80ED;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Profile",new { area = "Admin", id = Model.UserID })', function (e) { $('#modal-qltaikhoan').modal('show'); });">Edit</a>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2 style="color: #1E4D5B; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal;">Password</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="" style="background-color: #fff; padding: 40px 0;">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label class="control-label" for="first-name">Your password</label>
+                                <div style="padding: 10px 0;">
+                                    <input class="form-control" id="Password" name="Password" type="password" disabled value="@(Model != null? Model.Password : "")">
+                                </div>
+                                <a style="cursor: pointer; color: #2F80ED;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Password","Profile",new { area = "Admin", id = Model.UserID })', function (e) { $('#modal-qltaikhoan').modal('show'); });">Rerest password</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    mnActive = "mn-profile";
+</script>

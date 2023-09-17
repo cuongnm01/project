@@ -5,42 +5,106 @@
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     UserInfo nd_dv = (UserInfo)ViewBag.User;
 }
+<!-- top navigation -->
+<div class="top_nav">
+    <div class="nav_menu">
+        <nav>
+            <div class="nav toggle">
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
+                {
+                    <li class="">
+                        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="cta-add-new">+ New</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-usermenu pull-right">
+                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Insert","Products",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/list_alt.png" width="24" /> Recipe</a></li>
+                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Categories",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/book.png" width="24" /> Recipe Book</a></li>
+                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/ingredient_group.png" width="24" /> Ingredient</a></li>
+                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/ingredient_group.png" width="24" /> Ingredient Group</a></li>
+                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit</a></li>
+                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit Group</a></li>
+                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Sizes",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Size</a></li>
+                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Slider",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Banner</a></li>
+                        </ul>
+                    </li>
+                }
+                <li style="padding: 12px;">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div>
+                                <input class="form-control search-form" placeholder="Search Unit..." name="tuKhoa" onchange="DanhSach();" />
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<!-- /top navigation -->
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Units <span id="permission-name"></span><span id="idtongso">(0)</span></h2>
                 <div class="clearfix"></div>
             </div>
-            <div class="">
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="col-md-10 col-sm-10 col-xs-12">
-                        <div>
-                            <input class="form-control" placeholder="Search..." name="tuKhoa" />
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-sm-2 col-sm-12">
-                        <a class="btn btn-primary" onclick="DanhSach();">Search</a>
-                    </div>
-                </div>
+            <div class="menu-nav">
+                <a class="menu-nav-item" href="@Url.Action("MainPage","Products")">
+                    <img src="/Files/images/system/recipe.png" width="24" />
+                    <span>Recipes</span>
+                </a>
+                <a class="menu-nav-item" href="@Url.Action("MainPage","Categories")">
+                    <img src="/Files/images/system/recipe_book.png" width="24" />
+                    <span>Recipe Books</span>
+                </a>
+                <a class="menu-nav-item" href="@Url.Action("MainPage","Ingredient")">
+                    <img src="/Files/images/system/ingredients.png" width="24" />
+                    <span>Ingredients</span>
+                </a>
+                <a class="menu-nav-item" href="@Url.Action("MainPage_Group","Ingredient")">
+                    <img src="/Files/images/system/ingredient_group_color.png" width="24" />
+                    <span>Ingredient Group</span>
+                </a>
+                <a class="menu-nav-item active">
+                    <img src="/Files/images/system/unit_group_color.png" width="24" />
+                    <span>Unit</span>
+                </a>
+                <a class="menu-nav-item" href="@Url.Action("MainPage_Group","Unit")">
+                    <img src="/Files/images/system/unit_group_color.png" width="24" />
+                    <span>Unit Group</span>
+                </a>
+                <a class="menu-nav-item" href="@Url.Action("MainPage","Sizes")">
+                    <img src="/Files/images/system/unit_group_color.png" width="24" />
+                    <span>Size</span>
+                </a>
+                <a class="menu-nav-item" href="@Url.Action("MainPage","Slider")">
+                    <img src="/Files/images/system/unit_group_color.png" width="24" />
+                    <span>Banner</span>
+                </a>
             </div>
             <div class="x_content table-responsive">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th class="text-center" width="100">Sort Order</th>
-                            <th class="text-center" width="100">Code</th>
-                            <th class="text-center">Name</th>
-                            <th width="150" class="text-center">
-                                @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Unit && (x.Fulls == EnumStatus.ACTIVE || x.Updates == EnumStatus.ACTIVE)) != null)
-                                {
-                                    <a class="btn btn-xs btn-primary" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-plus"></i> @Message.ACTION_INSERT</a>
-                                }
+                            <th class="text-left" width="60" style="max-width:60px;"><input type="checkbox" name="checkedAll" id="checkedAll" /></th>
+                            <th class="text-left">Name</th>
+                            <th class="text-left" width="200">Code</th>
+                            <th class="text-left" width="200">Group</th>
+                            <th class="text-left" width="200">Rate</th>
+                            <th class="text-left" width="300">Date added</th>
+                            <th width="150" class="text-left" style="max-width:60px;">
                             </th>
                         </tr>
                     </thead>
                     <tbody id="list"></tbody>
                     <tfoot>
+                        <tr>
+                            <td colspan="18" class="clear-all text-left" style="background-color: #fff;">
+                                <a class="btn btn-xs" onclick="RemoveAll($(this))"><img src="/Files/images/system/delete.png" width="24" /> Remove</a>
+                            </td>
+                        </tr>
                         <tr>
                             <td colspan="19">
                                 <span class="pull-left" style="margin-left:5px;">
@@ -58,12 +122,12 @@
                                 </span>
                                 <span class="pull-right" style="margin-right:5px;">
                                     <label for="" id="">Page:</label>
-                                    <select name="tongsodong" onchange="ChoosePage(5)" class="DDControl" style="height:30px;">
+                                    <select name="tongsodong" onchange="ChoosePage(5)" class="DDControl" style="height: 30px; background-color: transparent; border: 0px;">
                                         <option value="5">5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
-                                        <option value="20" selected>20</option>
-                                        <option value="100">100</option>
+                                        <option value="20">20</option>
+                                        <option value="100" selected>100</option>
                                     </select>
                                 </span>
                             </td>
@@ -79,42 +143,66 @@
 <div class="modal" tabindex="-1" role="dialog" id="modal-giaodich"></div>
 
 <script>
-    mnActive = "mn-unit";
+    mnActive = "mn-home";
     $(document).ready(function () {
         $(".ctr-select").selectpicker({
             width: '100%',
             showTick: true,
         });
         DanhSach();
-    });
+        $("#checkedAll").change(function () {
+            if (this.checked) {
+                $(".checkSingle").each(function () {
+                    this.checked = true;
+                })
+            } else {
+                $(".checkSingle").each(function () {
+                    this.checked = false;
+                })
+            }
+        });
 
+        $(".checkSingle").click(function () {
+            if ($(this).is(":checked")) {
+                var isAllChecked = 0;
+                $(".checkSingle").each(function () {
+                    if (!this.checked)
+                        isAllChecked = 1;
+                })
+                if (isAllChecked == 0) { $("#checkedAll").prop("checked", true); }
+            } else {
+                $("#checkedAll").prop("checked", false);
+            }
+        });
+    });
+    // Sort order by Tab table//
+    //$('th').click(function () {
+    //    var table = $(this).parents('table').eq(0)
+    //    var rows = table.find('tbody tr').toArray().sort(comparer($(this).index()))
+    //    this.asc = !this.asc
+    //    if (!this.asc) { rows = rows.reverse() }
+    //    for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
+    //})
+    //function comparer(index) {
+    //    return function (a, b) {
+    //        var valA = getCellValue(a, index), valB = getCellValue(b, index)
+    //        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+    //    }
+    //}
+    //function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
+    //===================================//
 </script>
 
 <script>
     function DanhSach() {
         $("#list").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
-        $("#list").load("@Url.Action("List", "Unit", new { area = "Admin" })?keyword=" + encodeURI($("[name=tuKhoa]").val()) + "&tongsodong=" + $('[name=tongsodong]').val() + "&status=" + $("#nhomquyenid").val());
+        $("#list").load("@Url.Action("List", "Unit", new { area = "Admin" })?keyword=" + encodeURI($("[name=tuKhoa]").val()) + "&tongsodong=" + $('[name=tongsodong]').val() + "&unitGroupId=" + @(ViewBag.unitGroupId ?? ""));
     }
 </script>
 <script>
 
     $(document).on("change", "[name=tuKhoa]", function () {
         DanhSach();
-    });
-    $(document).on("change", "[name=status]", function () {
-        DanhSach();
-    });
-</script>
-<script>
-    $(document).on("click", ".nhomquyen li a", function () {
-        //change tab view
-        $(this).parents(".nhomquyen").find(".active").removeClass("active");
-        $(this).parent("li").addClass("active");
-        //get nhom quyen
-        $("#nhomquyenid").val($(this).attr("id"));
-        //call function get danh sach
-        DanhSach();
-        return false;
     });
 </script>
 <script>
@@ -172,7 +260,7 @@
             }
         }
         $("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
-        $("#list").load("@Url.Action("List", "Unit", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&status=" + $('#nhomquyenid').val());
+        $("#list").load("@Url.Action("List", "Unit", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&unitGroupId=" + @(ViewBag.unitGroupId ?? ""));
     }
 </script>
 <script>
@@ -201,33 +289,30 @@
             }
         });
     }
-</script>
-<script>
-    function CapNhatTrangThai(obj) {
-        alertify.confirm('Confirm', function (e) {
+       function RemoveAll(obj) {
+           var checkboxValues = [];
+           $('input[name=checkAll]:checked').map(function () {
+               checkboxValues.push($(this).val());
+           });
+           console.log(checkboxValues);
+         alertify.confirm('Confirm delete', function (e) {
             if (e) {
-                $.ajax({
-                    url: '@Url.Action("Change_Status", "Unit", new { area = "Admin" })',
-                    type: 'GET',
-                    dataType: 'json',
-                    mimeType: "multipart/form-data",
-                    contentType: false,
-                    async: false,
-                    cache: false,
-                    data: { id: obj.attr("data-id") },
-                    success: function (data) {
-                        debugger;
-                        console.log(data);
-                        if (data.isSuccess) {
-                            alertify.success(data.message);
-                            if (data.data == @EnumStatus.ACTIVE)
-                                obj.html('<i class="fa fa-unlock" style="font-size:22px;"></i>');
-                            else
-                                obj.html('<i class="fa fa-lock" style="font-size:22px;"></i>');
-                            DanhSach();
+            $.ajax({
+                url: '@Url.Action("DeleteAll", "Unit", new { area = "Admin" })',
+                type: 'GET',
+                dataType: 'json',
+                mimeType: "multipart/form-data",
+                contentType: false,
+                async: false,
+                cache: false,
+                data: { ids: checkboxValues.join() },
+                success: function (data) {
+                    if (data.isSuccess) {
+                        alertify.success(data.message);
+                        DanhSach();
                         }
                         else {
-                            alertify.error(data.message);
+                        alertify.error(data.message);
                         }
                     }
                 });

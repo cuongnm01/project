@@ -23,7 +23,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Banners, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
@@ -36,8 +36,8 @@ namespace Project.Service.Areas.Admin.Controllers
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
-            var list = (from a in _db.Sliders.ToList()
-                        select a);
+            var list = (from a in _db.Sliders
+                        select a).OrderByDescending(x=>x.CreateDate);
 
             int tongso = list.Count();
 
@@ -57,12 +57,15 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Banners, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
-            var listSlider = _db.Sliders.ToList();
-            var slider = _db.Sliders.FirstOrDefault(x => x.SliderId == id);
-            return PartialView(slider);
+            var new_record = new Slider();
+            new_record.SortOrder = _db.Sliders.Count() + 1;
+
+            var obj = _db.Sliders.FirstOrDefault(x => x.SliderId == id);
+            obj = obj == null ? new_record : obj;
+            return PartialView(obj);
         }
 
         [Route("banner/update")]
@@ -73,7 +76,7 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 CheckPermission(EnumFunctions.Banners, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                     return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
                 if (slider.SliderId == 0)
@@ -86,6 +89,7 @@ namespace Project.Service.Areas.Admin.Controllers
                         string[] fileImage = _Logo.uploadFile(rootPathImage, filePathImage);
                         slider.Url = fileImage[1];
                     }
+                    slider.CreateDate = DateTime.Now;
                     _db.Sliders.Add(slider);
                     _db.SaveChanges();
 
@@ -125,7 +129,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Banners, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var slider = _db.Sliders.FirstOrDefault(x => x.SliderId == id);
@@ -149,6 +153,25 @@ namespace Project.Service.Areas.Admin.Controllers
 
             _db.SaveChanges();
             return Json(new CxResponse<object>(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("banner/delete-all")]
+        public ActionResult DeleteAll(string ids)
+        {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.DELETE);
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var sliderIds = ids.Split(',').ToList();
+
+            var sliders = _db.Sliders.Where(x => sliderIds.Contains(x.SliderId.ToString()));
+            if (sliders == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
+
+            _db.Sliders.RemoveRange(sliders);
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
     }
 }

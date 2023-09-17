@@ -26,7 +26,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Manager, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
@@ -41,7 +41,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Users.ToList()
-                        where a.PermissionID == EnumUserType.MANAGER && a.StatusID == status
+                        where a.PermissionID == EnumUserType.MANAGER && a.StatusID == status && (keyword == "" ? true : a.FullName.RemoveUnicode().ToLower().Contains(keyword))
                         select a).OrderByDescending(x => x.CreateDate);
 
             int tongso = list.Count();
@@ -62,7 +62,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Manager, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var users = _db.Users.FirstOrDefault(x => x.UserID == id);
@@ -77,7 +77,7 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 CheckPermission(EnumFunctions.Manager, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                     return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
                 if (obj.UserID == Guid.Empty)
@@ -177,7 +177,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Manager, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var obj = _db.Users.FirstOrDefault(x => x.UserID == id);
@@ -193,7 +193,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Manager, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var obj = _db.Users.FirstOrDefault(x => x.UserID == id);
@@ -283,12 +283,12 @@ namespace Project.Service.Areas.Admin.Controllers
         #endregion
 
         #region employee
-        [Route("employee/main-page")] 
+        [Route("employee/main-page")]
         public ActionResult MainPage()
         {
             CheckPermission(EnumFunctions.Employee, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
@@ -302,8 +302,10 @@ namespace Project.Service.Areas.Admin.Controllers
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Users.ToList()
-                        where a.PermissionID == EnumUserType.EMPLOYEE && a.StatusID == status
-                        select a).OrderByDescending(x => x.CreateDate);
+                        where (a.PermissionID == EnumUserType.EMPLOYEE || a.PermissionID == EnumUserType.MANAGER)
+                        && (keyword != "" ? (a.FullName.RemoveUnicode().ToLower().Contains(keyword) || a.Email.RemoveUnicode().ToLower().Contains(keyword)) : true)
+                        && a.StatusID != EnumStatus.DELETE
+                        select a).OrderBy(x => x.FullName);
 
             int tongso = list.Count();
 
@@ -323,10 +325,14 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Employee, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
+            var new_record = new User();
             var users = _db.Users.FirstOrDefault(x => x.UserID == id);
+            users = users == null ? new_record : users;
+
+
             return PartialView(users);
         }
 
@@ -338,7 +344,7 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 CheckPermission(EnumFunctions.Employee, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                     return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
                 if (obj.UserID == Guid.Empty)
@@ -371,7 +377,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     obj.UserID = Guid.NewGuid();
                     obj.UserCode = Helpers.CreateCode9Char();
                     obj.Password = Base.Security.Encode(obj.Password);
-                    obj.PermissionID = EnumUserType.EMPLOYEE;
+                    obj.PermissionID = obj.PermissionID ?? EnumUserType.EMPLOYEE;
                     obj.CreateDate = DateTime.Now;
                     _db.Users.Add(obj);
                     _db.SaveChanges();
@@ -438,13 +444,24 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Employee, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var obj = _db.Users.FirstOrDefault(x => x.UserID == id);
             if (obj == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
             obj.StatusID = EnumStatus.DELETE;
+
+            var a = _db.User_Category.Where(x => x.UserID == id);
+            _db.User_Category.RemoveRange(a);
+
+            var b = _db.User_Product.Where(x => x.UserID == id);
+            _db.User_Product.RemoveRange(b);
+
+            var c = _db.User_Permission.Where(x => x.UserID == id);
+            _db.User_Permission.RemoveRange(c);
+
+            _db.Users.Remove(obj);
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
@@ -483,13 +500,13 @@ namespace Project.Service.Areas.Admin.Controllers
             var category = _db.Categorys.ToList();
             ViewBag.categories = category;
 
-            var user_Category = _db.User_Category.Where(x => x.UserID == id).OrderBy(x => x.CategoryId).Select(x=>x.CategoryId).ToList();
+            var user_Category = _db.User_Category.Where(x => x.UserID == id).OrderBy(x => x.CategoryId).Select(x => x.CategoryId).ToList();
             ViewBag.userCategories = user_Category;
 
             var products = from a in _db.User_Product
-                          join b in _db.Products on a.ProductId equals b.ProductId
-                          where a.UserID == id
-                          select b;
+                           join b in _db.Products on a.ProductId equals b.ProductId
+                           where a.UserID == id
+                           select b;
 
             ViewBag.products = products;
 
@@ -498,8 +515,39 @@ namespace Project.Service.Areas.Admin.Controllers
 
             return PartialView(user);
         }
+        #endregion
 
-        [Route("employee/permission/list")]
+
+        #region permission access type
+        [Route("employee/permission/access-type")]
+        public ActionResult Role_User_Permission_Access_Type(Guid? id = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var user = _db.Users.FirstOrDefault(x => x.UserID == id);
+
+            return PartialView(user);
+        }
+
+        [Route("employee/permission/select/access")]
+        public ActionResult Role_User_Permission_Select_Access(Guid? id = null, int? permission = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var user = _db.Users.FirstOrDefault(x => x.UserID == id);
+            user.PermissionID = permission;
+            _db.SaveChanges();
+            return Json(new { kq = "ok", id = id, msg = "Success!" }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region permission block category
+        //Product in table User_Category is product blocked
+        [Route("employee/permission/category/list")]
         public ActionResult Role_User_Permission_List(Guid? id = null)
         {
             var nd_dv = GetUserLogin;
@@ -508,100 +556,176 @@ namespace Project.Service.Areas.Admin.Controllers
 
             var user = _db.Users.FirstOrDefault(x => x.UserID == id);
 
+            var user_Category = _db.User_Category.Where(x => x.UserID == id).Select(x => x.CategoryId).ToList();
 
-            var category = _db.Categorys.ToList();
+            var category = _db.Categorys.Where(x => user_Category.Contains(x.CategoryId) && x.StatusID != EnumStatus.DELETE).ToList();
             ViewBag.categories = category;
 
-            var user_Category = _db.User_Category.Where(x => x.UserID == id).OrderBy(x => x.CategoryId).Select(x => x.CategoryId).ToList();
-            ViewBag.userCategories = user_Category;
-
-            var products = (from a in _db.User_Product
-                           join b in _db.Products on a.ProductId equals b.ProductId
-                           where a.UserID == id
-                           select b).ToList();
-
-            ViewBag.products = products;
-
-            var userProducts = _db.User_Product.Where(x => x.UserID == id).ToList();
-            ViewBag.userProducts = userProducts;
             return PartialView(user);
         }
 
-        [Route("employee/permission/select")]
-        public ActionResult Role_User_Permission_Select_Category(Guid? id = null, int? category = null)
+        [Route("employee/permission/category/add")]
+        public ActionResult Role_User_Permission_Add_Category(Guid? id = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var user = _db.Users.FirstOrDefault(x => x.UserID == id);
+
+            var user_Category = _db.User_Category.Where(x => x.UserID == id).OrderBy(x => x.CategoryId).Select(x => x.CategoryId).ToList();
+
+            var category = _db.Categorys.Where(x => !user_Category.Contains(x.CategoryId) && x.StatusID != EnumStatus.DELETE).ToList();
+            string cbxCategory = "";
+            foreach (var item in category)
+            {
+                cbxCategory += string.Format("<option value=\"{0}\">{1}</option>", item.CategoryId, item.Name);
+            }
+            ViewBag.cbxCategory = cbxCategory;
+
+            User_Category obj = new User_Category();
+            obj.UserID = user.UserID;
+
+            return PartialView(obj);
+        }
+
+        [Route("employee/permission/category/add")]
+        [HttpPost]
+        public ActionResult Role_User_Permission_Add_Category(User_Category obj)
+        {
+            try
+            {
+                CheckPermission(EnumFunctions.Employee, EnumOptions.ADD);
+                var nd_dv = GetUserLogin;
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                    return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+                var old = _db.User_Category.Count(x => x.UserID == obj.UserID && x.CategoryId == obj.CategoryId);
+                if (old == 0)
+                {
+                    obj.User_CategoryID = Guid.NewGuid();
+                    _db.User_Category.Add(obj);
+                    _db.SaveChanges();
+                }
+
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+
+
+            }
+            catch (Exception e)
+            {
+                return Json(new CxResponse("err", Message.MSG_EXCEPTION));
+            }
+
+        }
+
+        [Route("employee/permission/category/remove")]
+        public ActionResult Role_User_Permission_Remove_Category(Guid? id = null, int? category = null)
         {
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var userCategory = _db.User_Category.FirstOrDefault(x => x.UserID == id && x.CategoryId == category);
-            if(userCategory == null)
+
+            var products = _db.Products.Where(x => x.CategoryId == category).Select(x => x.ProductId).ToList();
+            var userProducts = _db.User_Product.Where(x => products.Contains(x.ProductId) && x.UserID == id).ToList();
+            if (userProducts != null && userProducts.Count() > 0)
             {
-                User_Category user_Category = new User_Category();
-                user_Category.User_CategoryID = Guid.NewGuid();
-                user_Category.CategoryId = category;
-                user_Category.UserID = id;
-                _db.User_Category.Add(user_Category);
-
-                var products = _db.Products.Where(x => x.CategoryId == category).ToList();
-                if(products != null && products.Count() > 0)
-                {
-                    List<User_Product> user_Products = new List<User_Product>();
-                    foreach(var item in products)
-                    {
-                        User_Product user_Product = new User_Product();
-                        user_Product.User_ProductID = Guid.NewGuid();
-                        user_Product.UserID = id;
-                        user_Product.ProductId = item.ProductId;
-                        user_Product.StatusID = EnumStatus.ACTIVE;
-                        user_Products.Add(user_Product);
-                    }
-                    _db.User_Product.AddRange(user_Products);
-                }
+                _db.User_Product.RemoveRange(userProducts);
             }
-            else
-            {
-                var products = _db.Products.Where(x => x.CategoryId == category).Select(x=>x.ProductId).ToList();
-                var userProducts = _db.User_Product.Where(x => products.Contains(x.ProductId)).ToList();
-                if(userProducts != null && userProducts.Count() > 0)
-                {
-                    _db.User_Product.RemoveRange(userProducts);
-                }
-                _db.User_Category.Remove(userCategory);
-
-            }
-            _db.SaveChanges();
-
-            return Json(new { kq = "ok", id = id, msg = "Success!" }, JsonRequestBehavior.AllowGet);
-        }
-
-        [Route("employee/permission/select/product")]
-        public ActionResult Role_User_Permission_Select_Product(Guid? id = null, Guid? product = null)
-        {
-            var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
-                return RedirectToAction("AccessDenied", "Home", new { area = "" });
-
-            var userProduct = _db.User_Product.FirstOrDefault(x => x.UserID == id && x.ProductId == product);
-            if(userProduct == null)
-            {
-                User_Product user_Product = new User_Product();
-                user_Product.User_ProductID = Guid.NewGuid();
-                user_Product.UserID = id;
-                user_Product.ProductId = product.Value;
-                user_Product.StatusID = 1;
-                _db.User_Product.Add(user_Product);
-            }
-            else
-            {
-                userProduct.StatusID = userProduct.StatusID == 1 ? 0 : 1;
-            }
+            _db.User_Category.Remove(userCategory);
             _db.SaveChanges();
 
             return Json(new { kq = "ok", id = id, msg = "Success!" }, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
+        #region permission block recipe
+        //Product in table User_Product is product blocked
+        [Route("employee/permission/product")]
+        public ActionResult Role_User_Permission_Product(Guid? id = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var user = _db.Users.FirstOrDefault(x => x.UserID == id);
+            var userProducts = _db.User_Product.Where(x => x.UserID == id).Select(x => x.ProductId).ToList();
+
+            var products = _db.Products.Where(x => userProducts.Contains(x.ProductId) && x.StatusID != EnumStatus.DELETE).ToList();
+            ViewBag.products = products;
+
+            return PartialView(user);
+        }
+
+        [Route("employee/permission/product/add")]
+        public ActionResult Role_User_Permission_Add_Product(Guid? id = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var user = _db.Users.FirstOrDefault(x => x.UserID == id);
+
+            var user_Product = _db.User_Product.Where(x => x.UserID == id).OrderBy(x => x.ProductId).Select(x => x.ProductId).ToList();
+
+            var products = _db.Products.Where(x => !user_Product.Contains(x.ProductId) && x.StatusID != EnumStatus.DELETE).ToList();
+            string cbxProducts = "";
+            foreach (var item in products)
+            {
+                cbxProducts += string.Format("<option value=\"{0}\">{1}</option>", item.ProductId, item.Name);
+            }
+            ViewBag.cbxProducts = cbxProducts;
+
+            User_Product obj = new User_Product();
+            obj.UserID = user.UserID;
+
+            return PartialView(obj);
+        }
+
+        [Route("employee/permission/product/add")]
+        [HttpPost]
+        public ActionResult Role_User_Permission_Add_Product(User_Product obj)
+        {
+            try
+            {
+                CheckPermission(EnumFunctions.Employee, EnumOptions.ADD);
+                var nd_dv = GetUserLogin;
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                    return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+                var old = _db.User_Product.Count(x => x.UserID == obj.UserID && x.ProductId == obj.ProductId);
+                if (old == 0)
+                {
+                    obj.User_ProductID = Guid.NewGuid();
+                    obj.StatusID = EnumStatus.ACTIVE;
+                    _db.User_Product.Add(obj);
+                    _db.SaveChanges();
+                }
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+            }
+            catch (Exception e)
+            {
+                return Json(new CxResponse("err", Message.MSG_EXCEPTION));
+            }
+
+        }
+
+        [Route("employee/permission/product/remove")]
+        public ActionResult Role_User_Permission_Remove_Product(Guid? id = null, Guid? product = null)
+        {
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var userProduct = _db.User_Product.FirstOrDefault(x => x.UserID == id && x.ProductId == product);
+            _db.User_Product.Remove(userProduct);
+            _db.SaveChanges();
+
+            return Json(new { kq = "ok", id = id, msg = "Success!" }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
 
     }
 }

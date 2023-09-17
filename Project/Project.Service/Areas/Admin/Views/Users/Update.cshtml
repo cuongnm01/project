@@ -7,97 +7,148 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">
-                Update
-            </h4>
+
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
             <div class="modal-body">
+                <h4 class="modal-title">
+                    Update
+                </h4>
                 <input type="hidden" id="UserID" name="UserID" value="@(Model != null? Model.UserID.ToString():"")">
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">UserName</label>
-                        <div>
-                            <input type="text" class="form-control" id="UserName" name="UserName" value="@(Model != null && !string.IsNullOrEmpty(Model.UserName)? Model.UserName :"")" />
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Password</label>
-                        <div>
-                            <input type="password" class="form-control" id="Password" name="Password" value="" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Phone</label>
-                        <div>
-                            <input type="text" class="form-control" id="Phone" name="Phone" value="@(Model != null && !string.IsNullOrEmpty(Model.Phone)? Model.Phone :"")" />
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Email</label>
-                        <div>
-                            <input type="text" class="form-control" id="Email" name="Email" value="@(Model != null && !string.IsNullOrEmpty(Model.Email)? Model.Email :"")" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Full Name</label>
-                        <div>
-                            <input type="text" class="form-control" id="FullName" name="FullName" value="@(Model != null && !string.IsNullOrEmpty(Model.FullName)? Model.FullName :"")" />
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Status:</label>
-                        <div>
-                            <select class="ctr-select" data-live-search="true" name="StatusID">
-                                <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
-                                <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>Block</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Image:</label>
-                        <div>
-                            <div style="margin-bottom:10px">
-                                <input type="file" class="form-control" name="_Logo" />
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">UserName</label>
+                            <div>
+                                <input type="text" class="form-control" id="UserName" name="UserName" value="@(Model != null && !string.IsNullOrEmpty(Model.UserName)? Model.UserName :"")" />
                             </div>
-                            @if (Model != null && Model.Avatar != null)
-                            {
-                                <div class="col-md-55">
-                                    <div class="thumbnail" style="height:auto;">
-                                        <div class="image view view-first">
-                                            <img id="_Logo" src="@Model.Avatar.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
-                                            <div class="mask">
-                                                <p></p>
-                                                <div class="tools tools-bottom">
-                                                    <a href="javascript: window.open('@Model.Avatar.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">Password</label>
+                            <div>
+                                <input type="password" class="form-control" id="Password" name="Password" value="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 20px;">
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">Full Name</label>
+                            <div>
+                                <input type="text" class="form-control" id="FullName" name="FullName" value="@(Model != null && !string.IsNullOrEmpty(Model.FullName)? Model.FullName :"")" />
+                            </div>
+                        </div>
 
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">Email</label>
+                            <div>
+                                <input type="text" class="form-control" id="Email" name="Email" value="@(Model != null && !string.IsNullOrEmpty(Model.Email)? Model.Email :"")" />
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">Status:</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="StatusID">
+                                    <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
+                                    <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>Block</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.UserID != Guid.Empty)
+                    {
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Access Type</label>
+                                <div>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important "></th>
+                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">View Only</th>
+                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Manager</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="access_type">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Add Restrict Access by Folder (Recipes Book):</label>
+                                <div>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Recipe Book</th>
+                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recipe_book"></tbody>
+                                    </table>
+                                    <div>
+                                        <a class="btn btn-sm btn-add-access" onclick="javascript: $('#modal-example').load('@Url.Action("Role_User_Permission_Add_Category","Users",new { area = "Admin" , id = Model.UserID })', function (e) { $('#modal-example').modal('show'); });"><i class="fa fa-plus"></i> Add Restrict Access</a>
                                     </div>
                                 </div>
-                            }
-                            else
-                            {
-                                <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
-                            }
-
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Add Restrict Access by Single Recipe:</label>
+                                <div>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Recipe</th>
+                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recipe"></tbody>
+                                    </table>
+                                    <div>
+                                        <a class="btn btn-sm btn-add-access" onclick="javascript: $('#modal-example').load('@Url.Action("Role_User_Permission_Add_Product","Users",new { area = "Admin" , id = Model.UserID })', function (e) { $('#modal-example').modal('show'); });"><i class="fa fa-plus"></i> Add Restrict Access</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Access Type</label>
+                                <div>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important "></th>
+                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">View Only</th>
+                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Manager</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="border: 1px solid #E0E0E0 !important ">General Access</td>
+                                                <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
+                                                    <input type="radio" name="PermissionID" value="@EnumUserType.EMPLOYEE" @(Model.PermissionID == EnumUserType.EMPLOYEE ? "checked" :"")/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
+                                                    <input type="radio" name="PermissionID" value="@EnumUserType.MANAGER" @(Model.PermissionID == EnumUserType.MANAGER ? "checked" : "") />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
-
-
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">@Message.CANCEL</button>
                 <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">@Message.CANCEL</button>
             </div>
         </form>
     </div>
@@ -108,6 +159,15 @@
             width: '100%',
             showTick: true,
         });
+
+        $("#access_type").html("<tr><td colspan='19'><img src='/Files/images/system/id-loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
+        access_type_load('@Model.UserID');
+
+        $("#recipe_book").html("<tr><td colspan='19'><img src='/Files/images/system/id-loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
+        recipe_book_load('@Model.UserID');
+
+        $("#recipe").html("<tr><td colspan='19'><img src='/Files/images/system/id-loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
+        recipe_load('@Model.UserID');
     })
 </script>
 <script>
@@ -135,7 +195,13 @@
                         }
                     }
                 },
-
+                FullName: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Required data'
+                        },
+                    }
+                },
                 _Logo: {
                     validators: {
                         file: {
@@ -146,22 +212,7 @@
                         },
                     }
                 },
-                Phone: {
-                    validators: {
-                        callback: {
-                            callback: function (value, validator, $field) {
-                                var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
-                                if (value.length != 0 && vnf_regex.test(value) == false) {
-                                    return {
-                                        valid: false,
-                                        message: 'Sai định dạng'
-                                    }
-                                }
-                                return true;
-                            }
-                        },
-                    }
-                },
+
             }
         }).on('success.form.fv', function (e) {
             document.getElementById("btn-save1").disabled = true;
@@ -177,7 +228,6 @@
                 cache: false,
                 data: new FormData(document.getElementById('frm-capnhat1')),
                 success: function (data) {
-                    debugger;
                     if (data.isSuccess) {
                         alertify.success(data.message);
                         window.location.href = '@Url.Action("MainPage", "Users", new { area = "Admin" })';

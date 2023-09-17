@@ -388,6 +388,7 @@ C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramewor
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\EntityFramework.SqlServer.xml
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.ValueTuple.xml
 C:\Users\HP\Desktop\Nhat\Menu\project\Project\Project.Service\bin\System.Threading.Tasks.Extensions.xml
+E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.Reflection.Metadata.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.dll.config
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\Project.Service.pdb
@@ -422,7 +423,6 @@ E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.IO.F
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.IO.FileSystem.Primitives.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.Net.Http.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.Net.Sockets.dll
-E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.Reflection.Metadata.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.Security.Cryptography.Algorithms.dll
 E:\SourceCode\Web\Project\project\Project\Project.Service\bin\roslyn\System.Security.Cryptography.Encoding.dll

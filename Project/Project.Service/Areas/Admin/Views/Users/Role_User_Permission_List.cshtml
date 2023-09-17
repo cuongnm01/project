@@ -12,30 +12,17 @@
 
     int stt = 0;
 }
+
 @if (categories != null && categories.Count() > 0)
 {
     foreach (var item in categories)
     {
-        int j = 0;
         <tr>
-            <td class="text-left" >@(++stt)</td>
-            <td colspan="2">@item.Name</td>
-            <td class="text-center">
-                <input type="checkbox" name="foo" data-id="@Model.UserID" data-category="@item.CategoryId" value="@(userCategories.Contains(item.CategoryId) ? 1 : 0)" @( userCategories.Contains(item.CategoryId) ? "checked" : "") onclick="select_category($(this));">
+            <td style="border: 1px solid #E0E0E0 !important ">@item.Name</td>
+            <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
+                <img style="cursor: pointer" src="/Files/images/system/close.png" width="24" height="24" data-id="@Model.UserID" data-category="@item.CategoryId" onclick="remove_category($(this));"/>
             </td>
         </tr>
-        foreach (var subItem in products.Where(x=>x.CategoryId == item.CategoryId))
-        {
-            var userProduct = userProducts.FirstOrDefault(x => x.ProductId == subItem.ProductId);
-            <tr>
-                <td class="text-center"></td>
-                <td class="text-left">@(++j)</td>
-                <td>@subItem.Name</td>
-                <td class="text-center">
-                    <input type="checkbox" name="foo" data-id="@Model.UserID" data-product="@subItem.ProductId" value="@(userProduct != null ? userProduct.StatusID ?? 0 : 0)" @(userProduct != null && userProduct.StatusID == EnumStatus.ACTIVE ? "checked" : "") onclick="select_product($(this));">
-                </td>
-            </tr>
-        }
     }
 }
 

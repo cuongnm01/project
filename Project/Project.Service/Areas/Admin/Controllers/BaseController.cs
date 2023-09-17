@@ -34,27 +34,27 @@ namespace Project.Service.Areas.Admin.Controllers
 
             nd_dv.AccessDenied = EnumStatus.INACTIVE;
 
-            var permission = _db.User_Permission.FirstOrDefault(x => x.UserID == nd_dv.Users.UserID && x.Functions == functions);
-            if (nd_dv.Users.PermissionID != EnumUserType.ADMIN && permission == null)
-            {
-                nd_dv.AccessDenied = EnumStatus.ACTIVE;
-                return Json(new {}, JsonRequestBehavior.AllowGet);
-            }
+            //var permission = _db.User_Permission.FirstOrDefault(x => x.UserID == nd_dv.Users.UserID && x.Functions == functions);
+            //if (nd_dv.Users.PermissionID != EnumUserType.ADMIN && permission == null)
+            //{
+            //    nd_dv.AccessDenied = EnumStatus.ACTIVE;
+            //    return Json(new {}, JsonRequestBehavior.AllowGet);
+            //}
 
-            if (nd_dv.Users.PermissionID != EnumUserType.ADMIN && permission.Fulls != EnumStatus.ACTIVE)
-            {
-                if (option == EnumOptions.VIEW && permission.Views != EnumStatus.ACTIVE)
-                    nd_dv.AccessDenied = EnumStatus.ACTIVE;
+            //if (nd_dv.Users.PermissionID != EnumUserType.ADMIN && permission.Fulls != EnumStatus.ACTIVE)
+            //{
+            //    if (option == EnumOptions.VIEW && permission.Views != EnumStatus.ACTIVE)
+            //        nd_dv.AccessDenied = EnumStatus.ACTIVE;
 
-                if (option == EnumOptions.ADD && permission.Updates != EnumStatus.ACTIVE)
-                    nd_dv.AccessDenied = EnumStatus.ACTIVE;
+            //    if (option == EnumOptions.ADD && permission.Updates != EnumStatus.ACTIVE)
+            //        nd_dv.AccessDenied = EnumStatus.ACTIVE;
 
-                if (option == EnumOptions.DELETE && permission.Deletes != EnumStatus.ACTIVE)
-                    nd_dv.AccessDenied = EnumStatus.ACTIVE;
+            //    if (option == EnumOptions.DELETE && permission.Deletes != EnumStatus.ACTIVE)
+            //        nd_dv.AccessDenied = EnumStatus.ACTIVE;
 
-                if (option == EnumOptions.FULL && permission.Fulls != EnumStatus.ACTIVE)
-                    nd_dv.AccessDenied = EnumStatus.ACTIVE;
-            }
+            //    if (option == EnumOptions.FULL && permission.Fulls != EnumStatus.ACTIVE)
+            //        nd_dv.AccessDenied = EnumStatus.ACTIVE;
+            //}
 
             Session[ConfigKey.SESSION_LOGIN] = nd_dv;
             return Json(new {}, JsonRequestBehavior.AllowGet);

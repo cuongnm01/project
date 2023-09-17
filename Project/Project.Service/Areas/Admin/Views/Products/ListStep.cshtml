@@ -4,47 +4,35 @@
 @model IEnumerable<ProductDirection>
 @{
     int stt = 0;
-
 }
 @if (Model != null && Model.Count() > 0)
 {
     foreach (var item in Model)
     {
-<tr>
-    <td class="text-center">@(++stt)</td>
-
-    <td class="text-center">
-        <span class="">@(item.Name)</span>
-    </td>
-    <td class="text-center">
-        <span class="">@(item.Description)</span>
-    </td>
-    <td class="text-center"><img width="50" src="@(string.IsNullOrEmpty(item.Image)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Image.Replace("~","")) " /></td>
-    <td class="text-center">
-        <span data-id="@item.ProductDirectionId" onclick="CapNhatTrangThaiStep($(this))" style="cursor: pointer" title="Cập nhật trạng thái">
-            <i class="fa @(item.StatusID == EnumStatus.ACTIVE? "fa-unlock":"fa-lock")" style="font-size:22px;"></i>
-        </span>
-    </td>
-
-    <td class="text-center clickable-td">
-        <div class="dropdown">
-            <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
-                Thao tác
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("UpdateStep","Products", new { area = "Admin", directionId = item.ProductDirectionId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i>Chỉnh sửa</a>
-
-                </li>
-                <li>
-                    <a class="btn btn-xs btn-danger" data-id="@item.ProductDirectionId" onclick="XoaStep($(this))"><i class="fa fa-trash"></i>Xoá</a>
-                </li>
-            </ul>
-        </div>
-
-    </td>
-</tr>
+        <tr style="height: 150px;">
+            <td class="text-center"><p>Step @(++stt)</p></td>
+            <td class="text-left">
+                <p>
+                    @(item.Description)
+                </p>
+            </td>
+            <td class="text-left" width="150"><img style="width: 150px; height: 150px; object-fit: cover; border-radius: 6px;" src="@(string.IsNullOrEmpty(item.Image)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Image.Replace("~","")) " /></td>
+            <td class="text-center clickable-td" width="60" style="max-width: 60px;">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
+                        <img src="/Files/images/system/more_vertical.png" width="24" height="24" />
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("UpdateStep","Products", new {area ="Admin",directionId = item.ProductDirectionId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/edit_book.png" width="24" /> Edit Step</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" data-id="@item.ProductDirectionId" onclick="XoaStep($(this))"><img src="/Files/images/system/delete.png" width="24" /> Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
 
     }
 }

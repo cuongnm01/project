@@ -1,4 +1,5 @@
 ﻿
+using Common.Constants;
 using Project.Model.DbSet;
 using Project.Model.Respone;
 using System;
@@ -35,10 +36,9 @@ namespace Project.Service.Controllers
                     return Ok(new CxResponse("err", "User not found"));
                 }
 
-
                 var userCategory = db.User_Category.Where(x => x.UserID == user.UserID).Select(x => x.CategoryId).ToList();
 
-                var list = db.Categorys.Where(x=> userCategory.Contains(x.CategoryId)).ToList();
+                var list = db.Categorys.Where(x=> x.StatusID == EnumStatus.ACTIVE && !userCategory.Contains(x.CategoryId)).ToList();
 
                 var obj = (from a in list
                            select new

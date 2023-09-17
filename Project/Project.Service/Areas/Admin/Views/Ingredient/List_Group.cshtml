@@ -3,7 +3,7 @@
 @using Common.Resources
 @using Project.Model.Model
 @using Project.Model.Configuration;
-@model IEnumerable<IngredientGroup>
+@model IEnumerable<IngredientGroupInfo>
 @{
     int stt = 0;
     UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
@@ -14,30 +14,38 @@
     foreach (var item in Model)
     {
         <tr>
-            <td class="text-center">@(++stt)</td>
-            <td class="text-center">@(item.Name)</td>
+            <td class="text-left">
+                <input type="checkbox" name="checkAll" class="checkSingle" value="@item.IngredientGroup.IngredientGroupId" />
+            </td>
+            <td class="text-left">@(item.IngredientGroup.Name)</td>
+            <td class="text-left">
+                <a href="@Url.Action("MainPage","Ingredient", new {ingredientGroupId = item.IngredientGroup.IngredientGroupId })">@(item.TotalIngredient)</a>
+            </td>
+            <td class="text-left">
+                <span>
+                    @(item.IngredientGroup.StatusID == EnumStatus.ACTIVE? "Active":"Hide")
+                </span>
+            </td>
+            <td class="text-left">
+                <span class="">@( item.IngredientGroup.CreateDate != null ? item.IngredientGroup.CreateDate.Value.ToString("yyyy-MM-dd") :"")</span>
+            </td>
             <td class="text-center clickable-td">
-                <div class="dropdown">
-                    <button class="btn btn-xs btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:160px;">
-                        Action
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Ingredient && (x.Fulls == EnumStatus.ACTIVE || x.Updates == EnumStatus.ACTIVE)) != null)
-                        {
+                @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
+                {
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
+                            <img src="/Files/images/system/more_vertical.png" width="24" height="24" />
+                        </a>
+                        <ul class="dropdown-menu">
                             <li>
-                                <a class="btn btn-xs btn-success" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Ingredient", new { area = "Admin", id = item.IngredientGroupId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><i class="fa fa-pencil-square-o"></i>@Message.ACTION_UPDATE</a>
+                                <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Ingredient", new { area = "Admin", id = item.IngredientGroup.IngredientGroupId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/edit_book.png" width="24" /> Edit Ingredient group</a>
                             </li>
-                        }
-                        @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN || nd_dv.User_Permissions.FirstOrDefault(x => x.Functions == EnumFunctions.Ingredient && (x.Fulls == EnumStatus.ACTIVE || x.Deletes == EnumStatus.ACTIVE)) != null)
-                        {
                             <li>
-                                <a class="btn btn-xs btn-danger" data-id="@item.IngredientGroupId" onclick="Xoa($(this))"><i class="fa fa-trash"></i> @Message.ACTION_DELETE</a>
+                                <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" data-id="@item.IngredientGroup.IngredientGroupId" onclick="Xoa($(this))"><img src="/Files/images/system/delete.png" width="24" /> Delete</a>
                             </li>
-                        }
-                    </ul>
-                </div>
-
+                        </ul>
+                    </div>
+                }
             </td>
         </tr>
 
@@ -46,9 +54,7 @@
 <script>
     $('#idsotrang').val('@ViewBag.sotrang');
     document.getElementById("idtongsotrang").innerHTML = '@ViewBag.tongsotrang';
-    document.getElementById("idtongso").innerHTML = '(' + '@ViewBag.tongso' + ')';
     $(".clickable-td").on("click", function (e) {
-        //e.stopPropagation();
         $(".dropdown-toggle").dropdown();
     });
 

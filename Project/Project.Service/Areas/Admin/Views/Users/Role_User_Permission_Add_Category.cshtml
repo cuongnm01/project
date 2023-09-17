@@ -1,0 +1,74 @@
+﻿@using Project.Model.DbSet
+@model User_Category
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form class="fv-form fv-form-bootstrap" id="frm-capnhat2">
+            <div class="modal-body">
+                <h4 class="modal-title">
+                    Recipe Book
+                </h4>
+                <input type="hidden" id="UserID" name="UserID" value="@Model.UserID">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 conditionType">
+                            <label class="control-label" for="first-name">Recipe Book</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="CategoryId" id="CategoryId">
+                                    @Html.Raw(ViewBag.cbxCategory)
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                <button id="btn-saveStep" type="button" onclick="save()" class="btn btn-success">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".ctr-select").selectpicker({
+            width: '100%',
+            showTick: true,
+        });
+    })
+
+    function save() {
+        $.ajax({
+                url: '@Url.Action("Role_User_Permission_Add_Category", "Users", new { area = "Admin" })',
+                type: 'POST',
+                dataType: 'json',
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                async: false,
+                cache: false,
+                data: new FormData(document.getElementById('frm-capnhat2')),
+                success: function (data) {
+                    if (data.isSuccess) {
+                        alertify.success(data.message);
+                        $('#modal-example').modal('hide');
+                        recipe_book_load('@Model.UserID');
+                    }
+                    else {
+                        alertify.error(data.message);
+                        document.getElementById("btn-saveStep").disabled = false;
+                        $("#btn-saveStep").removeClass("disabled");
+                    }
+                }
+            });
+    }
+
+
+
+</script>
+

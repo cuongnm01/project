@@ -1,95 +1,55 @@
 ﻿@using Project.Model.Model
 @using Project.Model.Configuration
+@using Common.Constants
+
 @{
     UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
 }
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="@Url.Action("MainPage","Home")" class="site_title"><i class="fa fa-home"></i> <span>Bottega</span></a>
+            <a href="@Url.Action("MainPage","Home")" class="site_title"><img src="/Files/images/system/logo-white.png" width="115" /></a>
+            <div class="nav left-toggle">
+                <a id="menu_toggle"><img src="/Files/images/system/double_arrow.png" width="32" /></a>
+            </div>
         </div>
         <div class="clearfix"></div>
+        <br />
+        <!-- sidebar menu -->
+        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu" style=" display: flex; justify-content: center; align-items: center; height: 90%; ">
+            <div class="menu_section" style=" width: 230px; ">
+                <ul class="nav side-menu">
+                    <li class="mn-home">
+                        <a href="@Url.Action("MainPage","Products")"><i class="fa fa-home"></i> Home<span class="fa fa-chevron-right"></span></a>
+                    </li>
+                    <li class="mn-profile">
+                        <a href="@Url.Action("MainPage","Profile")"><i class="fa fa-user"></i> Profile<span class="fa fa-chevron-right"></span></a>
+                    </li>
+                    @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
+                    {
+                        <li class="mn-team">
+                            <a href="@Url.Action("MainPage","Users")"><i class="fa fa-users"></i> Manage Team<span class="fa fa-chevron-right"></span></a>
+                        </li>
+                    }
+
+
+                </ul>
+            </div>
+
+        </div>
+        <!-- /sidebar menu -->
         <!-- menu profile quick info -->
         <div class="profile clearfix">
             <div class="profile_pic">
-                <img src="@(!string.IsNullOrEmpty(nd_dv.Users.Avatar) ? nd_dv.Users.Avatar.Replace("~/","/") : "/Files/images/system/no_pic.jpg")" alt="@string.Format("{0}", nd_dv.Users.FullName)" class="img-circle profile_img">
+                <img src="@((nd_dv != null && nd_dv.Users != null && nd_dv.Users.Avatar != null) ? nd_dv.Users.Avatar.Replace("~/", "/") : "/Files/images/system/no_pic.jpg" )" class="img-circle profile_img" width="48" height="48">
             </div>
             <div class="profile_info">
-                <span>Welcome,</span>
-                <h2>@string.Format("{0}", nd_dv.Users.FullName)</h2>
+                <h2>@nd_dv.Users.FullName</h2>
+                <span>@(nd_dv.Users.Email?? "email@bottega.com")</span>
+                <br />
+                <a style="color: #fff;" href="/logout"><i class="fa fa-sign-out pull-right"></i> Logout</a>
             </div>
         </div>
         <!-- /menu profile quick info -->
-        <br />
-        <!-- sidebar menu -->
-        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-            <div class="menu_section">
-                <ul class="nav side-menu">
-                    <li class="mn-slider">
-                        <a><i class="fa fa-sliders"></i> Banner<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="mn-notifications"> <a href="@Url.Action("MainPage","Slider")"> Banner</a></li>
-                        </ul>
-                    </li>
-                    <li class="mn-size">
-                        <a><i class="fa fa-sliders"></i> Size<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="mn-sizes"> <a href="@Url.Action("MainPage","Sizes")"> Size</a></li>
-                            <li class="mn-unit-group"> <a href="@Url.Action("MainPage_Group","Unit")"> Unit Group</a></li>
-                            <li class="mn-unit"> <a href="@Url.Action("MainPage","Unit")"> Unit</a></li>
-                        </ul>
-                    </li>
-                    <li class="mn-ingredient">
-                        <a><i class="fa fa-sliders"></i> Ingredient<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="mn-ingredient-group"> <a href="@Url.Action("MainPage_Group","Ingredient")"> Ingredient group</a></li>
-                            <li class="mn-ingredient"> <a href="@Url.Action("MainPage","Ingredient")"> Ingredient</a></li>
-                        </ul>
-                    </li>
-                    <li class="mn-employee">
-                        <a><i class="fa fa-graduation-cap"></i> Account<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="mn-manager"><a href="@Url.Action("MainPage_Manager","Users")">Manager</a></li>
-                            <li class="mn-employee"><a href="@Url.Action("MainPage","Users")">Employee</a></li>
-                        </ul>
-                    </li>
-                    <li class="mn-store">
-                        <a><i class="fa fa-graduation-cap"></i> Recipe<span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li class="mn-product-categories"><a href="@Url.Action("MainPage","Categories")">Recipe Book</a></li>
-                            <li class="mn-products"><a href="@Url.Action("MainPage","Products")">Recipe</a></li>
-                        </ul>
-                    </li>
-                    
-                </ul>
-            </div>
-        </div>
-        <!-- /sidebar menu -->
     </div>
 </div>
-<!-- top navigation -->
-<div class="top_nav">
-    <div class="nav_menu">
-        <nav>
-            <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-            </div>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="">
-                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        <img src="@(!string.IsNullOrEmpty(nd_dv.Users.Avatar) ? nd_dv.Users.Avatar.Replace("~/","/") : "/Files/images/system/no_pic.jpg")" alt="@string.Format("{0}", nd_dv.Users.FullName)">@string.Format("{0}", nd_dv.Users.FullName)
-                        <span class=" fa fa-angle-down"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-usermenu pull-right">
-                        @*<li><a href="@Url.Action("Info","User", new { area = "Admin"})"> Info</a></li>*@
-                        @*<li>
-                            <a class="" style="cursor:pointer;padding-right:10px;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("ChangePassword","Account", new { area = ""})', function (e) { $('#modal-qltaikhoan').modal('show'); });"> Đổi mật khẩu</a>
-                        </li>*@
-                        <li><a href="@Url.Action("Logout","Home", new { area = ""})"><i class="fa fa-sign-out pull-right"></i> Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</div>
-<!-- /top navigation -->

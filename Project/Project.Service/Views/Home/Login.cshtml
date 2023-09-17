@@ -10,7 +10,7 @@
     <!--===============================================================================================-->
     <script src="~/Libs/Login_v3/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="~/Files/images/system/FAV.png" />
+    <link rel="icon" type="image/png" href="/Files/images/system/logo.jpg" />
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="~/Libs/Login_v3/vendor/bootstrap/css/bootstrap.min.css">
     <!--===============================================================================================-->
@@ -128,7 +128,7 @@
                         debugger;
                         if (data.isSuccess) {
                             alertify.success(data.message);
-                            window.location.href = '@Url.Action("MainPage", "Slider", new { area = "Admin" })';
+                            window.location.href = '@Url.Action("MainPage", "Products", new { area = "Admin" })';
                         }
                         else {
                             alertify.error(data.message);

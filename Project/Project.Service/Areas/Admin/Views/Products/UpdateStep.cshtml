@@ -7,88 +7,63 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">
-                Steps
-            </h4>
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat2">
             <div class="modal-body">
+                <h4 class="modal-title">
+                    Steps
+                </h4>
                 <input type="hidden" id="ProductDirectionId" name="ProductDirectionId" value="@(Model != null? Model.ProductDirectionId.ToString():Guid.Empty.ToString())">
+                <input type="hidden" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder:0)">
                 <input type="hidden" id="ProductTempId" name="ProductTempId">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Name</label>
-                        <div>
-                            <input class="form-control" id="Name" name="Name" type="text" value="@(Model != null? Model.Name : "")">
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Image : (104x104)</label>
-                        <div>
-                            <div style="margin-bottom:10px">
-                                <input type="file" class="form-control" name="_LogoStep" />
-                            </div>
-                            @if (Model != null && Model.Image != null)
-                            {
-                                <div class="col-md-55">
-                                    <div class="thumbnail" style="height:auto;">
-                                        <div class="image view view-first">
-                                            <img id="_Logo" src="@Model.Image.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
-                                            <div class="mask">
-                                                <p></p>
-                                                <div class="tools tools-bottom">
-                                                    <a href="javascript: window.open('@Model.Image.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Image : (104x104)</label>
+                            <div>
+                                <div style="margin-bottom:10px">
+                                    <input type="file" class="form-control" name="_LogoStep" />
+                                </div>
+                                @if (Model != null && Model.Image != null)
+                                {
+                                    <div class="col-md-55">
+                                        <div class="thumbnail" style="height:auto;">
+                                            <div class="image view view-first">
+                                                <img id="_Logo" src="@Model.Image.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
+                                                <div class="mask">
+                                                    <p></p>
+                                                    <div class="tools tools-bottom">
+                                                        <a href="javascript: window.open('@Model.Image.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                                                    </div>
                                                 </div>
                                             </div>
+
                                         </div>
-
                                     </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
-                            }
+                                }
+                                else
+                                {
+                                    <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
+                                }
 
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Sort Order</label>
-                        <div>
-                            <input class="form-control" id="SortOrder" name="SortOrder" type="number" value="@(Model != null? Model.SortOrder.ToString() : "")">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Status:</label>
-                        <div>
-                            <select class="ctr-select" data-live-search="true" name="StatusID">
-                                <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
-                                <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
                         <div class="form-group col-md-12 col-sm-12 col-xs-12">
                             <label class="control-label" for="first-name">Content</label>
                             <div>
-                                <textarea class="form-control"  name="Description">@(Model != null ? Model.Description : "")</textarea>
+                                <textarea class="form-control" rows="5" name="Description">@(Model != null ? Model.Description : "")</textarea>
                             </div>
 
                         </div>
+                    </div>
                 </div>
-               
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
                 <button id="btn-saveStep" type="button" onclick="saveStep()" class="btn btn-success">Save</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
             </div>
         </form>
     </div>
@@ -107,63 +82,10 @@
             framework: 'bootstrap',
             excluded: ':disabled',
             fields: {
-                Name: {
+                Description: {
                     validators: {
                         notEmpty: {
                             message: 'Dữ liệu bắt buộc'
-                        },
-                    }
-                },
-                Address: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
-                        },
-                    }
-                },
-                STT: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
-                        },
-                    }
-                },
-
-                _LogoStep: {
-                    validators: {
-
-                        file: {
-                            extension: 'jpeg,jpg,png',
-                            type: 'image/jpeg,image/png',
-                            maxSize: 5242880,
-                            message: 'Hệ thống chỉ hỗ trợ sử dụng file ảnh jpg,png'
-                        },
-    @if (!(Model != null && Model.Image != null))
-    {
-        <text>
-                            notEmpty: {
-                                message: 'Dữ liệu bắt buộc'
-                            },
-        </text>
-    }
-                    }
-                },
-                Phone: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Dữ liệu bắt buộc'
-                        },
-                        callback: {
-                            callback: function (value, validator, $field) {
-                                var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
-                                if (value.length != 0 && vnf_regex.test(value) == false) {
-                                    return {
-                                        valid: false,
-                                        message: 'Sai định dạng'
-                                    }
-                                }
-                                return true;
-                            }
                         },
                     }
                 },
@@ -203,5 +125,5 @@
     }
 
 
-    
+
 </script>

@@ -1,81 +1,73 @@
 ﻿@using Common.Constants
 @using Project.Model.DbSet
 @using Common.Resources
+@using Project.Model.Model
+@using Project.Model.Configuration;
 @model Unit
-
+@{
+    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
+}
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">
-                Unit
-            </h4>
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
             <div class="modal-body">
+                <h4 class="modal-title">
+                    Unit
+                </h4>
                 <input type="hidden" id="UnitId" name="UnitId" value="@(Model != null? Model.UnitId:0)">
-
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-4 col-sm-4 col-xs-12">
-                        <label class="control-label" for="first-name">Group</label>
-                        <div>
-                            <select class="ctr-select" data-live-search="true" name="UnitGroupId" id="UnitGroupId">
-                                @Html.Raw(ViewBag.cbxCategory)
-                            </select>
+                <input type="hidden" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder:0)">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">Group</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="UnitGroupId" id="UnitGroupId">
+                                    @Html.Raw(ViewBag.cbxCategory)
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">Code</label>
+                            <div>
+                                <input type="text" class="form-control" id="Code" name="Code" value="@(Model != null && !string.IsNullOrEmpty(Model.Code)? Model.Code :"")" />
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">Name</label>
+                            <div>
+                                <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-4 col-sm-4 col-xs-12">
-                        <label class="control-label" for="first-name">Code</label>
-                        <div>
-                            <input type="text" class="form-control" id="Code" name="Code" value="@(Model != null && !string.IsNullOrEmpty(Model.Code)? Model.Code :"")" />
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">Is Base Unit</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="IsDefault">
+                                    <option value="true" @((Model != null && Model.IsDefault == true) ? "Selected" : "")>Yes</option>
+                                    <option value="false" @((Model != null && Model.IsDefault == false) ? "Selected" : "")>No</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-4 col-sm-4 col-xs-12">
-                        <label class="control-label" for="first-name">Name</label>
-                        <div>
-                            <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">IsDefault</label>
-                        <div>
-                            <select class="ctr-select" data-live-search="true" name="IsDefault">
-                                <option value="true" @((Model != null && Model.IsDefault == true) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
-                                <option value="false" @((Model != null && Model.IsDefault == false) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Rate</label>
-                        <div>
-                            <input type="text" class="form-control" id="Rate" name="Rate" value="@(Model != null && Model.Rate != null ? Model.Rate :1)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">@Message.F_STATUS:</label>
-                        <div>
-                            <select class="ctr-select" data-live-search="true" name="StatusID">
-                                <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
-                                <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Sort Order</label>
-                        <div>
-                            <input type="text" class="form-control" id="SortOrder" name="SortOrder" value="@(Model != null && Model.SortOrder != null ? Model.SortOrder :1)" />
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">Rate</label>
+                            <div>
+                                <input type="text" class="form-control" id="Rate" name="Rate" value="@(Model != null && Model.Rate != null ? Model.Rate :1)" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
-                <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">@Message.CANCEL</button>
+                @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
+                {
+                    <button type="button" class="btn btn-info" data-dismiss="modal">@Message.CANCEL</button>
+                    <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
+                }
             </div>
         </form>
     </div>

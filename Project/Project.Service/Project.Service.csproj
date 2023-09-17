@@ -151,6 +151,7 @@
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\IngredientController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProfileController.cs" />
     <Compile Include="Areas\Admin\Controllers\SizesController.cs" />
     <Compile Include="Areas\Admin\Controllers\SliderController.cs" />
     <Compile Include="Areas\Admin\Controllers\UnitController.cs" />
@@ -8029,6 +8030,17 @@
     <Content Include="Areas\Admin\Views\Ingredient\Update_Group.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Role_User_Permission.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Role_User_Permission_List.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role_User_Permission_Product.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\RecipeIngredient.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\UpdateIngredient.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\UpdateIngredientByText.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\UpdateStepByText.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role_User_Permission_Access_Type.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role_User_Permission_Add_Category.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Role_User_Permission_Add_Product.cshtml" />
+    <Content Include="Areas\Admin\Views\Profile\MainPage.cshtml" />
+    <Content Include="Areas\Admin\Views\Profile\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Profile\Password.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

@@ -1,0 +1,119 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+@model ProductIngredient
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form class="fv-form fv-form-bootstrap" id="frm-capnhat2">
+            <div class="modal-body">
+                <h4 class="modal-title">
+                    Ingredient
+                </h4>
+                <input type="hidden" id="ProductIngredientId" name="ProductIngredientId" value="@(Model != null? Model.ProductIngredientId.ToString():Guid.Empty.ToString())">
+                <input type="hidden" id="ProductTempId" name="ProductTempId">
+                <input type="hidden" id="SizeId" name="SizeId" value="@Model.SizeId">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 conditionType">
+                            <label class="control-label" for="first-name">Ingredient</label>
+                            <div id="productId">
+                                <select class="ctr-select" data-live-search="true" title="Choose Ingredient" name="IngredientId" id="IngredientId">
+                                    @Html.Raw(ViewBag.cbxIngredient)
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">Qty</label>
+                            <div>
+                                <input class="form-control" id="Value" name="Value" type="text" value="@(Model != null? Model.Value : 0)">
+                            </div>
+
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">Unit</label>
+                            <div id="lstUnitId">
+                                <select class="ctr-select" data-live-search="true" name="UnitId" id="UnitId">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                <button id="btn-saveStep" type="button" onclick="saveIngredient()" class="btn btn-success">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".ctr-select").selectpicker({
+            width: '100%',
+            showTick: true,
+        });
+    })
+    $("#IngredientId").on("change", function () {
+        var id = $("#IngredientId").val();
+        $.ajax({
+            url: '@Url.Action("GetUnitByIngredient", "Products", new { area = "Admin" })',
+            type: 'GET',
+            mimeType: "multipart/form-data",
+            contentType: false,
+            async: false,
+            cache: false,
+            data: { id: id },
+            success: function (data) {
+                $("#lstUnitId").html(data);
+                $(".ctr-select").selectpicker({
+                    width: '100%',
+                    showTick: true,
+                });
+                $('#frm-capnhat2').formValidation('updateStatus', 'UnitId', 'NOT_VALIDATED').formValidation('validateField', 'UnitId');
+            }
+        })
+    })
+    $(document).on('change', '#UnitId', function () {
+        $('#frm-capnhat2').formValidation('updateStatus', 'UnitId', 'NOT_VALIDATED').formValidation('validateField', 'UnitId');
+    });
+
+    function saveIngredient() {
+        var s = new FormData(document.getElementById('frm-capnhat1'));
+        $('[name=ProductTempId]').val(s.get('ProductTempId'));
+        $.ajax({
+                url: '@Url.Action("UpdateIngredient", "Products", new { area = "Admin" })',
+                type: 'POST',
+                dataType: 'json',
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                async: false,
+                cache: false,
+                data: new FormData(document.getElementById('frm-capnhat2')),
+                success: function (data) {
+                    if (data.isSuccess) {
+                        alertify.success(data.message);
+                        $('#modal-qltaikhoan').modal('hide');
+                        selectSize();
+                    }
+                    else {
+                        alertify.error(data.message);
+                        document.getElementById("btn-save1").disabled = false;
+                        $("#btn-save1").removeClass("disabled");
+                    }
+                }
+            });
+    }
+
+
+
+</script>
+

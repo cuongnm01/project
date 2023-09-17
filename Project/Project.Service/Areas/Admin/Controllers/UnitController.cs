@@ -3,6 +3,7 @@ using Common.Helpers;
 using Common.Resources;
 using Project.Model;
 using Project.Model.DbSet;
+using Project.Model.Model;
 using Project.Model.Respone;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Unit, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
@@ -38,9 +39,16 @@ namespace Project.Service.Areas.Admin.Controllers
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
+            var ingredients = _db.Ingredients;
+
             var list = (from a in _db.UnitGroups.ToList()
-                        where status == null ? true : a.StatusID == status
-                        select a).OrderByDescending(x => x.CreateDate);
+                        where (keyword == "" ? true : a.Name.RemoveUnicode().ToLower().Contains(keyword))
+                        select new UnitGroupInfo
+                        {
+                            UnitGroup = a,
+                            TotalIngredient = ingredients.Count(x => x.UnitGroupId == a.UnitGroupId),
+                            TotalUnit = _db.Units.Count(x => x.UnitGroupId == a.UnitGroupId),
+                        }).OrderBy(x => x.UnitGroup.Name);
 
             int tongso = list.Count();
 
@@ -60,12 +68,17 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Unit, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
-            var size = _db.UnitGroups.FirstOrDefault(x => x.UnitGroupId == id);
+            var new_record = new UnitGroup();
+            var sortOrder = _db.UnitGroups.OrderByDescending(x => x.SortOrder).Select(x => x.SortOrder).FirstOrDefault();
+            new_record.SortOrder = sortOrder != null ? (sortOrder + 1) : 1;
 
-            return PartialView(size);
+            var obj = _db.UnitGroups.FirstOrDefault(x => x.UnitGroupId == id);
+            obj = obj == null ? new_record : obj;
+
+            return PartialView(obj);
         }
 
         [Route("unit-group/update")]
@@ -76,12 +89,13 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 CheckPermission(EnumFunctions.Unit, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                     return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
                 if (obj.UnitGroupId == 0)
                 {
                     obj.CreateDate = DateTime.Now;
+                    obj.StatusID = EnumStatus.ACTIVE;
                     _db.UnitGroups.Add(obj);
                     _db.SaveChanges();
 
@@ -95,9 +109,8 @@ namespace Project.Service.Areas.Admin.Controllers
                     {
                         return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
                     }
+
                     old.Name = obj.Name;
-                    old.SortOrder = obj.SortOrder;
-                    old.StatusID = obj.StatusID;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
@@ -115,7 +128,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Unit, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var unit = _db.UnitGroups.FirstOrDefault(x => x.UnitGroupId == id);
@@ -126,30 +139,56 @@ namespace Project.Service.Areas.Admin.Controllers
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
 
+        [Route("unit-group/delete-all")]
+        public ActionResult Delete_GroupAll(string ids)
+        {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.DELETE);
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var unitIds = ids.Split(',').ToList();
+
+            var unitGroups = _db.UnitGroups.Where(x => unitIds.Contains(x.UnitGroupId.ToString()));
+            if (unitGroups == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
+
+            _db.UnitGroups.RemoveRange(unitGroups);
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region unit
         [Route("unit/main-page")]
-        public ActionResult MainPage()
+        public ActionResult MainPage(int? unitGroupId = null)
         {
             CheckPermission(EnumFunctions.Unit, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
+            ViewBag.unitGroupId = unitGroupId ?? 0;
             return View();
         }
 
         [Route("unit/list")]
-        public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
+        public ActionResult List(int? unitGroupId = null, string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
         {
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Units.ToList()
-                        where status == null ? true : a.StatusID == status
-                        select a).OrderByDescending(x => x.CreateDate);
+                        join b in _db.UnitGroups on a.UnitGroupId equals b.UnitGroupId
+                        where (unitGroupId == null || unitGroupId == 0 ? true : a.UnitGroupId == unitGroupId)
+                         && (keyword == "" ? true : a.Name.RemoveUnicode().ToLower().Contains(keyword))
+                        select new UnitInfo
+                        {
+                            Unit = a,
+                            UnitGroup = b,
+                        }).OrderBy(x => x.UnitGroup.Name).ThenBy(x=>x.Unit.Name);
 
             int tongso = list.Count();
 
@@ -169,10 +208,15 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Unit, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
+            var new_record = new Unit();
+            var sortOrder = _db.Units.OrderByDescending(x => x.SortOrder).Select(x => x.SortOrder).FirstOrDefault();
+            new_record.SortOrder = sortOrder != null ? (sortOrder + 1) : 1;
+
             var unit = _db.Units.FirstOrDefault(x => x.UnitId == id);
+            unit = unit == null ? new_record : unit;
 
             var category = _db.UnitGroups
                .Where(x => x.StatusID == EnumStatus.ACTIVE)
@@ -194,7 +238,7 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 CheckPermission(EnumFunctions.Unit, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                     return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
                 if (obj.UnitId == 0)
@@ -215,6 +259,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     }
 
                     obj.CreateDate = DateTime.Now;
+                    obj.StatusID = EnumStatus.ACTIVE;
                     _db.Units.Add(obj);
                     _db.SaveChanges();
 
@@ -237,7 +282,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     }
                     else
                     {
-                        if(ortherItem == null)
+                        if (ortherItem == null)
                             return Json(new CxResponse("err", "Default is Required"));
                     }
 
@@ -245,9 +290,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     old.Code = obj.Code;
                     old.Name = obj.Name;
                     old.IsDefault = obj.IsDefault;
-                    old.Rate = obj.IsDefault == true ? 1: obj.Rate;
-                    old.SortOrder = obj.SortOrder;
-                    old.StatusID = obj.StatusID;
+                    old.Rate = obj.IsDefault == true ? 1 : obj.Rate;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
@@ -265,36 +308,35 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Unit, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var unit = _db.Units.FirstOrDefault(x => x.UnitId == id);
             if (unit == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SIZE)));
-            unit.StatusID = EnumStatus.DELETE;
+
+            _db.Units.Remove(unit);
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
 
-        [Route("unit/change-status")]
-        public ActionResult Change_Status(int id)
+        [Route("unit/delete-all")]
+        public ActionResult DeleteAll(string ids)
         {
-            CheckPermission(EnumFunctions.Unit, EnumOptions.ADD);
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
-            var unit = _db.Units.FirstOrDefault(x => x.UnitId == id);
-            if (unit == null)
-                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SIZE)));
+            var unitIds = ids.Split(',').ToList();
 
-            if (unit.StatusID == EnumStatus.ACTIVE)
-                unit.StatusID = EnumStatus.INACTIVE;
-            else
-                unit.StatusID = EnumStatus.ACTIVE;
+            var units = _db.Units.Where(x => unitIds.Contains(x.UnitId.ToString()));
+            if (units == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
 
+            _db.Units.RemoveRange(units);
             _db.SaveChanges();
-            return Json(new CxResponse<object>(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
         #endregion
 

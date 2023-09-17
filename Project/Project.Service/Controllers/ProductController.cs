@@ -43,7 +43,7 @@ namespace Project.Service.Controllers
                     keyword = keyword.ToLower();
                 }
 
-                var product = db.Products.Where(x=>x.Name.ToLower().Contains(keyword) && userProduct.Contains(x.ProductId)).OrderBy(x => x.CreateDate).ToList();
+                var product = db.Products.Where(x=>x.Name.ToLower().Contains(keyword) && !userProduct.Contains(x.ProductId) && x.StatusID == EnumStatus.ACTIVE).OrderBy(x => x.CreateDate).ToList();
 
                 var products = (from a in product
                                 select new
@@ -85,7 +85,7 @@ namespace Project.Service.Controllers
                 }
                 var userProduct = db.User_Product.Where(x => x.UserID == user.UserID && x.StatusID == EnumStatus.ACTIVE).Select(x => x.ProductId).ToList();
 
-                var product = db.Products.Where(x => x.CategoryId == categoryId && userProduct.Contains(x.ProductId)).OrderBy(x=>x.CreateDate).ToList();
+                var product = db.Products.Where(x => x.CategoryId == categoryId && !userProduct.Contains(x.ProductId) && x.StatusID == EnumStatus.ACTIVE).OrderBy(x=>x.CreateDate).ToList();
 
                 var products = (from a in product
                                 select new
@@ -127,22 +127,27 @@ namespace Project.Service.Controllers
                 }
                 var userProduct = db.User_Product.Where(x => x.UserID == user.UserID && x.StatusID == EnumStatus.ACTIVE).Select(x => x.ProductId).ToList();
 
-                var product = db.Products.FirstOrDefault(x => x.ProductId == code && userProduct.Contains(x.ProductId));
+                var product = db.Products.FirstOrDefault(x => x.ProductId == code && !userProduct.Contains(x.ProductId) && x.StatusID == EnumStatus.ACTIVE);
                 if (product == null)
-                    return Json(new { isSuccess = false, data = new { }, message = "Sản phẩm không xác định", version = "", code = "" });
+                    return Json(new { isSuccess = false, data = new { }, message = "Unknown Recipe", version = "", code = "" });
 
-                var steps = db.ProductDirections.Where(x => x.ProductId == product.ProductId).ToList();
+                var steps = db.ProductDirections.Where(x => x.ProductId == product.ProductId).OrderBy(x=>x.SortOrder).ToList();
                 var sizeIds = db.ProductIngredients.Where(x => x.ProductId == product.ProductId).Select(x => x.SizeId).Distinct().ToList();
                 var sizes = db.Sizes.Where(x => sizeIds.Contains(x.SizeId)).ToList();
 
                 var ingredients = db.ProductIngredients.Where(x => x.ProductId == product.ProductId).GroupBy(x => x.IngredientId).Select(x => new { Key = db.Ingredients.FirstOrDefault(y => y.IngredientId == x.Key), List = x.ToList() }).ToList();
 
+                int i = 0;
+                foreach(var item in steps)
+                {
+                    item.Name = string.Format("Step {0}", ++i);
+                }
 
                 var obj = new
                 {
                     code = product.Code,
                     name = product.Name,
-                    image = !string.IsNullOrEmpty(product.Image) ? url + product.Image : "",
+                    image = !string.IsNullOrEmpty(product.Image) ? url + product.Image.Replace("~/", "/") : "",
                     background = !string.IsNullOrEmpty(product.Background) ? url + product.Background.Replace("~/", "/") : "",
                     isNew = product.IsNew == 1 ? true : false,
                     direction = (from a in steps

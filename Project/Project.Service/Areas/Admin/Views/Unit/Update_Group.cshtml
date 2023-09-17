@@ -1,52 +1,44 @@
 ﻿@using Common.Constants
 @using Project.Model.DbSet
 @using Common.Resources
+@using Project.Model.Model
+@using Project.Model.Configuration;
 @model UnitGroup
-
+@{
+    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
+}
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">
-                Unit group
-            </h4>
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
             <div class="modal-body">
+                <h4 class="modal-title">
+                    Unit group
+                </h4>
                 <input type="hidden" id="UnitGroupId" name="UnitGroupId" value="@(Model != null? Model.UnitGroupId:0)">
-
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-
-                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Name</label>
-                        <div>
-                            <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">@Message.F_STATUS:</label>
-                        <div>
-                            <select class="ctr-select" data-live-search="true" name="StatusID">
-                                <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
-                                <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.INACTIVE)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                        <label class="control-label" for="first-name">Sort Order</label>
-                        <div>
-                            <input type="text" class="form-control" id="SortOrder" name="SortOrder" value="@(Model != null && Model.SortOrder != null ? Model.SortOrder :1)" />
+                <input type="hidden" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder:0)">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Name</label>
+                                <div>
+                                    <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
-                <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">@Message.CANCEL</button>
+                @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
+                {
+                    <button type="button" class="btn btn-info" data-dismiss="modal">@Message.CANCEL</button>
+                    <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
+                }
             </div>
         </form>
     </div>

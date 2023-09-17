@@ -8,7 +8,6 @@
     List<Unit> units = (List<Unit>)ViewBag.Units;
 
     int index = 0;
-
 }
 
 
@@ -16,38 +15,48 @@
 {
     foreach (var item in size)
     {
-        <tr>
-            <td class="text-center" rowspan="@ingredients.Count">@(++index)</td>
-            <td class="text-center" rowspan="@ingredients.Count">
-                <span class="">@item.Name</span>
-            </td>
-            <td class="text-center" rowspan="@ingredients.Count">
-                @Model.Where(x=>x.SizeId == item.SizeId).Sum(x => x.Price).Value.ToString("#,###")
-            </td>
-            @if (ingredients.Count > 0)
+@*<tr>
+    <td class="text-center">
+        <input class="form-control" type="text" value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId).Value.ToString():"" )" onkeypress="return validateNumber(event)" name="value@(stt)" id="value@(stt)" />
+    </td>
+    <td class="text-center" rowspan="@ingredients.Count">
+        <span class="">@item.Name</span>
+    </td>
+    <td class="text-center" rowspan="@ingredients.Count">
+        @Model.Where(x => x.SizeId == item.SizeId).Sum(x => x.Price).Value.ToString("#,###")
+    </td>
+    <td class="text-center">
+        <select class="ctr-select" name="unitid@(stt)">
+            @foreach (var unit in units.Where(x => x.UnitGroupId == ingredients.FirstOrDefault().UnitGroupId))
             {
-                <td class="text-center" hidden><input type="hidden" value="@item.SizeId" name="tbSizeId@(++stt)" id="tbSizeId@(stt)" /></td>
-                <td class="text-center" hidden><input type="hidden" value="@ingredients.FirstOrDefault().IngredientId" name="tbIngredientId@(stt)" id="tbIngredientId@(stt)" /></td>
-                <td class="text-center">
-                    <span class="text-center">@ingredients.FirstOrDefault().Name</span><br />
-                    @*@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId).Price.Value.ToString("#,###"):"" )*@
-                </td>
-                <td class="text-center">
-                    <input class="form-control" type="text" value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId).Value.ToString():"" )" onkeypress="return validateNumber(event)" name="value@(stt)" id="value@(stt)" />
-                </td>
-                <td class="text-center">
-                    @*<input type="text" value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId).Unit.ToString():"" )" name="unit@(stt)" id="unit@(stt)" />*@
-                    <select class="ctr-select" name="unitid@(stt)">
-                        @foreach (var unit in units.Where(x => x.UnitGroupId == ingredients.FirstOrDefault().UnitGroupId))
-                        {
-                            var a = Model.FirstOrDefault(x => x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId);
+                var a = Model.FirstOrDefault(x => x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId);
 
-                            <option value="@unit.UnitId" @(a != null && unit.UnitId == a.UnitId ? "selected" : "" )>@unit.Code</option>
-                        }
-                    </select>
-                </td>
+                <option value="@unit.UnitId" @(a != null && unit.UnitId == a.UnitId ? "selected" : "" )>@unit.Code</option>
             }
-        </tr>
+        </select>
+    </td>*@
+    @*@if (ingredients.Count > 0)
+    {
+        <td class="text-center" hidden><input type="hidden" value="@item.SizeId" name="tbSizeId@(++stt)" id="tbSizeId@(stt)" /></td>
+        <td class="text-center" hidden><input type="hidden" value="@ingredients.FirstOrDefault().IngredientId" name="tbIngredientId@(stt)" id="tbIngredientId@(stt)" /></td>
+        <td class="text-center">
+            <span class="text-center">@ingredients.FirstOrDefault().Name</span><br />
+        </td>
+        <td class="text-center">
+            <input class="form-control" type="text" value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId).Value.ToString():"" )" onkeypress="return validateNumber(event)" name="value@(stt)" id="value@(stt)" />
+        </td>
+        <td class="text-center">
+            <select class="ctr-select" name="unitid@(stt)">
+                @foreach (var unit in units.Where(x => x.UnitGroupId == ingredients.FirstOrDefault().UnitGroupId))
+                {
+                    var a = Model.FirstOrDefault(x => x.SizeId == item.SizeId && x.IngredientId == ingredients.FirstOrDefault().IngredientId);
+
+                    <option value="@unit.UnitId" @(a != null && unit.UnitId == a.UnitId ? "selected" : "" )>@unit.Code</option>
+                }
+            </select>
+        </td>
+    }*@
+@*</tr>*@
         for (var i = 1; i < ingredients.Count; i++)
         {
             <tr>
@@ -56,13 +65,11 @@
                 <td class="text-center">
                     <span class="text-center">@ingredients[i].Name</span>
                     <br />
-                    @*@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId).Price.Value.ToString("#,###"):"" )*@
                 </td>
                 <td class="text-center">
                     <input class="form-control" type="text" value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId).Value.ToString():"" )" onkeypress="return validateNumber(event)" name="value@(stt)" id="value@(stt)" />
                 </td>
                 <td class="text-center">
-                    @*<input type="text"value="@(Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId) != null ?Model.FirstOrDefault(x=>x.SizeId == item.SizeId && x.IngredientId == ingredients[i].IngredientId).Unit.ToString():"" )" name="unit@(stt)" id="unit@(stt)" />*@
                     <select class="ctr-select" name="unitid@(stt)">
                         @foreach (var unit in units.Where(x => x.UnitGroupId == ingredients[i].UnitGroupId))
                         {

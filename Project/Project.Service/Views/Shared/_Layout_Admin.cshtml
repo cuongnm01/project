@@ -22,7 +22,7 @@
 
     <meta name="robots" content="noindex">
     <!--  favicon -->
-    @*  <link rel="icon" type="image/png" href="@EnumConfig.LOGO" />*@
+      <link rel="icon" type="image/png" href="/Files/images/system/logo.jpg" />
     <!-- jQuery -->
     <script src="~/Libs/theme_admin/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -54,9 +54,17 @@
     <link href="~/Libs/theme_admin/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
     <link href="~/Libs/theme_admin/Site.css" rel="stylesheet" />
     <style>
-        .table-bordered > tbody > tr > td, .table-bordered > thead > tr > th {
+        .table-bordered > tbody{
+            background-color: #fff;
+        }
+            .table-bordered > tbody > tr > td {
+                border: 0 !important;
+                border-top: 1px solid #E0E0E0 !important;
+            }
+        .table-bordered > thead > tr > th, .table-bordered > tfoot > tr > td {
             border: 0 !important;
-            border-top: 1px solid #ddd !important;
+            border-top: 0px solid #ddd !important;
+            color: #BDBDBD;
         }
     </style>
 </head>
@@ -66,7 +74,6 @@
             @RenderPage("_Navshared_Admin.cshtml")
             <!-- page content -->
             <div class="right_col" role="main">
-                <h1 hidden>CMS</h1>
                 @RenderBody()
             </div>
             <div class="modal" tabindex="-1" role="dialog" id="modal-qltaikhoan">

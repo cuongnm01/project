@@ -23,7 +23,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Sizes, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
@@ -31,14 +31,14 @@ namespace Project.Service.Areas.Admin.Controllers
         }
 
         [Route("size/list")]
-        public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
+        public ActionResult List(string keyword = "", int sotrang = 1, int tongsodong = 5)
         {
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Sizes.ToList()
-                            where status == null ? true : a.StatusID == status
-                        select a).OrderByDescending(x => x.CreateDate);
+                            where a.StatusID != EnumStatus.DELETE && (keyword == "" ? true : a.Name.RemoveUnicode().ToLower().Contains(keyword))
+                        select a).OrderBy(x => x.Name);
 
             int tongso = list.Count();
 
@@ -58,11 +58,11 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Sizes, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var new_record = new Size();
-            new_record.SortOrder = _db.Categorys.Count() + 1;
+            new_record.SortOrder = _db.Sizes.Count() + 1;
 
             var obj = _db.Sizes.FirstOrDefault(x => x.SizeId == id);
             obj = obj == null ? new_record : obj;
@@ -77,7 +77,7 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 CheckPermission(EnumFunctions.Sizes, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                     return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
                 if (size.SizeId == 0)
@@ -114,7 +114,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Sizes, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
 
@@ -126,19 +126,23 @@ namespace Project.Service.Areas.Admin.Controllers
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
 
-        [Route("size/change-status")]
-        public ActionResult Change_Status(int id)
+        [Route("size/delete-all")]
+        public ActionResult DeleteAll(string ids)
         {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv == null || nd_dv.Users.PermissionID != EnumUserType.ADMIN)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
+            
+            var sizeIds = ids.Split(',').ToList();
 
-            var size = _db.Sizes.FirstOrDefault(x => x.SizeId == id);
-            if (size == null)
-                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SIZE)));
+            var sizes = _db.Sizes.Where(x => sizeIds.Contains(x.SizeId.ToString()));
+            if (sizes == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
 
+            _db.Sizes.RemoveRange(sizes);
             _db.SaveChanges();
-            return Json(new CxResponse<object>(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
     }
 }

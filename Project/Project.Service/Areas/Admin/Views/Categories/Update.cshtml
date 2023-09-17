@@ -1,78 +1,89 @@
 ﻿@using Common.Constants
 @using Project.Model.DbSet
 @using Common.Resources
-@model Category
+@using Project.Model.Model
+@using Project.Model.Configuration;
 
+@model Category
+@{
+    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
+}
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">
-                Recipe Book
-            </h4>
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
             <div class="modal-body">
-                <input type="hidden" id="Id" name="Id" value="@(Model != null? Model.CategoryId.ToString():"0")">
-
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Name</label>
-                        <div>
-                            <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
+                <h4 class="modal-title">
+                    Recipe Book
+                </h4>
+                <input type="hidden" id="CategoryId" name="CategoryId" value="@(Model != null? Model.CategoryId.ToString():"0")">
+                <input type="hidden" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder:0)">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Name</label>
+                                <div>
+                                    <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                </div>
-
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Image:</label>
-                        <div>
-                            <div style="margin-bottom:10px">
-                                <input type="file" class="form-control" name="_Logo" />
-                            </div>
-                            @if (Model != null && Model.Image != null)
-                            {
-                                <div class="col-md-55">
-                                    <div class="thumbnail" style="height:auto;">
-                                        <div class="image view view-first">
-                                            <img id="_Logo" src="@Model.Image.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
-                                            <div class="mask">
-                                                <p></p>
-                                                <div class="tools tools-bottom">
-                                                    <a href="javascript: window.open('@Model.Image.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Image:</label>
+                                <div>
+                                    <div style="margin-bottom:10px">
+                                        <input type="file" class="form-control" name="_Logo" />
+                                    </div>
+                                    @if (Model != null && Model.Image != null)
+                                    {
+                                        <div class="col-md-55">
+                                            <div class="thumbnail" style="height:auto;">
+                                                <div class="image view view-first">
+                                                    <img id="_Logo" src="@Model.Image.Replace("~/", "/")" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="width: 100%; display: block;" alt="image" />
+                                                    <div class="mask">
+                                                        <p></p>
+                                                        <div class="tools tools-bottom">
+                                                            <a href="javascript: window.open('@Model.Image.Replace("~/", "/")', '_blank')"><i class="fa fa-link"></i></a>
+                                                        </div>
+                                                    </div>
                                                 </div>
+
                                             </div>
                                         </div>
-
-                                    </div>
+                                    }
+                                    else
+                                    {
+                                        <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
+                                    }
                                 </div>
-                            }
-                            else
-                            {
-                                <img id="_Logo" src="" onclick="javascript: window.open($(this).attr('src'), '_blank')" style="max-height:150px; display:none;" />
-                            }
-
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
-                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                        <label class="control-label" for="first-name">Sort Order</label>
-                        <div>
-                            <input type="text" class="form-control" id="SortOrder" name="SortOrder" value="@(Model != null && Model.SortOrder != null? Model.SortOrder :0)" />
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
+                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label" for="first-name">Publish status</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="StatusID">
+                                    <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>Active</option>
+                                    <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>Hide</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
-                <button id="btn-save1" type="submit" class="btn btn-success">Save</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
+                {
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                    <button id="btn-save1" type="submit" class="btn btn-success">Save</button>
+                }
             </div>
         </form>
     </div>

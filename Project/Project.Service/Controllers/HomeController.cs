@@ -30,7 +30,6 @@ namespace Project.Service.Controllers
 
         [HttpPost]
         [Route("api/auth/login")]
-        //[ActionName("login")]
         public IHttpActionResult Login([FromBody] LoginRequest request)
         {
             try
@@ -38,9 +37,9 @@ namespace Project.Service.Controllers
                 var appConfig = db.AppConfigs.FirstOrDefault();
 
                 request.password = request.password.Encode();
-                var user = db.Users.FirstOrDefault(x => x.PermissionID == EnumUserType.EMPLOYEE && (x.UserName == request.username || x.Phone == request.username || x.Email == request.username));
+                var user = db.Users.FirstOrDefault(x => (x.PermissionID == EnumUserType.EMPLOYEE || x.PermissionID == EnumUserType.MANAGER) && (x.UserName == request.username || x.Phone == request.username || x.Email == request.username));
                 if (user == null)
-                    return Json(new { isSuccess = false, data = new { }, message = "Unknow account", version = "", code = "" });
+                    return Json(new { isSuccess = false, data = new { }, message = "Unknown account", version = "", code = "" });
 
                 if (user.Password != request.password)
                     return Json(new { isSuccess = false, data = new { }, message = "Wrong password", version = "", code = "" });
@@ -106,7 +105,7 @@ namespace Project.Service.Controllers
                                }).ToList();
 
 
-                var product = db.Products.ToList();
+                var product = db.Products.Where(x=> x.StatusID != EnumStatus.DELETE).ToList();
 
 
                 var products = (from a in product

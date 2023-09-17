@@ -1,0 +1,22 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+
+@model User
+@{
+    Layout = "";
+    List<Product> products = (List<Product>)ViewBag.products;
+}
+@if (products != null && products.Count() > 0)
+{
+    foreach (var subItem in products)
+    {
+        <tr>
+            <td style="border: 1px solid #E0E0E0 !important ">@subItem.Name</td>
+            <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
+                <img style="cursor: pointer" src="/Files/images/system/close.png" width="24" height="24" data-id="@Model.UserID" data-product="@subItem.ProductId" onclick="remove_product($(this));" />
+            </td>
+        </tr>
+    }
+}
+

@@ -1,0 +1,50 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Project.Model.Model
+
+@model IEnumerable<ProductIngredientInfo>
+@{
+    int stt = 0;
+    List<Unit> units = (List<Unit>)ViewBag.Units;
+}
+
+@if (Model != null && Model.Count() > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                <input class="form-control" disabled type="text" value="@(item.ProductIngredient.Value)" data-id="@item.ProductIngredient.ProductIngredientId" onkeypress="return validateNumber(event)" onchange="change_qty($(this))" />
+            </td>
+            <td class="text-center">
+                <select class="ctr-select" name="unitid@(stt)" data-id="@item.ProductIngredient.ProductIngredientId" onchange="change_unit($(this))" disabled>
+                    @foreach (var unit in units.Where(x => x.UnitGroupId == item.Ingredient.UnitGroupId))
+                    {
+                        <option value="@unit.UnitId" @(unit.UnitId == item.ProductIngredient.UnitId ? "selected" : "" )>@unit.Code</option>
+                    }
+                </select>
+            </td>
+            <td class="text-center">@item.Ingredient.Name</td>
+            <td class="text-center">
+                <input class="form-control text-right" disabled type="text" value="@(item.ProductIngredient.Price.Value.ToString("#,###"))" onkeypress="return validateNumber(event)" />
+            </td>
+            <td class="text-center">
+                <a data-id="@item.ProductIngredient.ProductIngredientId" style="cursor: pointer;" onclick="delete_ingredient($(this))"><img src="/Files/images/system/delete.png" width="24" /></a>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td class="text-right" colspan="3"><strong>Total: </strong> </td>
+        <td class="text-right">@(Model.Sum(x=>x.ProductIngredient.Price ??0).ToString("#,###"))</td>
+    </tr>
+}
+<script>
+    $(document).ready(function () {
+        $(".ctr-select").selectpicker({
+            width: '100%',
+            showTick: true,
+        });
+    });
+</script>
+
+

@@ -1,0 +1,23 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+
+@model User
+@{
+    Layout = "";
+
+}
+
+@if (Model != null)
+{
+<tr>
+    <td style="border: 1px solid #E0E0E0 !important ">General Access</td>
+    <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
+        <img style="cursor: pointer" src="@(Model.PermissionID == EnumUserType.EMPLOYEE ? "/Files/images/system/checked.png" : "/Files/images/system/uncheck.png")" width="24" height="24" data-id="@Model.UserID" data-permission="@EnumUserType.EMPLOYEE" onclick="select_access($(this));" />
+    </td>
+    <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
+        <img style="cursor: pointer" src="@( Model.PermissionID == EnumUserType.MANAGER ? "/Files/images/system/checked.png" : "/Files/images/system/uncheck.png")" width="24" height="24" data-id="@Model.UserID" data-permission="@EnumUserType.MANAGER" onclick="select_access($(this));" />
+    </td>
+</tr>
+}
+

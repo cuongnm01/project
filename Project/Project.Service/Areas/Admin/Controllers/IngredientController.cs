@@ -10,6 +10,7 @@ using Project.Model.DbSet;
 using System.IO;
 using Project.Model.Respone;
 using Common.Resources;
+using Project.Model.Model;
 
 namespace Project.Service.Areas.Admin.Controllers
 {
@@ -26,7 +27,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Ingredient, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
@@ -39,10 +40,16 @@ namespace Project.Service.Areas.Admin.Controllers
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
+            var ingredients = _db.Ingredients;
+
             var list = (from a in _db.IngredientGroups.ToList()
-                        where (status == null ? true : a.StatusID == status) && a.StatusID != EnumStatus.DELETE
-                        select a)
-            .OrderByDescending(x => x.CreateDate);
+                        where (keyword == "" ? true : a.Name.RemoveUnicode().ToLower().Contains(keyword))
+                        select new IngredientGroupInfo
+                        {
+                            IngredientGroup = a,
+                            TotalIngredient = ingredients.Count(x => x.IngredientGroupId == a.IngredientGroupId),
+                        })
+            .OrderBy(x => x.IngredientGroup.Name);
 
             int tongso = list.Count();
 
@@ -62,7 +69,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Ingredient, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var listIngredients = _db.IngredientGroups.ToList();
@@ -78,7 +85,7 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 CheckPermission(EnumFunctions.Ingredient, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                     return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
                 if (obj.IngredientGroupId == 0)
@@ -97,9 +104,10 @@ namespace Project.Service.Areas.Admin.Controllers
                     {
                         return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
                     }
-                   
+
                     old.Name = obj.Name;
                     old.SortOrder = obj.SortOrder;
+                    old.StatusID = obj.StatusID;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
@@ -118,13 +126,33 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Ingredient, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var obj = _db.IngredientGroups.FirstOrDefault(x => x.IngredientGroupId == id);
             if (obj == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
-            obj.StatusID = EnumStatus.DELETE;
+            //obj.StatusID = EnumStatus.DELETE;
+
+            _db.IngredientGroups.Remove(obj);
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("ingredient-group/delete-all")]
+        public ActionResult Delete_GroupAll(string ids)
+        {
+            CheckPermission(EnumFunctions.Recipe_Book, EnumOptions.DELETE);
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var ingreIds = ids.Split(',').ToList();
+            var ingredients = _db.IngredientGroups.Where(x => ingreIds.Contains(x.IngredientGroupId.ToString()));
+            if (ingredients == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT_CATEGORY)));
+
+            _db.IngredientGroups.RemoveRange(ingredients);
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
@@ -132,27 +160,40 @@ namespace Project.Service.Areas.Admin.Controllers
 
         #region ingredient
         [Route("ingredient/main-page")]
-        public ActionResult MainPage()
+        public ActionResult MainPage(int? unitGroupId = null, int? ingredientGroupId = null)
         {
             CheckPermission(EnumFunctions.Ingredient, EnumOptions.VIEW);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
+            ViewBag.unitGroupId = unitGroupId ?? 0;
+            ViewBag.ingredientGroupId = ingredientGroupId ?? 0;
+
             return View();
         }
 
         [Route("ingredient/list")]
-        public ActionResult List(string keyword = "", int? status = EnumStatus.ACTIVE, int sotrang = 1, int tongsodong = 5)
+        public ActionResult List(int? unitGroupId = null, int? ingredientGroupId = null, string keyword = "", int sotrang = 1, int tongsodong = 5)
         {
             if (keyword != "")
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Ingredients.ToList()
-                        where status == null ? true : a.StatusID == status && a.StatusID != EnumStatus.DELETE
-                        select a)
-            .OrderByDescending(x => x.CreateDate);
+                        join b in _db.IngredientGroups on a.IngredientGroupId equals b.IngredientGroupId
+                        join c in _db.UnitGroups on a.UnitGroupId equals c.UnitGroupId
+                        where (unitGroupId == null || unitGroupId == 0 ? true : a.UnitGroupId == unitGroupId)
+                        && (ingredientGroupId == null || ingredientGroupId == 0 ? true : a.IngredientGroupId == ingredientGroupId)
+                        && a.StatusID != EnumStatus.DELETE
+                         && (keyword == "" ? true : a.Name.RemoveUnicode().ToLower().Contains(keyword))
+                        select new IngredientInfo
+                        {
+                            Ingredient = a,
+                            IngredientGroup = b,
+                            UnitGroup = c,
+                        })
+            .OrderBy(x => x.IngredientGroup.Name).ThenBy(x=>x.Ingredient.Name);
 
             int tongso = list.Count();
 
@@ -172,11 +213,15 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Ingredient, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
-            var listIngredients = _db.Ingredients.ToList();
-            var ingredient = _db.Ingredients.FirstOrDefault(x => x.IngredientId == id);
+            var new_record = new Ingredient();
+            var sortOrder = _db.Ingredients.OrderByDescending(x => x.SortOrder).Select(x => x.SortOrder).FirstOrDefault();
+            new_record.SortOrder = sortOrder != null ? (sortOrder + 1) : 1;
+
+            var obj = _db.Ingredients.FirstOrDefault(x => x.IngredientId == id);
+            obj = obj == null ? new_record : obj;
 
             var category = _db.IngredientGroups
              .Where(x => x.StatusID == EnumStatus.ACTIVE)
@@ -184,10 +229,9 @@ namespace Project.Service.Areas.Admin.Controllers
             string cbxCategory = "";
             foreach (var item in category)
             {
-                cbxCategory += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.IngredientGroupId, item.Name, ingredient != null && ingredient.IngredientGroupId == item.IngredientGroupId ? "selected" : "");
+                cbxCategory += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.IngredientGroupId, item.Name, obj != null && obj.IngredientGroupId == item.IngredientGroupId ? "selected" : "");
             }
             ViewBag.cbxCategory = cbxCategory;
-
 
             var categoryUnit = _db.UnitGroups
              .Where(x => x.StatusID == EnumStatus.ACTIVE)
@@ -195,11 +239,11 @@ namespace Project.Service.Areas.Admin.Controllers
             string cbxCategoryUnit = "";
             foreach (var item in categoryUnit)
             {
-                cbxCategoryUnit += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.UnitGroupId, item.Name, ingredient != null && ingredient.UnitGroupId == item.UnitGroupId ? "selected" : "");
+                cbxCategoryUnit += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.UnitGroupId, item.Name, obj != null && obj.UnitGroupId == item.UnitGroupId ? "selected" : "");
             }
             ViewBag.cbxCategoryUnit = cbxCategoryUnit;
 
-            return PartialView(ingredient);
+            return PartialView(obj);
         }
 
         [Route("ingredient/update")]
@@ -210,15 +254,11 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 CheckPermission(EnumFunctions.Ingredient, EnumOptions.ADD);
                 var nd_dv = GetUserLogin;
-                if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                     return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
                 if (obj.IngredientId == 0)
                 {
-                    //var checkTontai = _db.Sliders.FirstOrDefault(x => x.StatusID == EnumStatus.ACTIVE && x.STT == slider.STT);
-                    //if (checkTontai != null)
-                    //    return Json(new { kq = "err", msg = Translate.SLIDER_STT_IS_USED }, JsonRequestBehavior.AllowGet);
-
                     // tao moi
                     if (_Logo != null)
                     {
@@ -227,6 +267,7 @@ namespace Project.Service.Areas.Admin.Controllers
                         string[] fileImage = _Logo.uploadFile(rootPathImage, filePathImage);
                         obj.Image = fileImage[1];
                     }
+
                     _db.Ingredients.Add(obj);
                     _db.SaveChanges();
 
@@ -251,7 +292,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     old.Name = obj.Name;
                     old.UnitGroupId = obj.UnitGroupId;
                     old.Price = obj.Price;
-                    old.SortOrder = obj.SortOrder;
+                    old.StatusID = obj.StatusID;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
@@ -270,7 +311,7 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             CheckPermission(EnumFunctions.Ingredient, EnumOptions.DELETE);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var obj = _db.Ingredients.FirstOrDefault(x => x.IngredientId == id);
@@ -281,12 +322,31 @@ namespace Project.Service.Areas.Admin.Controllers
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
 
+        [Route("ingredient/delete-all")]
+        public ActionResult DeleteAll(string ids)
+        {
+            CheckPermission(EnumFunctions.Recipe_Book, EnumOptions.DELETE);
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var ingreIds = ids.Split(',').ToList();
+
+            var ingredients = _db.Ingredients.Where(x => ingreIds.Contains(x.IngredientId.ToString()));
+            if (ingredients == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT_CATEGORY)));
+
+            _db.Ingredients.RemoveRange(ingredients);
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
+        }
+
         [Route("ingredient/change-status")]
         public ActionResult Change_Status(int id)
         {
             CheckPermission(EnumFunctions.Ingredient, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
-            if (nd_dv.AccessDenied == EnumStatus.ACTIVE)
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             var obj = _db.Ingredients.FirstOrDefault(x => x.IngredientId == id);
