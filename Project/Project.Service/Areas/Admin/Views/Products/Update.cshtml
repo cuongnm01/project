@@ -15,6 +15,29 @@
     td {
         border: 0 !important
     }
+
+    .image-area {
+        position: relative;
+    }
+
+    .overlay-image-remove {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgb(50 50 50 / 50%);
+        top: 0;
+    }
+
+    .image-area:hover .overlay-image-remove {
+        display: block;
+    }
+
+    .overlay-image-remove a {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
 </style>
 
 <div class="row">
@@ -145,8 +168,10 @@
                                     <table class="table table-bordered" id="tableFormula">
                                         <thead>
                                             <tr>
-                                                <th class="text-center" width="200">Qty </th>
-                                                <th class="text-center" width="200">Unit</th>
+                                                <th class="text-center" width="60"># </th>
+                                                <th class="text-center" width="60"># </th>
+                                                <th class="text-center" width="100">Qty </th>
+                                                <th class="text-center" width="100">Unit</th>
                                                 <th class="text-center" width="200">Ingredient</th>
                                                 <th class="text-center" width="200">Cost</th>
                                                 <th class="text-center" width="60" style="max-width:60px;"></th>
@@ -157,7 +182,10 @@
                                     <div style="display: flex; justify-content: space-between">
                                         @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
                                         {
-                                            <a class="btn btn-sm btn-add-step" onclick="add_ingredient()"><i class="fa fa-plus"></i> Add Ingredient</a>
+                                            <div>
+                                                <a class="btn btn-sm btn-add-step" onclick="add_ingredient()"><i class="fa fa-plus"></i> Add Ingredient</a>
+                                                <a class="btn btn-sm btn-add-step" onclick="add_ingredient_header()"><i class="fa fa-plus"></i> Add Header</a>
+                                            </div>
                                             <a class="btn btn-sm btn-add-step" onclick="add_ingredient_text()"><i class="fa fa-plus"></i> Add Ingredient by Text</a>
                                         }
 
@@ -173,20 +201,38 @@
             <div class="col-md-6 col-sm-6 col-xs-12 clearfix">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2 style="color: #1E4D5B; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal;">Image Cover</h2>
+                        <h2 style="color: #1E4D5B; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal;">Image Cover (257x156)</h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div>
+                    <div class="image-area">
                         <input type="file" class="form-control" id="imgUploadLogo" name="_Logo" style="display:none" onchange="loadFileLogo(event)" />
                         <img src="@((Model != null && Model.Image != null) ? @Model.Image.Replace("~/", "/") : "/Files/images/system/cover_default.png" )" id="OpenImgUploadLogo" style="width: 100%" />
+
+                        @if (Model != null && Model.Image != null)
+                        {
+                            <div class="overlay-image-remove">
+                                <div>
+                                    <a data-id="@Model.ProductId" data-type="@EnumProductImageType.IMAGE" style="cursor: pointer;" title="Remove Image" onclick="delete_image($(this))"><i class="fa fa-trash" style="font-size: 25px; color: #fff;"></i></a>
+                                </div>
+                            </div>
+                        }
+
                     </div>
                     <div class="x_title">
                         <h2 style="color: #1E4D5B; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal;">Image Background</h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div>
+                    <div class="image-area">
                         <input type="file" class="form-control" id="imgUploadBackground" name="_BackGround" style="display:none" onchange="loadFileBackground(event)" />
                         <img src="@((Model != null && Model.Background != null) ? @Model.Background.Replace("~/", "/") : "/Files/images/system/cover_default.png" )" id="OpenImgUploadBackground" style="width: 100%" />
+                        @if (Model != null && Model.Background != null)
+                        {
+                            <div class="overlay-image-remove">
+                                <div>
+                                    <a data-id="@Model.ProductId" data-type="@EnumProductImageType.BACKGROUND" style="cursor: pointer;" title="Remove Image" onclick="delete_image($(this))"><i class="fa fa-trash" style="font-size: 25px; color: #fff;"></i></a>
+                                </div>
+                            </div>
+                        }
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -207,7 +253,10 @@
                                     <div style="display:flex; justify-content: space-between">
                                         @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
                                         {
-                                            <a class="btn btn-sm btn-add-step" onclick="add_step()"><i class="fa fa-plus"></i> Add step</a>
+                                            <div>
+                                                <a class="btn btn-sm btn-add-step" onclick="add_step()"><i class="fa fa-plus"></i> Add step</a>
+                                                <a class="btn btn-sm btn-add-step" onclick="add_step_header()"><i class="fa fa-plus"></i> Add step header</a>
+                                            </div>
                                             <a class="btn btn-sm btn-add-step" onclick="add_step_text()"><i class="fa fa-plus"></i> Add step by Text</a>
                                         }
                                     </div>
@@ -222,70 +271,6 @@
     </form>
 </div>
 
-<script type="text/javascript">
-    //$(function () {
-    //    $("#tableStep").sortable({
-    //        items: 'tr',
-    //        cursor: 'pointer',
-    //        axis: 'y',
-    //        dropOnEmpty: false,
-    //        start: function (e, ui) {
-    //            ui.item.addClass("selected");
-    //        },
-    //        stop: function (e, ui) {
-    //            ui.item.removeClass("selected");
-    //            $(this).find("tr").each(function (index) {
-    //                if (index > 0) {
-    //                    console.log($(this).find("td").html());
-    //                    $(this).find("td").eq(0).html(index);
-    //                }
-    //            });
-    //        }
-    //    });
-    //});
-</script>
-
-<script>
-
-
-    $('#OpenImgUploadLogo').click(function () { $('#imgUploadLogo').trigger('click'); });
-    var loadFileLogo = function (event) {
-        var output = document.getElementById('OpenImgUploadLogo');
-        output.src = URL.createObjectURL(event.target.files[0]);
-        output.onload = function () {
-            URL.revokeObjectURL(output.src) // free memory
-        }
-    };
-
-    $('#OpenImgUploadBackground').click(function () { $('#imgUploadBackground').trigger('click'); });
-    var loadFileBackground = function (event) {
-        var output = document.getElementById('OpenImgUploadBackground');
-        output.src = URL.createObjectURL(event.target.files[0]);
-        output.onload = function () {
-            URL.revokeObjectURL(output.src) // free memory
-        }
-    };
-
-    var dataStep = '';
-
-    function LoadStep() {
-        $("#listStep").html("<div><img src='/Files/images/system/id-loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></div>");
-        $("#listStep").load("@Url.Action("ListStep", "Products", new {area ="Admin"})?productId=" + $('[name=ProductTempId]').val());
-    }
-
-    function selectSize() {
-        $("#listFormula").html("<div><img src='/Files/images/system/id-loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></div>");
-        $("#listFormula").load("@Url.Action("RecipeIngredient", "Products", new {area ="Admin"})?sizeId=" + $('[name=size]').val() + "&ingredientId=" + $('[name=ingredient]').val() + "&productId=@(Model != null ? Model.ProductId : Guid.Empty)" );
-    }
-    function selectIngredient() {
-        $("#listFormula").html("<div><img src='/Files/images/system/id-loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></div>");
-        $("#listFormula").load("@Url.Action("Ingredient", "Products", new {area ="Admin"})?sizeId=" + $('[name=size]').val() + "&ingredientId=" + $('[name=ingredient]').val()  + "&productId=@(Model != null ? Model.ProductId : Guid.Empty)");
-    }
-
-    $(document).on("change", "[name=Type]", function () {
-        $('#listProduct input').keyup();
-    });
-</script>
 <script>
     mnActive = "mn-product";
     $(document).ready(function () {
@@ -296,6 +281,72 @@
         selectSize();
         LoadStep();
     });
+
+    $('#OpenImgUploadLogo').click(function () {
+        $('#imgUploadLogo').trigger('click');
+    });
+
+    var loadFileLogo = function (event) {
+        var output = document.getElementById('OpenImgUploadLogo');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+
+    $('#OpenImgUploadBackground').click(function () {
+        $('#imgUploadBackground').trigger('click');
+    });
+    var loadFileBackground = function (event) {
+        var output = document.getElementById('OpenImgUploadBackground');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+
+    function delete_image(obj) {
+        alertify.confirm('Confirm Delete', function (e) {
+            if (e) {
+                $.ajax({
+                    url: '@Url.Action("DeleteImage", "Products", new { area = "Admin" })',
+                    type: 'GET',
+                    dataType: 'json',
+                    mimeType: "multipart/form-data",
+                    contentType: false,
+                    async: false,
+                    cache: false,
+                    data: {
+                        id: obj.attr("data-id"),
+                        type: obj.attr("data-type"),
+                    },
+                    success: function (data) {
+                        if (data.isSuccess) {
+                            window.location.reload();
+                        }
+                        else {
+                            alertify.error(data.message);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    var dataStep = '';
+    function LoadStep() {
+        $("#listStep").html("<div><img src='/Files/images/system/id-loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></div>");
+        $("#listStep").load("@Url.Action("ListStep", "Products", new {area ="Admin"})?productId=" + $('[name=ProductTempId]').val());
+    }
+    function selectSize() {
+        $("#listFormula").html("<div><img src='/Files/images/system/id-loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></div>");
+        $("#listFormula").load("@Url.Action("RecipeIngredient", "Products", new {area ="Admin"})?sizeId=" + $('[name=size]').val() + "&ingredientId=" + $('[name=ingredient]').val() + "&productId=@(Model != null ? Model.ProductId : Guid.Empty)" );
+    }
+
+    $(document).on("change", "[name=Type]", function () {
+        $('#listProduct input').keyup();
+    });
+
     function add_ingredient_text() {
         $('#modal-qltaikhoan').load('@Url.Action("UpdateIngredientByText", "Products", new { area = "Admin"})?sizeId=' + $('[name = size]').val()+ "&productId=@(Model != null ? Model.ProductId : Guid.Empty)", function (e) {
             $('#modal-qltaikhoan').modal('show');
@@ -308,11 +359,91 @@
         });
     }
 
+    function add_ingredient_header() {
+        openModalDetail('@Url.Action("UpdateIngredientGroup", "Products", new { area = "Admin"})?productId=@(Model != null ? Model.ProductId : Guid.Empty)');
+    }
+
+    function change_data_ingredient(obj, type) {
+        $.ajax({
+            url: '@Url.Action("ChangeDataIngredient", "Products", new { area = "Admin" })',
+            type: 'GET',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: false,
+            async: false,
+            cache: false,
+            data: {
+                id: obj.attr("data-id"),
+                value: obj.val(),
+                type: obj.attr("data-type"),
+            },
+            success: function (data) {
+                selectSize();
+                if (data.isSuccess) {
+                    alertify.success(data.message);
+                }
+                else {
+                    alertify.error(data.message);
+                }
+            }
+        });
+    }
+
+    function change_data_ingredient_group(obj) {
+        $.ajax({
+            url: '@Url.Action("ChangeDataIngredientGroup", "Products", new { area = "Admin" })',
+            type: 'GET',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: false,
+            async: false,
+            cache: false,
+            data: {
+                id: obj.attr("data-id"),
+                value: obj.val(),
+            },
+            success: function (data) {
+                selectSize();
+                if (data.isSuccess) {
+                    alertify.success(data.message);
+                }
+                else {
+                    alertify.error(data.message);
+                }
+            }
+        });
+    }
+
     function delete_ingredient(obj) {
         alertify.confirm('Confirm Delete', function (e) {
             if (e) {
                 $.ajax({
                     url: '@Url.Action("DeleteIngredient", "Products", new { area = "Admin" })',
+                    type: 'GET',
+                    dataType: 'json',
+                    mimeType: "multipart/form-data",
+                    contentType: false,
+                    async: false,
+                    cache: false,
+                    data: { id: obj.attr("data-id") },
+                    success: function (data) {
+                        if (data.isSuccess) {
+                            selectSize();
+                        }
+                        else {
+                            alertify.error(data.message);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function delete_ingredient_group(obj) {
+        alertify.confirm('Confirm Delete', function (e) {
+            if (e) {
+                $.ajax({
+                    url: '@Url.Action("DeleteIngredientGroup", "Products", new { area = "Admin" })',
                     type: 'GET',
                     dataType: 'json',
                     mimeType: "multipart/form-data",
@@ -346,13 +477,40 @@
         });
     }
 
-     function add_step() {
+    function add_step() {
         $('#modal-qltaikhoan').load('@Url.Action("UpdateStep", "Products", new { area = "Admin"})?&productId=@(Model != null ? Model.ProductId : Guid.Empty)', function (e) {
             $('#modal-qltaikhoan').modal('show');
         });
     }
 
-    function XoaStep(obj) {
+    function change_data_step(obj, type) {
+        $.ajax({
+            url: '@Url.Action("ChangeDataStep", "Products", new { area = "Admin" })',
+            type: 'GET',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: false,
+            async: false,
+            cache: false,
+            data: {
+                id: obj.attr("data-id"),
+                value: obj.val(),
+                type: obj.attr("data-type"),
+            },
+            success: function (data) {
+                LoadStep();
+                if (data.isSuccess) {
+                    alertify.success(data.message);
+                }
+                else {
+                    alertify.error(data.message);
+                }
+            }
+        });
+    }
+
+
+    function delete_step(obj) {
         alertify.confirm('Confirm', function (e) {
             if (e) {
                 $.ajax({
@@ -367,6 +525,88 @@
                     success: function (data) {
                         if (data.isSuccess) {
                             debugger;
+                            alertify.success(data.message);
+                            LoadStep();
+                        }
+                        else {
+                            alertify.error(data.message);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function add_step_header() {
+        openModalDetail('@Url.Action("UpdateStepGroup", "Products", new { area = "Admin"})?productId=@(Model != null ? Model.ProductId : Guid.Empty)');
+    }
+
+    function change_data_step_group(obj) {
+        $.ajax({
+            url: '@Url.Action("ChangeDataStepGroup", "Products", new { area = "Admin" })',
+            type: 'GET',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: false,
+            async: false,
+            cache: false,
+            data: {
+                id: obj.attr("data-id"),
+                value: obj.val(),
+            },
+            success: function (data) {
+                LoadStep();
+                if (data.isSuccess) {
+                    alertify.success(data.message);
+                }
+                else {
+                    alertify.error(data.message);
+                }
+            }
+        });
+    }
+
+    function delete_step_group(obj) {
+        alertify.confirm('Confirm', function (e) {
+            if (e) {
+                $.ajax({
+                    url: '@Url.Action("DeleteStepGroup", "Products", new { area = "Admin" })',
+                    type: 'GET',
+                    dataType: 'json',
+                    mimeType: "multipart/form-data",
+                    contentType: false,
+                    async: false,
+                    cache: false,
+                    data: { id: obj.attr("data-id") },
+                    success: function (data) {
+                        if (data.isSuccess) {
+                            debugger;
+                            alertify.success(data.message);
+                            LoadStep();
+                        }
+                        else {
+                            alertify.error(data.message);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function delete_step_image(obj) {
+        alertify.confirm('Confirm Delete', function (e) {
+            if (e) {
+                $.ajax({
+                    url: '@Url.Action("DeleteStepImage", "Products", new { area = "Admin" })',
+                    type: 'GET',
+                    dataType: 'json',
+                    mimeType: "multipart/form-data",
+                    contentType: false,
+                    async: false,
+                    cache: false,
+                    data: { id: obj.attr("data-id") },
+                    success: function (data) {
+                        if (data.isSuccess) {
                             alertify.success(data.message);
                             LoadStep();
                         }

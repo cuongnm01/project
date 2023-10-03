@@ -14,9 +14,18 @@
                     Steps
                 </h4>
                 <input type="hidden" id="ProductDirectionId" name="ProductDirectionId" value="@(Model != null? Model.ProductDirectionId.ToString():Guid.Empty.ToString())">
-                <input type="hidden" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder:0)">
                 <input type="hidden" id="ProductTempId" name="ProductTempId">
                 <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 conditionType">
+                            <label class="control-label" for="first-name">Header</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" title="Choose header" name="ProductDirectionGroupId" id="ProductDirectionGroupId">
+                                    @Html.Raw(ViewBag.cbxHeaders)
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                         <div class="form-group col-md-12 col-sm-12 col-xs-12">
                             <label class="control-label" for="first-name">Image : (104x104)</label>
@@ -54,6 +63,12 @@
                             <label class="control-label" for="first-name">Content</label>
                             <div>
                                 <textarea class="form-control" rows="5" name="Description">@(Model != null ? Model.Description : "")</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">SortOrder</label>
+                            <div>
+                                <input class="form-control" id="SortOrder" name="SortOrder" type="text" value="@(Model != null? Model.SortOrder : 0)">
                             </div>
 
                         </div>

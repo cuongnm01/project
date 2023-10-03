@@ -17,7 +17,11 @@
             <td class="text-left">
                 <input type="checkbox" name="checkAll" class="checkSingle" value="@item.IngredientGroup.IngredientGroupId" />
             </td>
-            <td class="text-left">@(item.IngredientGroup.Name)</td>
+            <td class="text-left">
+                <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("Update_Group","Ingredient", new { area = "Admin", id = item.IngredientGroup.IngredientGroupId})');">
+                    @(item.IngredientGroup.Name)
+                </a>
+            </td>
             <td class="text-left">
                 <a href="@Url.Action("MainPage","Ingredient", new {ingredientGroupId = item.IngredientGroup.IngredientGroupId })">@(item.TotalIngredient)</a>
             </td>

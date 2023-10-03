@@ -15,8 +15,16 @@
             <td class="text-left">
                 <input type="checkbox" name="checkAll" class="checkSingle" value="@item.Unit.UnitId" />
             </td>
-            <td class="text-left">@(item.Unit.Name)</td>
-            <td class="text-left">@(item.Unit.Code)</td>
+            <td class="text-left">
+                <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("Update","Unit", new {area ="Admin",id = item.Unit.UnitId})');">
+                    @(item.Unit.Name)
+                </a>
+            </td>
+            <td class="text-left">
+                <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("Update","Unit", new {area ="Admin",id = item.Unit.UnitId})');">
+                    @(item.Unit.Code)
+                </a>
+            </td>
             <td class="text-left">@item.UnitGroup.Name</td>
             <td class="text-left">@(item.Unit.Rate)</td>
             <td class="text-left">@(item.Unit.CreateDate != null ? item.Unit.CreateDate.Value.ToString("yyyy-MM-dd") :"")</td>
@@ -29,7 +37,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Unit", new {area ="Admin",id = item.Unit.UnitId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/edit_book.png" width="24" /> Edit Unit</a>
+                                <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" onclick="openModalDetail('@Url.Action("Update","Unit", new {area ="Admin",id = item.Unit.UnitId})');"><img src="/Files/images/system/edit_book.png" width="24" /> Edit Unit</a>
                             </li>
                             <li>
                                 <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" data-id="@item.Unit.UnitId" onclick="Xoa($(this))"><img src="/Files/images/system/delete.png" width="24" /> Delete</a>

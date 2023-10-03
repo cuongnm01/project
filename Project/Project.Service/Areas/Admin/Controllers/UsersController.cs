@@ -302,7 +302,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Users.ToList()
-                        where (a.PermissionID == EnumUserType.EMPLOYEE || a.PermissionID == EnumUserType.MANAGER)
+                        where (a.PermissionID == EnumUserType.EMPLOYEE || a.PermissionID == EnumUserType.MANAGER || a.PermissionID == EnumUserType.GUEST)
                         && (keyword != "" ? (a.FullName.RemoveUnicode().ToLower().Contains(keyword) || a.Email.RemoveUnicode().ToLower().Contains(keyword)) : true)
                         && a.StatusID != EnumStatus.DELETE
                         select a).OrderBy(x => x.FullName);
@@ -460,6 +460,9 @@ namespace Project.Service.Areas.Admin.Controllers
 
             var c = _db.User_Permission.Where(x => x.UserID == id);
             _db.User_Permission.RemoveRange(c);
+
+            var d = _db.Tokens.Where(x => x.UserID == id);
+            _db.Tokens.RemoveRange(d);
 
             _db.Users.Remove(obj);
             _db.SaveChanges();

@@ -13,6 +13,9 @@
 <tr>
     <td style="border: 1px solid #E0E0E0 !important ">General Access</td>
     <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
+        <img style="cursor: pointer" src="@(Model.PermissionID == EnumUserType.GUEST ? "/Files/images/system/checked.png" : "/Files/images/system/uncheck.png")" width="24" height="24" data-id="@Model.UserID" data-permission="@EnumUserType.GUEST" onclick="select_access($(this));" />
+    </td>
+    <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
         <img style="cursor: pointer" src="@(Model.PermissionID == EnumUserType.EMPLOYEE ? "/Files/images/system/checked.png" : "/Files/images/system/uncheck.png")" width="24" height="24" data-id="@Model.UserID" data-permission="@EnumUserType.EMPLOYEE" onclick="select_access($(this));" />
     </td>
     <td class="text-center" style="border: 1px solid #E0E0E0 !important ">

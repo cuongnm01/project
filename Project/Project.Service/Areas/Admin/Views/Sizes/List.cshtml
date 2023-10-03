@@ -16,7 +16,11 @@
             <td class="text-left">
                 <input type="checkbox" name="checkAll" class="checkSingle" value="@item.SizeId" />
             </td>
-            <td class="text-left">@(item.Name)</td>
+            <td class="text-left">
+                <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("Update","Sizes", new {area ="Admin",id = item.SizeId})');">
+                    @(item.Name)
+                </a>
+            </td>
             <td class="text-left">@(item.CreateDate != null ? item.CreateDate.Value.ToString("yyyy-MM-dd") :"")</td>
             <td class="text-center clickable-td">
                 @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
@@ -27,7 +31,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Sizes", new {area ="Admin",id = item.SizeId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/edit_book.png" width="24" /> Edit Size</a>
+                                <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" onclick="openModalDetail('@Url.Action("Update","Sizes", new {area ="Admin",id = item.SizeId})');"><img src="/Files/images/system/edit_book.png" width="24" /> Edit Size</a>
                             </li>
                             <li>
                                 <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" data-id="@item.SizeId" onclick="Xoa($(this))"><img src="/Files/images/system/delete.png" width="24" /> Delete</a>

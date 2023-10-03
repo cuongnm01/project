@@ -18,6 +18,7 @@ namespace Project.Model.DbSet
 
         public int? SortOrder { get; set; }
         public int? StatusID { get; set; }
+        public Guid? ProductId { get; set; }
         public DateTime? CreateDate { get; set; }
     }
 }

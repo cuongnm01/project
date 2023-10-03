@@ -169,6 +169,12 @@
             var result = parseFloat(money.replace('.', ''));
             return result;
         }
+
+        function openModalDetail(url) {
+            $('#modal-qltaikhoan').load(url, function (e) {
+                $('#modal-qltaikhoan').modal('show');
+            });
+        }
     </script>
     @RenderSection("scripts", required: false)
 </body>

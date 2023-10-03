@@ -27,7 +27,6 @@
                             <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit</a></li>
                             <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit Group</a></li>
                             <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Sizes",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Size</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Slider",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Banner</a></li>
                         </ul>
                     </li>
                 }
@@ -80,10 +79,6 @@
                     <img src="/Files/images/system/unit_group_color.png" width="24" />
                     <span>Size</span>
                 </a>
-                <a class="menu-nav-item" href="@Url.Action("MainPage","Slider")">
-                    <img src="/Files/images/system/unit_group_color.png" width="24" />
-                    <span>Banner</span>
-                </a>
             </div>
             <div class="x_content table-responsive">
                 <table class="table table-bordered">
@@ -93,10 +88,10 @@
                             <th class="text-left">Name</th>
                             <th class="text-left" width="200">Image</th>
                             <th class="text-left" width="200">Group</th>
-                            <th class="text-left" width="200">Publish Status</th>
-                            <th class="text-left" width="200">Scale by </th>
-                            <th class="text-left" width="200">Price</th>
-                            <th class="text-left" width="200">Date Added</th>
+                            <th class="text-left" width="150">Publish Status</th>
+                            <th class="text-left" width="100">Scale by </th>
+                            <th class="text-left" width="150">Price</th>
+                            <th class="text-left" width="100">Date Added</th>
                             <th width="150" class="text-left" style="max-width:60px;">
                             </th>
                         </tr>
@@ -262,7 +257,7 @@
                 return false;
             }
         }
-        $("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
+        //$("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
         $("#list").load("@Url.Action("List", "Ingredient", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&unitGroupId=" + @ViewBag.unitGroupId+ "&ingredientGroupId=" + @ViewBag.ingredientGroupId);
     }
 </script>

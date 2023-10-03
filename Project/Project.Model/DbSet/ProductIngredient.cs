@@ -9,16 +9,12 @@ namespace Project.Model.DbSet
     public partial class ProductIngredient
     {
         public Guid ProductIngredientId { get; set; }
-
         public Guid? ProductId { get; set; }
-
+        public Guid? ProductIngredientGroupId { get; set; }
         public int? SizeId { get; set; }
-
         public int? IngredientId { get; set; }
-
         public double? Value { get; set; }
         public int? UnitId { get; set; }
-
         [StringLength(50)]
         public string Unit { get; set; }
         public double? Price { get; set; }

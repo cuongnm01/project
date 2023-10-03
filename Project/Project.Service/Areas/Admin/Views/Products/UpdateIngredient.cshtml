@@ -19,6 +19,16 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                         <div class="form-group col-md-12 col-sm-12 col-xs-12 conditionType">
+                            <label class="control-label" for="first-name">Header</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" title="Choose header" name="ProductIngredientGroupId" id="ProductIngredientGroupId">
+                                    @Html.Raw(ViewBag.cbxHeaders)
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 conditionType">
                             <label class="control-label" for="first-name">Ingredient</label>
                             <div id="productId">
                                 <select class="ctr-select" data-live-search="true" title="Choose Ingredient" name="IngredientId" id="IngredientId">
@@ -38,7 +48,8 @@
                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                             <label class="control-label" for="first-name">Unit</label>
                             <div id="lstUnitId">
-                                <select class="ctr-select" data-live-search="true" name="UnitId" id="UnitId">
+                                <select class="ctr-select" data-live-search="true" title="Choose unit" name="UnitId" id="UnitId">
+                                    @Html.Raw(ViewBag.cbxUnits)
                                 </select>
                             </div>
                         </div>

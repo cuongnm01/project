@@ -23,7 +23,7 @@
                 <span class="">@(item.Category.Name)</span>
             </td>
             <td class="text-left">
-                <span class="">@(item.Product.Name)</span>
+                <a href="@Url.Action("Update","Products", new {area ="Admin",id = item.Product.ProductId})">@(item.Product.Name)</a>
             </td>
             <td class="text-left">
                 <span>

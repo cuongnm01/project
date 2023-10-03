@@ -1,0 +1,88 @@
+﻿@using Common.Constants
+@using Project.Model.DbSet
+@using Common.Resources
+@using Project.Model.Model
+@using Project.Model.Configuration;
+@model ProductDirectionGroup
+@{
+    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form class="fv-form fv-form-bootstrap" id="frm-capnhat2">
+            <div class="modal-body">
+                <h4 class="modal-title">
+                    Step Header
+                </h4>
+                <input type="hidden" id="ProductDirectionGroupId" name="ProductDirectionGroupId" value="@Model.ProductDirectionGroupId">
+                <input type="hidden" id="ProductId" name="ProductId" value="@Model.ProductId">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label" for="first-name">Name:</label>
+                            <div>
+                                <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="modal-footer">
+                @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
+                {
+                    <button type="button" class="btn btn-info" data-dismiss="modal">@Message.CANCEL</button>
+                    <button id="btn-saveStep" type="submit" class="btn btn-success">@Message.SAVE</button>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#frm-capnhat2').formValidation({
+            framework: 'bootstrap',
+            excluded: ':disabled',
+            fields: {
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Required data'
+                        },
+                    }
+                },
+            }
+        }).on('success.form.fv', function (e) {
+            document.getElementById("btn-saveStep").disabled = true;
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("UpdateStepGroup", "Products", new { area = "Admin" })',
+                type: 'POST',
+                dataType: 'json',
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                async: false,
+                cache: false,
+                data: new FormData(document.getElementById('frm-capnhat2')),
+                success: function (data) {
+                    debugger;
+                    if (data.isSuccess) {
+                        alertify.success(data.message);
+                        $('#modal-qltaikhoan').modal('hide');
+                        LoadStep();
+                    }
+                    else {
+                        alertify.error(data.message);
+                        document.getElementById("btn-saveStep").disabled = false;
+                        $("#btn-saveStep").removeClass("disabled");
+                    }
+                }
+            });
+        });
+    });
+
+</script>

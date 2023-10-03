@@ -6,25 +6,51 @@
 @{
     int stt = 0;
     List<Unit> units = (List<Unit>)ViewBag.Units;
+    string currentHeader = "";
 }
 
 @if (Model != null && Model.Count() > 0)
 {
     foreach (var item in Model)
     {
+        if (currentHeader != item.Header)
+        {
+            currentHeader = item.Header;
+            <tr>
+                <td class="text-center">
+                    <input class="form-control" type="text" value="@(item.ProductIngredientGroup.SortOrder)" data-id="@item.ProductIngredientGroup.ProductIngredientGroupId" onkeypress="return validateNumber(event)" onchange="change_data_ingredient_group($(this))" />
+                </td>
+                <td class="text-left" colspan="5">
+                    <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("UpdateIngredientGroup","Products", new {area ="Admin",id = item.ProductIngredientGroup.ProductIngredientGroupId})');">
+                        <strong style="font-size:18px;">@item.Header</strong>
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a data-id="@(item.ProductIngredientGroup != null ? item.ProductIngredientGroup.ProductIngredientGroupId.ToString() :"")" style="cursor: pointer;" onclick="delete_ingredient_group($(this))"><img src="/Files/images/system/delete.png" width="24" /></a>
+                </td>
+            </tr>
+        }
         <tr>
+            <td></td>
             <td class="text-center">
-                <input class="form-control" disabled type="text" value="@(item.ProductIngredient.Value)" data-id="@item.ProductIngredient.ProductIngredientId" onkeypress="return validateNumber(event)" onchange="change_qty($(this))" />
+                <input class="form-control" type="text" value="@(item.ProductIngredient.SortOrder)" data-id="@item.ProductIngredient.ProductIngredientId" data-type="@EnumIngredientData.SORT_ORDER" onkeypress="return validateNumber(event)" onchange="change_data_ingredient($(this))" />
             </td>
             <td class="text-center">
-                <select class="ctr-select" name="unitid@(stt)" data-id="@item.ProductIngredient.ProductIngredientId" onchange="change_unit($(this))" disabled>
+                <input class="form-control" type="text" value="@(item.ProductIngredient.Value)" data-id="@item.ProductIngredient.ProductIngredientId" data-type="@EnumIngredientData.QTY" onkeypress="return validateNumber(event)" onchange="change_data_ingredient($(this))" />
+            </td>
+            <td class="text-center">
+                <select class="ctr-select" name="unitid@(stt)" data-id="@item.ProductIngredient.ProductIngredientId" data-type="@EnumIngredientData.UNIT" onchange="change_data_ingredient($(this))">
                     @foreach (var unit in units.Where(x => x.UnitGroupId == item.Ingredient.UnitGroupId))
                     {
                         <option value="@unit.UnitId" @(unit.UnitId == item.ProductIngredient.UnitId ? "selected" : "" )>@unit.Code</option>
                     }
                 </select>
             </td>
-            <td class="text-center">@item.Ingredient.Name</td>
+            <td class="text-left">
+                <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("UpdateIngredient","Products", new {area ="Admin",id = item.ProductIngredient.ProductIngredientId})');">
+                    @item.Ingredient.Name
+                </a>
+            </td>
             <td class="text-center">
                 <input class="form-control text-right" disabled type="text" value="@(item.ProductIngredient.Price.Value.ToString("#,###"))" onkeypress="return validateNumber(event)" />
             </td>
@@ -34,7 +60,7 @@
         </tr>
     }
     <tr>
-        <td class="text-right" colspan="3"><strong>Total: </strong> </td>
+        <td class="text-right" colspan="5"><strong>Total: </strong> </td>
         <td class="text-right">@(Model.Sum(x=>x.ProductIngredient.Price ??0).ToString("#,###"))</td>
     </tr>
 }

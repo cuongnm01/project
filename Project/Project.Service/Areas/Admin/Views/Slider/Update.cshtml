@@ -7,7 +7,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-           
+
         </div>
         <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
             <div class="modal-body">
@@ -16,7 +16,7 @@
                 </h4>
                 <input type="hidden" id="SliderId" name="SliderId" value="@(Model != null? Model.SliderId.ToString():"0")">
                 <input type="hidden" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder.ToString():"0")">
-                <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
+                <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                     <div class="form-group col-md-12 col-sm-12 col-xs-12">
                         <label class="control-label" for="first-name">Image(1112x352):</label>
                         <div>
@@ -44,6 +44,16 @@
 
                         </div>
                     </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 conditionType">
+                            <label class="control-label" for="first-name">Product</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" title="Choose Recipe" name="ProductId" id="ProductId">
+                                    @Html.Raw(ViewBag.cbxProducts)
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -55,11 +65,18 @@
     </div>
 </div>
 <script>
+
+    $(document).ready(function () {
+        $(".ctr-select").selectpicker({
+            width: '100%',
+            showTick: true,
+        });
+    })
     $(document).ready(function () {
         $('#frm-capnhat1').formValidation({
             framework: 'bootstrap',
             excluded: ':disabled',
-            fields: {      
+            fields: {
                 _Logo: {
                     validators: {
                         file: {
@@ -96,7 +113,8 @@
                     debugger;
                     if (data.isSuccess) {
                         alertify.success(data.message);
-                        window.location.href = '@Url.Action("MainPage", "Slider", new { area = "Admin" })';
+                        $('#modal-qltaikhoan').modal('hide');
+                        ChoosePage(0);
                     }
                     else {
                         alertify.error(data.message);

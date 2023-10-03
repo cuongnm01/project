@@ -283,7 +283,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     else
                     {
                         if (ortherItem == null)
-                            return Json(new CxResponse("err", "Default is Required"));
+                            return Json(new CxResponse("err", "Unit group does not have a base yet if updated"));
                     }
 
                     old.UnitGroupId = obj.UnitGroupId;

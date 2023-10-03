@@ -64,8 +64,9 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-left" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important "></th>
-                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">View Only</th>
-                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Manager</th>
+                                                <th class="text-center" width="120" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Guest</th>
+                                                <th class="text-center" width="120" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">View Only</th>
+                                                <th class="text-center" width="120" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Manager</th>
                                             </tr>
                                         </thead>
                                         <tbody id="access_type">
@@ -123,15 +124,19 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-left" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important "></th>
-                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">View Only</th>
-                                                <th class="text-center" width="200" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Manager</th>
+                                                <th class="text-center" width="120" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Guest</th>
+                                                <th class="text-center" width="120" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">View Only</th>
+                                                <th class="text-center" width="120" style="background: var(--gray-6, #F2F2F2); color: var(--gray-1, #333); border: 1px solid #E0E0E0 !important ">Manager</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td style="border: 1px solid #E0E0E0 !important ">General Access</td>
                                                 <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
-                                                    <input type="radio" name="PermissionID" value="@EnumUserType.EMPLOYEE" @(Model.PermissionID == EnumUserType.EMPLOYEE ? "checked" :"")/>
+                                                    <input type="radio" name="PermissionID" value="@EnumUserType.GUEST" @(Model.PermissionID == EnumUserType.GUEST ? "checked" : "") />
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
+                                                    <input type="radio" name="PermissionID" value="@EnumUserType.EMPLOYEE" @(Model.PermissionID == EnumUserType.EMPLOYEE ? "checked" : "") />
                                                 </td>
                                                 <td class="text-center" style="border: 1px solid #E0E0E0 !important ">
                                                     <input type="radio" name="PermissionID" value="@EnumUserType.MANAGER" @(Model.PermissionID == EnumUserType.MANAGER ? "checked" : "") />

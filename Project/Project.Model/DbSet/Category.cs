@@ -22,6 +22,7 @@ namespace Project.Model.DbSet
 
         public int? SortOrder { get; set; }
         public int? StatusID { get; set; }
+        public int? IsHomePage { get; set; }
         public DateTime? CreateDate { get; set; }
     }
 }

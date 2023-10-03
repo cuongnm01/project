@@ -67,6 +67,8 @@ namespace Common.Constants
         public const int EMPLOYEE = 2;
         public const int MANAGER = 3;
         public const int CUSTOMER = 4;
+        public const int GUEST = 5;
+
         public static string ToString(int? value)
         {
             switch (value)
@@ -79,6 +81,8 @@ namespace Common.Constants
                     return EnumResource.USER_TYPE_AGENCY;
                 case CUSTOMER:
                     return EnumResource.USER_TYPE_CUSTOMER;
+                case GUEST:
+                    return "GUEST";
                 default:
                     return "";
             }
@@ -281,6 +285,66 @@ namespace Common.Constants
                     return "Insert/Update";
                 case DELETE:
                     return "Delete";
+                default:
+                    return "";
+            }
+        }
+    }
+
+    public class EnumProductImageType
+    {
+        public const int IMAGE = 1;
+        public const int BACKGROUND = 2;
+
+        public static string ToString(int? value)
+        {
+            switch (value)
+            {
+                case IMAGE:
+                    return "Image";
+                case BACKGROUND:
+                    return "Background";
+                default:
+                    return "";
+            }
+        }
+    }
+
+    public class EnumIngredientData
+    {
+        public const int SORT_ORDER = 1;
+        public const int QTY = 2;
+        public const int UNIT = 3;
+
+        public static string ToString(int? value)
+        {
+            switch (value)
+            {
+                case SORT_ORDER:
+                    return "Sort order";
+                case QTY:
+                    return "Qty";
+                case UNIT:
+                    return "Unit";
+                default:
+                    return "";
+            }
+        }
+    }
+
+    public class EnumStepData
+    {
+        public const int SORT_ORDER = 1;
+        public const int DESCRIPTION = 2;
+
+        public static string ToString(int? value)
+        {
+            switch (value)
+            {
+                case SORT_ORDER:
+                    return "Sort order";
+                case DESCRIPTION:
+                    return "Description";
                 default:
                     return "";
             }

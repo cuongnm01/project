@@ -237,7 +237,7 @@
                 return false;
             }
         }
-        $("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
+        //$("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
         $("#list").load("@Url.Action("List", "Slider", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&status=" + $('#nhomquyenid').val());
     }
 </script>

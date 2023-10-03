@@ -14,8 +14,17 @@ namespace Project.Model.Model
     }
     public class ProductIngredientInfo
     {
+        public string Header { get; set; }
+        public ProductIngredientGroup ProductIngredientGroup { get; set; }
         public ProductIngredient ProductIngredient { get; set; }
         public Ingredient Ingredient { get; set; }
+    }
+
+    public class ProductDirectionInfo
+    {
+        public string Header { get; set; }
+        public ProductDirectionGroup ProductDirectionGroup { get; set; }
+        public ProductDirection ProductDirection { get; set; }
     }
 
     public class UnitGroupInfo

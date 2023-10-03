@@ -18,7 +18,11 @@
             <td class="text-left">
                 <input type="checkbox" name="checkAll" class="checkSingle" value="@item.UnitGroup.UnitGroupId" />
             </td>
-            <td class="text-left">@(item.UnitGroup.Name)</td>
+            <td class="text-left">
+                <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("Update_Group","Unit", new {area ="Admin",id = item.UnitGroup.UnitGroupId})');">
+                    @(item.UnitGroup.Name)
+                </a>
+            </td>
             <td class="text-left">
                 <a href="@Url.Action("MainPage","Unit", new { unitGroupId = item.UnitGroup.UnitGroupId })">
                     @(item.TotalUnit)

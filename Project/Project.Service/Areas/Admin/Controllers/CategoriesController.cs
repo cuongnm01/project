@@ -97,6 +97,16 @@ namespace Project.Service.Areas.Admin.Controllers
                     productCategory.Image = fileImage[1];
                 }
                 productCategory.CreateDate = DateTime.Now;
+
+                if(productCategory.IsHomePage == EnumStatus.ACTIVE)
+                {
+                    var home = _db.Categorys.FirstOrDefault(x => x.IsHomePage == EnumStatus.ACTIVE);
+                    if(home != null)
+                    {
+                        home.IsHomePage = EnumStatus.INACTIVE;
+                    }
+                }
+
                 _db.Categorys.Add(productCategory);
                 _db.SaveChanges();
 
@@ -117,8 +127,20 @@ namespace Project.Service.Areas.Admin.Controllers
                     string[] fileImage = _Logo.uploadFile(rootPathImage, filePathImage);
                     old.Image = fileImage[1];
                 }
+
+                if (productCategory.IsHomePage == EnumStatus.ACTIVE)
+                {
+                    var home = _db.Categorys.FirstOrDefault(x => x.IsHomePage == EnumStatus.ACTIVE);
+                    if (home != null)
+                    {
+                        home.IsHomePage = EnumStatus.INACTIVE;
+                    }
+                }
+
                 old.Name = productCategory.Name;
                 old.StatusID = productCategory.StatusID;
+                old.IsHomePage = productCategory.IsHomePage;
+
                 _db.SaveChanges();
 
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));

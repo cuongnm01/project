@@ -11,6 +11,7 @@ namespace Project.Model.DbSet
         public Guid ProductDirectionId { get; set; }
 
         public Guid? ProductId { get; set; }
+        public Guid? ProductDirectionGroupId { get; set; }
 
         [StringLength(50)]
         public string Code { get; set; }
@@ -20,9 +21,7 @@ namespace Project.Model.DbSet
 
         [StringLength(500)]
         public string Image { get; set; }
-
         public string Description { get; set; }
-
         public int? SortOrder { get; set; }
         public int? StatusID { get; set; }
         public DateTime? CreateDate { get; set; }

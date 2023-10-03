@@ -25,7 +25,7 @@ namespace Project.Service.Controllers
             return Ok(new CxResponse<List<Size>>(size, "ok"));
         }
 
-        private string url = "http://bottega.sapp.asia";
+        private string url = "http://cafebottega.com/";
         // GET: Api/Bottega
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace Project.Service.Controllers
                 var appConfig = db.AppConfigs.FirstOrDefault();
 
                 request.password = request.password.Encode();
-                var user = db.Users.FirstOrDefault(x => (x.PermissionID == EnumUserType.EMPLOYEE || x.PermissionID == EnumUserType.MANAGER) && (x.UserName == request.username || x.Phone == request.username || x.Email == request.username));
+                var user = db.Users.FirstOrDefault(x => (x.PermissionID == EnumUserType.EMPLOYEE || x.PermissionID == EnumUserType.MANAGER || x.PermissionID == EnumUserType.GUEST) && (x.UserName == request.username || x.Phone == request.username || x.Email == request.username));
                 if (user == null)
                     return Json(new { isSuccess = false, data = new { }, message = "Unknown account", version = "", code = "" });
 
@@ -78,6 +78,7 @@ namespace Project.Service.Controllers
                         fullName = user.FullName ?? "",
                         avatar = !string.IsNullOrEmpty(user.Avatar) ? url + user.Avatar : "",
                         email = user.Email ?? "",
+                        permission = user.PermissionID ?? EnumUserType.GUEST,
                     }
                 };
 
@@ -102,10 +103,12 @@ namespace Project.Service.Controllers
                                {
                                    id = a.SliderId,
                                    image = !string.IsNullOrEmpty(a.Url) ? url + a.Url.Replace("~/", "/") : "",
+                                   productId = a.ProductId,
                                }).ToList();
 
+                var category = db.Categorys.FirstOrDefault(x => x.IsHomePage == EnumStatus.ACTIVE) ?? new Category();
 
-                var product = db.Products.Where(x=> x.StatusID != EnumStatus.DELETE).ToList();
+                var product = db.Products.Where(x=> x.StatusID != EnumStatus.DELETE && x.CategoryId == category.CategoryId).ToList();
 
 
                 var products = (from a in product

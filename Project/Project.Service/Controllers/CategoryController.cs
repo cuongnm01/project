@@ -12,7 +12,7 @@ namespace Project.Service.Controllers
 {
     public class CategoryController : BaseController
     {
-        private string url = "http://bottega.sapp.asia";
+        private string url = "http://cafebottega.com/";
 
         [HttpGet]
         [ActionName("list")]

@@ -17,8 +17,16 @@
             <td class="text-left">
                 <input type="checkbox" name="checkAll" class="checkSingle" value="@item.Ingredient.IngredientId" />
             </td>
-            <td class="text-left">@(item.Ingredient.Name)</td>
-            <td class="text-left"><img width="50" src="@(string.IsNullOrEmpty(item.Ingredient.Image)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Ingredient.Image.Replace("~","")) " /></td>
+            <td class="text-left">
+                <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("Update","Ingredient", new {area ="Admin",id = item.Ingredient.IngredientId})');">
+                    @(item.Ingredient.Name)
+                </a>
+            </td>
+            <td class="text-left">
+                <a style="cursor: pointer;" onclick="openModalDetail('@Url.Action("Update","Ingredient", new {area ="Admin",id = item.Ingredient.IngredientId})');">
+                    <img width="50" src="@(string.IsNullOrEmpty(item.Ingredient.Image)?EnumImageDefault.NEWS_EMPTY.Replace("~",""):item.Ingredient.Image.Replace("~","")) " />
+                </a>
+            </td>
             <td class="text-left">@(item.IngredientGroup.Name)</td>
             <td class="text-left">
                 <span>
@@ -39,7 +47,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new {area ="Admin",id = item.Ingredient.IngredientId})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/edit_book.png" width="24" /> Edit Ingredients</a>
+                                <a class="btn btn-xs" style="cursor: pointer; padding-right: 10px; text-align: left;" onclick="openModalDetail('@Url.Action("Update","Ingredient", new {area ="Admin",id = item.Ingredient.IngredientId})');"><img src="/Files/images/system/edit_book.png" width="24" /> Edit Ingredients</a>
                             </li>
                             @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)
                             {

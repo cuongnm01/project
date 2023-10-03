@@ -104,16 +104,44 @@
                 cache: false,
                 data: new FormData(document.getElementById('frm-capnhat1')),
                 success: function (data) {
-                    debugger;
-                    console.log(data);
                     if (data.isSuccess) {
                         alertify.success(data.message);
                         window.location.href = '@Url.Action("Update", "Products", new { area = "Admin"})?id=' + data.data;
                     }
                     else {
-                        alertify.error(data.message);
-                        document.getElementById("btn-save1").disabled = false;
-                        $("#btn-save1").removeClass("disabled");
+                        if (data.code == "warning") {
+                            alertify.confirm(data.message + '. <br/>Do you want to continue?', function (e) {
+                                if (e) {
+                                   $.ajax({
+                                        url: '@Url.Action("Insert", "Products", new { area = "Admin" , isConfirm = true })',
+                                        type: 'POST',
+                                        dataType: 'json',
+                                        mimeType: "multipart/form-data",
+                                        contentType: false,
+                                        processData: false,
+                                        async: false,
+                                        cache: false,
+                                        data: new FormData(document.getElementById('frm-capnhat1')),
+                                        success: function (data) {
+                                            if (data.isSuccess) {
+                                                alertify.success(data.message);
+                                                window.location.href = '@Url.Action("Update", "Products", new { area = "Admin"})?id=' + data.data;
+                                            }
+                                            else {
+                                                alertify.error(data.message);
+                                                document.getElementById("btn-save1").disabled = false;
+                                                $("#btn-save1").removeClass("disabled");
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            alertify.error(data.message);
+                            document.getElementById("btn-save1").disabled = false;
+                            $("#btn-save1").removeClass("disabled");
+                        }
+
                     }
                 }
             });

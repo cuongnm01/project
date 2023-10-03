@@ -38,8 +38,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -8041,6 +8041,8 @@
     <Content Include="Areas\Admin\Views\Profile\MainPage.cshtml" />
     <Content Include="Areas\Admin\Views\Profile\Update.cshtml" />
     <Content Include="Areas\Admin\Views\Profile\Password.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\UpdateIngredientGroup.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\UpdateStepGroup.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

@@ -37,7 +37,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 keyword = keyword.RemoveUnicode().ToLower();
 
             var list = (from a in _db.Sliders
-                        select a).OrderByDescending(x=>x.CreateDate);
+                        select a).OrderByDescending(x => x.CreateDate);
 
             int tongso = list.Count();
 
@@ -65,6 +65,15 @@ namespace Project.Service.Areas.Admin.Controllers
 
             var obj = _db.Sliders.FirstOrDefault(x => x.SliderId == id);
             obj = obj == null ? new_record : obj;
+
+            var products = _db.Products.Where(x => x.StatusID == EnumStatus.ACTIVE).OrderBy(x => x.Name).ToList();
+            string cbxProducts = "";
+            foreach (var item in products)
+            {
+                cbxProducts += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.ProductId, item.Name, item.ProductId == obj.ProductId ? "selected" : "");
+            }
+            ViewBag.cbxProducts = cbxProducts;
+
             return PartialView(obj);
         }
 
@@ -111,6 +120,7 @@ namespace Project.Service.Areas.Admin.Controllers
                         old.Url = fileImage[1];
                     }
                     old.SortOrder = slider.SortOrder;
+                    old.ProductId = slider.ProductId;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));

@@ -31,7 +31,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
             ViewBag.User = nd_dv;
-            ViewBag.categoryId = categoryId??0;
+            ViewBag.categoryId = categoryId ?? 0;
             return View();
         }
 
@@ -53,7 +53,7 @@ namespace Project.Service.Areas.Admin.Controllers
                             Category = b
 
                         })
-                        .OrderBy(x => x.Category.Name).ThenBy(x=>x.Product.Name)
+                        .OrderBy(x => x.Category.Name).ThenBy(x => x.Product.Name)
                         .ToList();
 
             int tongso = list.Count();
@@ -93,16 +93,21 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("recipe/insert")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Insert(Product products)
+        public ActionResult Insert(Product products, bool isConfirm = false)
         {
             CheckPermission(EnumFunctions.Recipe, EnumOptions.ADD);
             var nd_dv = GetUserLogin;
             if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
                 return RedirectToAction("AccessDenied", "Home", new { area = "" });
 
+            var exist = _db.Products.Count(x => x.Name.ToLower() == products.Name.ToLower().Trim());
+            if (exist > 0 && isConfirm == false)
+            {
+                return Json(new CxResponse("warning", string.Format("Recipe {0} is dupplicated", products.Name)));
+            }
+
             if (products.ProductId == Guid.Empty)
             {
-              
                 // tao moi
                 products.Code = Helpers.CreateCode6Char();
                 products.StatusID = EnumStatus.ACTIVE;
@@ -259,6 +264,30 @@ namespace Project.Service.Areas.Admin.Controllers
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
 
+        [Route("recipe/delete-image")]
+        public ActionResult DeleteImage(Guid id, int? type = null)
+        {
+            CheckPermission(EnumFunctions.Recipe, EnumOptions.DELETE);
+            var nd_dv = GetUserLogin;
+            if (nd_dv == null || nd_dv.AccessDenied == EnumStatus.ACTIVE)
+                return RedirectToAction("AccessDenied", "Home", new { area = "" });
+
+            var products = _db.Products.FirstOrDefault(x => x.ProductId == id);
+            if (products == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
+
+            if (type == EnumProductImageType.IMAGE)
+            {
+                products.Image = null;
+            }
+            else
+            {
+                products.Background = null;
+            }
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
+        }
+
 
         [Route("recipe/delete-all")]
         public ActionResult DeleteAll(string ids)
@@ -286,7 +315,17 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("recipe/list-step")]
         public ActionResult ListStep(Guid? productId)
         {
-            var productDirection = _db.ProductDirections.Where(x => x.ProductId == productId).OrderBy(x => x.SortOrder);
+            var productDirection = (from a in _db.ProductDirections
+                                    join c in _db.ProductDirectionGroup on a.ProductDirectionGroupId equals c.ProductDirectionGroupId into c1
+                                    from c in c1.DefaultIfEmpty()
+                                    where a.ProductId == productId
+                                    select new ProductDirectionInfo()
+                                    {
+                                        Header = c != null ? c.Name : "",
+                                        ProductDirection = a,
+                                        ProductDirectionGroup = c,
+                                    }).OrderBy(x => x.ProductDirectionGroup != null ? x.ProductDirectionGroup.SortOrder : 0).ThenBy(x => x.ProductDirection.SortOrder);
+
             return PartialView(productDirection);
         }
 
@@ -299,6 +338,15 @@ namespace Project.Service.Areas.Admin.Controllers
 
             var obj = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == directionId);
             obj = obj == null ? new_record : obj;
+
+            var headers = _db.ProductDirectionGroup.Where(x => x.ProductId == obj.ProductId && x.StatusID == EnumStatus.ACTIVE).OrderBy(x => x.Name).ToList();
+            string cbxHeaders = "";
+            foreach (var item in headers)
+            {
+                cbxHeaders += string.Format("<option value=\"{0}\">{1}</option>", item.ProductDirectionGroupId, item.Name);
+            }
+            ViewBag.cbxHeaders = cbxHeaders;
+
             return PartialView(obj);
 
         }
@@ -343,10 +391,36 @@ namespace Project.Service.Areas.Admin.Controllers
                     string[] fileImage = _LogoStep.uploadFile(rootPathImage, filePathImage);
                     old.Image = fileImage[1];
                 }
+                old.ProductDirectionGroupId = direction.ProductDirectionGroupId;
                 old.Name = direction.Name;
                 old.Description = direction.Description;
                 _db.SaveChanges();
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+            }
+        }
+
+        [Route("recipe/change-data-step")]
+        public ActionResult ChangeDataStep(Guid? id = null, dynamic value = null, int? type = null)
+        {
+            var obj = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == id);
+            if (obj != null)
+            {
+
+                if (type == EnumStepData.SORT_ORDER)
+                {
+                    obj.SortOrder = Convert.ToInt32(value[0] as string);
+                }
+                else if (type == EnumStepData.DESCRIPTION)
+                {
+                    obj.Description = value[0] as string;
+                }
+
+                _db.SaveChanges();
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new CxResponse("err", Message.MSG_EXCEPTION));
             }
         }
 
@@ -357,6 +431,95 @@ namespace Project.Service.Areas.Admin.Controllers
             if (productsDirection == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
             _db.ProductDirections.Remove(productsDirection);
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("recipe/delete-step-image")]
+        public ActionResult DeleteStepImage(Guid id)
+        {
+
+            var productsDirection = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == id);
+            if (productsDirection == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
+            productsDirection.Image = null;
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region Add Step group to Recipe
+        [Route("recipe/update-step-group")]
+        public ActionResult UpdateStepGroup(Guid? id = null, Guid? productId = null)
+        {
+            var new_record = new ProductDirectionGroup();
+            new_record.ProductId = productId;
+
+            var obj = _db.ProductDirectionGroup.FirstOrDefault(x => x.ProductDirectionGroupId == id);
+            obj = obj == null ? new_record : obj;
+
+            return PartialView(obj);
+        }
+
+        [Route("recipe/update-step-group")]
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult UpdateStepGroup(ProductDirectionGroup obj)
+        {
+            var productDirectionGroup = _db.ProductDirectionGroup.FirstOrDefault(x => x.ProductId == obj.ProductId && x.Name.ToLower() == obj.Name.ToLower().Trim());
+            if (productDirectionGroup != null)
+            {
+                return Json(new CxResponse("err", Message.MSG_USED.Params(productDirectionGroup.Name)));
+            }
+
+            if (obj.ProductDirectionGroupId == Guid.Empty)
+            {
+                obj.ProductDirectionGroupId = Guid.NewGuid();
+                obj.CreateDate = DateTime.Now;
+                obj.StatusID = EnumStatus.ACTIVE;
+                obj.SortOrder = _db.ProductDirectionGroup.Count(x => x.ProductId == obj.ProductId) + 1;
+                _db.ProductDirectionGroup.Add(obj);
+                _db.SaveChanges();
+
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
+            }
+            else
+            {
+                var old = _db.ProductDirectionGroup.FirstOrDefault(x => x.ProductDirectionGroupId == obj.ProductDirectionGroupId);
+                if (old == null)
+                    return Json(new CxResponse("err", Message.MSG_EMPTY));
+
+                old.Name = obj.Name;
+                _db.SaveChanges();
+
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+            }
+        }
+
+        [Route("recipe/change-data-step-group")]
+        public ActionResult ChangeDataStepGroup(Guid? id = null, int? value = null)
+        {
+            var obj = _db.ProductDirectionGroup.FirstOrDefault(x => x.ProductDirectionGroupId == id);
+            if (obj != null)
+            {
+                obj.SortOrder = value;
+                _db.SaveChanges();
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new CxResponse("err", Message.MSG_EXCEPTION));
+            }
+        }
+
+        [Route("recipe/delete-step-group")]
+        public ActionResult DeleteStepGroup(Guid id)
+        {
+            var productDirectionGroup = _db.ProductDirectionGroup.FirstOrDefault(x => x.ProductDirectionGroupId == id);
+            if (productDirectionGroup == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params("Header")));
+            _db.ProductDirectionGroup.Remove(productDirectionGroup);
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
@@ -382,38 +545,66 @@ namespace Project.Service.Areas.Admin.Controllers
                 StringSplitOptions.None
             );
 
-            var sortOrder = _db.ProductDirections.Where(x=>x.ProductId == obj.ProductId).OrderByDescending(x => x.SortOrder).Select(x => x.SortOrder).FirstOrDefault() ?? 0;
+            var sortOrder = _db.ProductDirections.Where(x => x.ProductId == obj.ProductId).OrderByDescending(x => x.SortOrder).Select(x => x.SortOrder).FirstOrDefault() ?? 0;
+            var productDirectionGroups = _db.ProductDirectionGroup.Where(x => x.StatusID != EnumStatus.DELETE && x.ProductId == ProductTempId);
 
             List<ProductDirection> lstProductDirections = new List<ProductDirection>();
+            List<ProductDirectionGroup> lstProductDirectionGroups = new List<ProductDirectionGroup>();
+
+            Guid? currentHeader = null;
 
             foreach (var item in lines)
             {
                 if (!string.IsNullOrEmpty(item))
                 {
-                    sortOrder++;
+                    if (item.Contains(":"))
+                    {
+                        var header = item.Replace(":", "").Trim();
 
-                    ProductDirection direction = new ProductDirection();
-                    direction.ProductDirectionId = Guid.NewGuid();
-                    direction.CreateDate = DateTime.Now;
-                    direction.StatusID = EnumStatus.ACTIVE;
-                    direction.ProductId = ProductTempId;
-                    direction.Code = Helpers.CreateCode6Char();
-                    direction.SortOrder = sortOrder;
-                    direction.Description = item;
-                    lstProductDirections.Add(direction);
+                        var oldHeader = productDirectionGroups.FirstOrDefault(x => x.ProductId == obj.ProductId && x.Name.ToLower() == header.ToLower());
+                        if (oldHeader == null)
+                        {
+                            ProductDirectionGroup productDirectionGroup = new ProductDirectionGroup();
+                            productDirectionGroup.ProductDirectionGroupId = Guid.NewGuid();
+                            productDirectionGroup.ProductId = ProductTempId;
+                            productDirectionGroup.Name = header;
+                            productDirectionGroup.StatusID = EnumStatus.ACTIVE;
+                            productDirectionGroup.SortOrder = productDirectionGroups.Count() + lstProductDirectionGroups.Count() + 1;
+                            productDirectionGroup.CreateDate = DateTime.Now;
+                            lstProductDirectionGroups.Add(productDirectionGroup);
+                            currentHeader = productDirectionGroup.ProductDirectionGroupId;
+                        }
+                        else
+                        {
+                            currentHeader = oldHeader.ProductDirectionGroupId;
+                        }
+                    }
+                    else
+                    {
+                        sortOrder++;
+
+                        ProductDirection direction = new ProductDirection();
+                        direction.ProductDirectionId = Guid.NewGuid();
+                        direction.CreateDate = DateTime.Now;
+                        direction.StatusID = EnumStatus.ACTIVE;
+                        direction.ProductId = ProductTempId;
+                        direction.ProductDirectionGroupId = currentHeader;
+                        direction.Code = Helpers.CreateCode6Char();
+                        direction.SortOrder = sortOrder;
+                        direction.Description = item;
+                        lstProductDirections.Add(direction);
+                    }
                 }
             }
             if (lstProductDirections != null && lstProductDirections.Count() > 0)
             {
                 _db.ProductDirections.AddRange(lstProductDirections);
+                _db.ProductDirectionGroup.AddRange(lstProductDirectionGroups);
                 _db.SaveChanges();
             }
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
         }
         #endregion
-
-
-
 
         #region Add Ingredient to Recipe
         [Route("recipe/ingredient")]
@@ -423,12 +614,16 @@ namespace Project.Service.Areas.Admin.Controllers
 
             var productIngredients = (from a in _db.ProductIngredients
                                       join b in _db.Ingredients on a.IngredientId equals b.IngredientId
+                                      join c in _db.ProductIngredientGroup on a.ProductIngredientGroupId equals c.ProductIngredientGroupId into c1
+                                      from c in c1.DefaultIfEmpty()
                                       where a.ProductId == productId && a.SizeId == sizeId
                                       select new ProductIngredientInfo()
                                       {
+                                          Header = c != null ? c.Name : "",
                                           ProductIngredient = a,
                                           Ingredient = b,
-                                      });
+                                          ProductIngredientGroup = c,
+                                      }).OrderBy(x => x.ProductIngredientGroup != null ? x.ProductIngredientGroup.SortOrder : 0).ThenBy(x => x.ProductIngredient.SortOrder);
 
             var listUnit = _db.Units.Where(x => x.StatusID == EnumStatus.ACTIVE).ToList();
             ViewBag.Units = listUnit;
@@ -437,23 +632,46 @@ namespace Project.Service.Areas.Admin.Controllers
         }
 
         [Route("recipe/update-ingredient")]
-        public ActionResult UpdateIngredient(Guid? productId = null, int? sizeId = null)
+        public ActionResult UpdateIngredient(Guid? id = null, int? sizeId = null)
         {
-            ProductIngredient productIngredient = new ProductIngredient();
-            productIngredient.ProductId = productId;
-            productIngredient.SizeId = sizeId;
 
-            var lstIngredient = _db.ProductIngredients.Where(x => x.ProductId == productId && x.SizeId == sizeId).Select(x => x.IngredientId).ToList();
+            var new_record = new ProductIngredient();
+            new_record.SizeId = sizeId;
 
-            var ingredients = _db.Ingredients.Where(x => !lstIngredient.Contains(x.IngredientId) && x.StatusID == EnumStatus.ACTIVE).OrderBy(x=>x.Name).ToList();
+            var obj = _db.ProductIngredients.FirstOrDefault(x => x.ProductIngredientId == id);
+            obj = obj == null ? new_record : obj;
+
+            var lstIngredient = _db.ProductIngredients.Where(x => x.ProductId == obj.ProductId && x.SizeId == sizeId).Select(x => x.IngredientId).ToList();
+
+            var ingredients = _db.Ingredients.Where(x => id != null ? true : !lstIngredient.Contains(x.IngredientId) && x.StatusID == EnumStatus.ACTIVE).OrderBy(x => x.Name).ToList();
             string cbxIngredient = "";
             foreach (var item in ingredients)
             {
-                cbxIngredient += string.Format("<option value=\"{0}\">{1}</option>", item.IngredientId, item.Name);
+                cbxIngredient += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.IngredientId, item.Name, obj.IngredientId == item.IngredientId ? "selected" : "");
             }
             ViewBag.cbxIngredient = cbxIngredient;
 
-            return PartialView(productIngredient);
+            var headers = _db.ProductIngredientGroup.Where(x => x.ProductId == obj.ProductId && x.StatusID == EnumStatus.ACTIVE).OrderBy(x => x.Name).ToList();
+            string cbxHeaders = "";
+            foreach (var item in headers)
+            {
+                cbxHeaders += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.ProductIngredientGroupId, item.Name, obj.ProductIngredientGroupId == item.ProductIngredientGroupId ? "selected" : "");
+            }
+            ViewBag.cbxHeaders = cbxHeaders;
+
+            var ingredient = _db.Ingredients.FirstOrDefault(x => x.IngredientId == obj.IngredientId);
+            if (ingredient != null)
+            {
+                var lstUnits = _db.Units.Where(x => x.UnitGroupId == ingredient.UnitGroupId).OrderBy(x => x.SortOrder).ToList();
+                string cbxUnits = "";
+                foreach (var item in lstUnits)
+                {
+                    cbxUnits += string.Format("<option value=\"{0}\" {2}>{1}</option>", item.UnitId, item.Name, obj.UnitId == item.UnitId ? "selected" : "");
+                }
+                ViewBag.cbxUnits = cbxUnits;
+            }
+
+            return PartialView(obj);
         }
 
         [Route("recipe/update-ingredient")]
@@ -493,8 +711,81 @@ namespace Project.Service.Areas.Admin.Controllers
             }
             else
             {
+                var old = _db.ProductIngredients.FirstOrDefault(x => x.ProductIngredientId == obj.ProductIngredientId);
+                if (old == null)
+                    return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params("Ingredients")));
 
+                old.ProductIngredientGroupId = obj.ProductIngredientGroupId;
+                old.IngredientId = obj.IngredientId;
+                old.Value = obj.Value;
+                old.UnitId = obj.UnitId;
+                old.Price = 0;
+                var unit = _db.Units.FirstOrDefault(x => x.UnitId == obj.UnitId);
+                if (unit != null)
+                {
+                    old.Unit = unit.Name;
+
+                    var unitBase = _db.Units.FirstOrDefault(x => x.UnitGroupId == unit.UnitGroupId && x.IsDefault == true);
+                    var percent = (double)(unit.Rate / unitBase.Rate);
+                    var price = obj.Value * percent * (ingredient != null && ingredient.Price != null ? ingredient.Price : 0);
+                    old.Price = price;
+                }
+
+                _db.SaveChanges();
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+            }
+        }
+
+        [Route("recipe/change-data-ingredient")]
+        public ActionResult ChangeDataIngredient(Guid? id = null, int? value = null, int? type = null)
+        {
+            var obj = _db.ProductIngredients.FirstOrDefault(x => x.ProductIngredientId == id);
+            if (obj != null)
+            {
+                var ingredient = _db.Ingredients.FirstOrDefault(x => x.IngredientId == obj.IngredientId);
+                if (ingredient == null)
+                {
+                    return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params("Ingredients")));
+                }
+
+                if (type == EnumIngredientData.SORT_ORDER)
+                {
+                    obj.SortOrder = value;
+                }
+                else if (type == EnumIngredientData.QTY)
+                {
+                    obj.Value = value;
+                    obj.Price = 0;
+                    var unit = _db.Units.FirstOrDefault(x => x.UnitId == obj.UnitId);
+                    if (unit != null)
+                    {
+                        obj.Unit = unit.Name;
+                        var unitBase = _db.Units.FirstOrDefault(x => x.UnitGroupId == unit.UnitGroupId && x.IsDefault == true);
+                        var percent = (double)(unit.Rate / unitBase.Rate);
+                        var price = obj.Value * percent * (ingredient != null && ingredient.Price != null ? ingredient.Price : 0);
+                        obj.Price = price;
+                    }
+                }
+                else if (type == EnumIngredientData.UNIT)
+                {
+                    var unit = _db.Units.FirstOrDefault(x => x.UnitId == value);
+                    if (unit != null)
+                    {
+                        obj.Price = 0;
+                        obj.UnitId = value;
+                        obj.Unit = unit.Name;
+                        var unitBase = _db.Units.FirstOrDefault(x => x.UnitGroupId == unit.UnitGroupId && x.IsDefault == true);
+                        var percent = (double)(unit.Rate / unitBase.Rate);
+                        var price = obj.Value * percent * (ingredient != null && ingredient.Price != null ? ingredient.Price : 0);
+                        obj.Price = price;
+                    }
+                }
+                _db.SaveChanges();
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new CxResponse("err", Message.MSG_EXCEPTION));
             }
         }
 
@@ -527,6 +818,83 @@ namespace Project.Service.Areas.Admin.Controllers
         }
         #endregion
 
+
+        #region Add Ingredient group to Recipe
+        [Route("recipe/update-ingredient-group")]
+        public ActionResult UpdateIngredientGroup(Guid? id = null, Guid? productId = null)
+        {
+
+            var new_record = new ProductIngredientGroup();
+            new_record.ProductId = productId;
+
+            var obj = _db.ProductIngredientGroup.FirstOrDefault(x => x.ProductIngredientGroupId == id);
+            obj = obj == null ? new_record : obj;
+
+            return PartialView(obj);
+        }
+
+        [Route("recipe/update-ingredient-group")]
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult UpdateIngredientGroup(ProductIngredientGroup obj)
+        {
+            var productIngredientGroup = _db.ProductIngredientGroup.FirstOrDefault(x => x.ProductId == obj.ProductId && x.Name.ToLower() == obj.Name.ToLower().Trim());
+            if (productIngredientGroup != null)
+            {
+                return Json(new CxResponse("err", Message.MSG_USED.Params(productIngredientGroup.Name)));
+            }
+
+            if (obj.ProductIngredientGroupId == Guid.Empty)
+            {
+                obj.ProductIngredientGroupId = Guid.NewGuid();
+                obj.CreateDate = DateTime.Now;
+                obj.StatusID = EnumStatus.ACTIVE;
+                obj.SortOrder = _db.ProductIngredientGroup.Count(x => x.ProductId == obj.ProductId) + 1;
+                _db.ProductIngredientGroup.Add(obj);
+                _db.SaveChanges();
+
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
+            }
+            else
+            {
+                var old = _db.ProductIngredientGroup.FirstOrDefault(x => x.ProductIngredientGroupId == obj.ProductIngredientGroupId);
+                if (old == null)
+                    return Json(new CxResponse("err", Message.MSG_EMPTY));
+
+                old.Name = obj.Name;
+                _db.SaveChanges();
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
+            }
+        }
+
+        [Route("recipe/change-data-ingredient-group")]
+        public ActionResult ChangeDataIngredientGroup(Guid? id = null, int? value = null)
+        {
+            var obj = _db.ProductIngredientGroup.FirstOrDefault(x => x.ProductIngredientGroupId == id);
+            if (obj != null)
+            {
+                obj.SortOrder = value;
+                _db.SaveChanges();
+                return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new CxResponse("err", Message.MSG_EXCEPTION));
+            }
+        }
+
+        [Route("recipe/delete-ingredient-group")]
+        public ActionResult DeleteIngredientGroup(Guid id)
+        {
+            var productIngredientGroup = _db.ProductIngredientGroup.FirstOrDefault(x => x.ProductIngredientGroupId == id);
+            if (productIngredientGroup == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params("Header")));
+            _db.ProductIngredientGroup.Remove(productIngredientGroup);
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
         #region Add Ingredient to Recipe by text area
         [Route("recipe/update-ingredient-text")]
         public ActionResult UpdateIngredientByText(Guid? productId = null, int? sizeId = null)
@@ -549,47 +917,75 @@ namespace Project.Service.Areas.Admin.Controllers
             );
             var units = _db.Units.Where(x => x.StatusID != EnumStatus.DELETE);
             var ingredients = _db.Ingredients.Where(x => x.StatusID != EnumStatus.DELETE);
+            var productIngredientGroups = _db.ProductIngredientGroup.Where(x => x.StatusID != EnumStatus.DELETE && x.ProductId == ProductTempId);
 
             List<ProductIngredient> lstProductIngredients = new List<ProductIngredient>();
+            List<ProductIngredientGroup> lstProductIngredientGroups = new List<ProductIngredientGroup>();
+
+            Guid? currentHeader = null;
 
             foreach (var item in lines)
             {
                 if (!string.IsNullOrEmpty(item))
                 {
-                    var itemInLine = item.Trim().Split(new string[] { " " }, StringSplitOptions.None);
-                    var qty = itemInLine[0];
-                    var unitText = itemInLine[1];
-                    var ingredientText = item.Replace(string.Format("{0} {1}", qty, unitText), "").ToLower().Trim();
-
-                    var ingredient = ingredients.FirstOrDefault(x => x.Name.ToLower().Equals(ingredientText.ToLower()));
-                    if (ingredient != null)
+                    if (item.Contains(":"))
                     {
-                        var unit = units.FirstOrDefault(x => x.UnitGroupId == ingredient.UnitGroupId && x.Name.ToLower().Equals(unitText.ToLower().Trim()) || x.Code.ToLower().Equals(unitText.ToLower().Trim()));
-                        if (unit != null)
+                        var header = item.Replace(":", "").Trim();
+
+                        var oldHeader = productIngredientGroups.FirstOrDefault(x =>x.ProductId == obj.ProductId && x.Name.ToLower() == header.ToLower());
+                        if (oldHeader == null)
                         {
-                            var checkExist = _db.ProductIngredients.Count(x => x.ProductId == ProductTempId && x.IngredientId == ingredient.IngredientId);
-                            if (checkExist == 0)
+                            ProductIngredientGroup productIngredientGroup = new ProductIngredientGroup();
+                            productIngredientGroup.ProductIngredientGroupId = Guid.NewGuid();
+                            productIngredientGroup.ProductId = ProductTempId;
+                            productIngredientGroup.Name = header;
+                            productIngredientGroup.StatusID = EnumStatus.ACTIVE;
+                            productIngredientGroup.SortOrder = productIngredientGroups.Count() + lstProductIngredientGroups.Count() + 1;
+                            productIngredientGroup.CreateDate = DateTime.Now;
+                            lstProductIngredientGroups.Add(productIngredientGroup);
+                            currentHeader = productIngredientGroup.ProductIngredientGroupId;
+                        }
+                        else
+                        {
+                            currentHeader = oldHeader.ProductIngredientGroupId;
+                        }
+                    }
+                    else
+                    {
+                        var itemInLine = item.Trim().Split(new string[] { " " }, StringSplitOptions.None);
+                        var qty = itemInLine[0];
+                        var unitText = itemInLine[1];
+                        var ingredientText = item.Replace(string.Format("{0} {1}", qty, unitText), "").ToLower().Trim();
+
+                        var ingredient = ingredients.FirstOrDefault(x => x.Name.ToLower().Equals(ingredientText.ToLower()));
+                        if (ingredient != null)
+                        {
+                            var unit = units.FirstOrDefault(x => x.UnitGroupId == ingredient.UnitGroupId && x.Name.ToLower().Equals(unitText.ToLower().Trim()) || x.Code.ToLower().Equals(unitText.ToLower().Trim()));
+                            if (unit != null)
                             {
-                                ProductIngredient productIngredient = new ProductIngredient();
-                                productIngredient.ProductIngredientId = Guid.NewGuid();
-                                productIngredient.ProductId = ProductTempId;
-                                productIngredient.SizeId = obj.SizeId;
-                                productIngredient.IngredientId = ingredient.IngredientId;
-                                productIngredient.Value = Convert.ToDouble(qty);
-                                productIngredient.Unit = unit.Name;
-                                productIngredient.UnitId = unit.UnitId;
-                                productIngredient.StatusID = EnumStatus.ACTIVE;
-                                productIngredient.CreateDate = DateTime.Now;
-                                productIngredient.Price = 0;
+                                var checkExist = _db.ProductIngredients.Count(x => x.ProductId == ProductTempId && x.IngredientId == ingredient.IngredientId);
+                                if (checkExist == 0)
+                                {
+                                    ProductIngredient productIngredient = new ProductIngredient();
+                                    productIngredient.ProductIngredientId = Guid.NewGuid();
+                                    productIngredient.ProductId = ProductTempId;
+                                    productIngredient.ProductIngredientGroupId = currentHeader;
+                                    productIngredient.SizeId = obj.SizeId;
+                                    productIngredient.IngredientId = ingredient.IngredientId;
+                                    productIngredient.Value = Convert.ToDouble(qty);
+                                    productIngredient.Unit = unit.Name;
+                                    productIngredient.UnitId = unit.UnitId;
+                                    productIngredient.StatusID = EnumStatus.ACTIVE;
+                                    productIngredient.CreateDate = DateTime.Now;
+                                    productIngredient.Price = 0;
 
-                                var unitBase = 1;
-                                var percent = (double)(unit.Rate / unitBase);
-                                var price = productIngredient.Value * percent * (ingredient != null && ingredient.Price != null ? ingredient.Price : 0);
+                                    var unitBase = 1;
+                                    var percent = (double)(unit.Rate / unitBase);
+                                    var price = productIngredient.Value * percent * (ingredient != null && ingredient.Price != null ? ingredient.Price : 0);
 
-                                productIngredient.Price = price;
-
-                                lstProductIngredients.Add(productIngredient);
-
+                                    productIngredient.Price = price;
+                                    lstProductIngredients.Add(productIngredient);
+                                }
                             }
                         }
                     }
@@ -598,6 +994,7 @@ namespace Project.Service.Areas.Admin.Controllers
             if (lstProductIngredients != null && lstProductIngredients.Count() > 0)
             {
                 _db.ProductIngredients.AddRange(lstProductIngredients);
+                _db.ProductIngredientGroup.AddRange(lstProductIngredientGroups);
                 _db.SaveChanges();
             }
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));

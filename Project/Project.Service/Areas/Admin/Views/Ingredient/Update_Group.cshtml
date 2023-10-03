@@ -97,7 +97,8 @@
                     debugger;
                     if (data.isSuccess) {
                         alertify.success(data.message);
-                        window.location.href = '@Url.Action("MainPage_Group", "Ingredient", new { area = "Admin" })';
+                        $('#modal-qltaikhoan').modal('hide');
+                        ChoosePage(0);
                     }
                     else {
                         alertify.error(data.message);
