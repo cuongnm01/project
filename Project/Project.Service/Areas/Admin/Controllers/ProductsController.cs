@@ -632,10 +632,11 @@ namespace Project.Service.Areas.Admin.Controllers
         }
 
         [Route("recipe/update-ingredient")]
-        public ActionResult UpdateIngredient(Guid? id = null, int? sizeId = null)
+        public ActionResult UpdateIngredient(Guid? id = null, Guid? productId = null, int? sizeId = null)
         {
 
             var new_record = new ProductIngredient();
+            new_record.ProductId = productId;
             new_record.SizeId = sizeId;
 
             var obj = _db.ProductIngredients.FirstOrDefault(x => x.ProductIngredientId == id);
@@ -685,12 +686,23 @@ namespace Project.Service.Areas.Admin.Controllers
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params("Ingredients")));
             }
 
+            obj.Value = obj.Value ?? 0;
+
             if (obj.ProductIngredientId == Guid.Empty)
             {
+                var checkExist = _db.ProductIngredients.Count(x => x.ProductId == ProductTempId && x.SizeId == obj.SizeId);
+                if(checkExist > 9)
+                {
+                    return Json(new CxResponse("err", "Dupplicate Ingredient"));
+                }
+
+                var lastItem = _db.ProductIngredients.Where(x => x.ProductId == ProductTempId && x.SizeId == obj.SizeId && x.ProductIngredientGroupId == obj.ProductIngredientGroupId).OrderByDescending(x=>x.SortOrder).FirstOrDefault();
+
                 obj.ProductIngredientId = Guid.NewGuid();
                 obj.CreateDate = DateTime.Now;
                 obj.StatusID = EnumStatus.ACTIVE;
                 obj.ProductId = ProductTempId;
+                obj.SortOrder = (lastItem != null ? lastItem.SortOrder: 0) + 1;
 
                 obj.Price = 0;
                 var unit = _db.Units.FirstOrDefault(x => x.UnitId == obj.UnitId);
@@ -714,6 +726,12 @@ namespace Project.Service.Areas.Admin.Controllers
                 var old = _db.ProductIngredients.FirstOrDefault(x => x.ProductIngredientId == obj.ProductIngredientId);
                 if (old == null)
                     return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params("Ingredients")));
+
+                var checkExist = _db.ProductIngredients.Count(x => x.ProductId == ProductTempId && x.SizeId == obj.SizeId && x.ProductIngredientId != obj.ProductIngredientId);
+                if (checkExist > 9)
+                {
+                    return Json(new CxResponse("err", "Dupplicate Ingredient"));
+                }
 
                 old.ProductIngredientGroupId = obj.ProductIngredientGroupId;
                 old.IngredientId = obj.IngredientId;
@@ -932,7 +950,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     {
                         var header = item.Replace(":", "").Trim();
 
-                        var oldHeader = productIngredientGroups.FirstOrDefault(x =>x.ProductId == obj.ProductId && x.Name.ToLower() == header.ToLower());
+                        var oldHeader = productIngredientGroups.FirstOrDefault(x => x.ProductId == obj.ProductId && x.Name.ToLower() == header.ToLower());
                         if (oldHeader == null)
                         {
                             ProductIngredientGroup productIngredientGroup = new ProductIngredientGroup();

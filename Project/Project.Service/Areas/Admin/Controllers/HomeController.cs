@@ -32,6 +32,10 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("login")]
         public ActionResult Login()
         {
+            var nd_dv = GetUserLogin;
+            if (nd_dv != null)
+                return RedirectToAction("Mainpage", "Products", new { area = "Admin" });
+
             return View();
         }
 

@@ -108,7 +108,7 @@ namespace Project.Service.Controllers
 
                 var category = db.Categorys.FirstOrDefault(x => x.IsHomePage == EnumStatus.ACTIVE) ?? new Category();
 
-                var product = db.Products.Where(x=> x.StatusID != EnumStatus.DELETE && x.CategoryId == category.CategoryId).ToList();
+                var product = db.Products.Where(x=> x.StatusID != EnumStatus.DELETE && x.CategoryId == category.CategoryId).OrderBy(x=>x.Name).ToList();
 
 
                 var products = (from a in product

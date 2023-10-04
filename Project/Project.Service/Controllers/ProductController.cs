@@ -8,6 +8,7 @@ using System.Net;
 using System.Web.Http;
 
 using Common.Constants;
+using Project.Model.Model;
 
 namespace Project.Service.Controllers
 {
@@ -43,7 +44,7 @@ namespace Project.Service.Controllers
                     keyword = keyword.ToLower();
                 }
 
-                var product = db.Products.Where(x=>x.Name.ToLower().Contains(keyword) && !userProduct.Contains(x.ProductId) && x.StatusID == EnumStatus.ACTIVE).OrderBy(x => x.CreateDate).ToList();
+                var product = db.Products.Where(x => x.Name.ToLower().Contains(keyword) && !userProduct.Contains(x.ProductId) && x.StatusID == EnumStatus.ACTIVE).OrderBy(x => x.Name).ToList();
 
                 var products = (from a in product
                                 select new
@@ -63,7 +64,7 @@ namespace Project.Service.Controllers
         }
 
         [HttpGet]
-        [Route("api/product/by_category/{categoryId}")]    
+        [Route("api/product/by_category/{categoryId}")]
         public IHttpActionResult ProductByCategory([FromUri] int categoryId = 0, int pageIndex = 1, int pageSize = 8)
         {
             try
@@ -85,7 +86,7 @@ namespace Project.Service.Controllers
                 }
                 var userProduct = db.User_Product.Where(x => x.UserID == user.UserID && x.StatusID == EnumStatus.ACTIVE).Select(x => x.ProductId).ToList();
 
-                var product = db.Products.Where(x => x.CategoryId == categoryId && !userProduct.Contains(x.ProductId) && x.StatusID == EnumStatus.ACTIVE).OrderBy(x=>x.CreateDate).ToList();
+                var product = db.Products.Where(x => x.CategoryId == categoryId && !userProduct.Contains(x.ProductId) && x.StatusID == EnumStatus.ACTIVE).OrderBy(x => x.Name).ToList();
 
                 var products = (from a in product
                                 select new
@@ -94,7 +95,7 @@ namespace Project.Service.Controllers
                                     name = a.Name,
                                     image = GetBaseUrl + a.Image.GetImage(),
                                     isNew = a.IsNew == 1 ? true : false,
-                                }).Skip(pageSize * (pageIndex -1)).Take(pageSize).ToList();
+                                }).Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList();
 
                 return Json(new { isSuccess = true, data = new { total = product.Count, products = products, }, message = "", version = "", code = "" });
             }
@@ -106,7 +107,7 @@ namespace Project.Service.Controllers
 
         [HttpGet]
         [Route("api/product/detail/{code}")]
-        public IHttpActionResult ProductDetail([FromUri]Guid? code = null)
+        public IHttpActionResult ProductDetail([FromUri] Guid? code = null)
         {
             try
             {
@@ -131,16 +132,39 @@ namespace Project.Service.Controllers
                 if (product == null)
                     return Json(new { isSuccess = false, data = new { }, message = "Unknown Recipe", version = "", code = "" });
 
-                var steps = db.ProductDirections.Where(x => x.ProductId == product.ProductId).OrderBy(x=>x.SortOrder).ToList();
+                var steps = (from a in db.ProductDirections
+                             join c in db.ProductDirectionGroup on a.ProductDirectionGroupId equals c.ProductDirectionGroupId into c1
+                             from c in c1.DefaultIfEmpty()
+                             where a.ProductId == product.ProductId
+                             select new ProductDirectionInfo()
+                             {
+                                 ProductDirection = a,
+                                 ProductDirectionGroup = c,
+                             }).OrderBy(x => x.ProductDirectionGroup != null ? x.ProductDirectionGroup.SortOrder : 0).ThenBy(x => x.ProductDirection.SortOrder).ToList();
+
+
                 var sizeIds = db.ProductIngredients.Where(x => x.ProductId == product.ProductId).Select(x => x.SizeId).Distinct().ToList();
                 var sizes = db.Sizes.Where(x => sizeIds.Contains(x.SizeId)).ToList();
 
-                var ingredients = db.ProductIngredients.Where(x => x.ProductId == product.ProductId).GroupBy(x => x.IngredientId).Select(x => new { Key = db.Ingredients.FirstOrDefault(y => y.IngredientId == x.Key), List = x.ToList() }).ToList();
+                var ingredientsTmp = (from a in db.ProductIngredients
+                                   join b in db.Ingredients on a.IngredientId equals b.IngredientId
+                                   join c in db.ProductIngredientGroup on a.ProductIngredientGroupId equals c.ProductIngredientGroupId into c1
+                                   from c in c1.DefaultIfEmpty()
+                                   where a.ProductId == product.ProductId && a.SizeId != null
+                                   select new ProductIngredientInfo()
+                                   {
+                                       Header = c != null ? c.Name : "",
+                                       ProductIngredient = a,
+                                       Ingredient = b,
+                                       ProductIngredientGroup = c,
+                                   }).OrderBy(x => x.ProductIngredientGroup != null ? x.ProductIngredientGroup.SortOrder : 0).ThenBy(x => x.ProductIngredient.SortOrder).ToList();
+
+                var ingredients = ingredientsTmp.GroupBy(x => x.Ingredient).Select(x => new { Key = x.Key, List = x.ToList() }).ToList();
 
                 int i = 0;
-                foreach(var item in steps)
+                foreach (var item in steps)
                 {
-                    item.Name = string.Format("Step {0}", ++i);
+                    item.ProductDirection.Name = string.Format("Step {0}", ++i);
                 }
 
                 var obj = new
@@ -153,10 +177,10 @@ namespace Project.Service.Controllers
                     direction = (from a in steps
                                  select new
                                  {
-                                     code = a.ProductDirectionId,
-                                     name = a.Name,
-                                     image = !string.IsNullOrEmpty(a.Image) ? url + a.Image.Replace("~/", "/") : "",
-                                     description = a.Description ?? "",
+                                     code = a.ProductDirection.ProductDirectionId,
+                                     name = a.ProductDirection.Name,
+                                     image = !string.IsNullOrEmpty(a.ProductDirection.Image) ? url + a.ProductDirection.Image.Replace("~/", "/") : "",
+                                     description = a.ProductDirection.Description ?? "",
                                  }).ToList(),
                     video = new
                     {
@@ -178,12 +202,12 @@ namespace Project.Service.Controllers
                                        name = a.Key.Name,
                                        image = !string.IsNullOrEmpty(a.Key.Image) ? url + a.Key.Image.Replace("~/", "/") : "",
                                        mass = from b in a.List
-                                              join c in db.Sizes on b.SizeId equals c.SizeId
+                                              join c in db.Sizes on b.ProductIngredient.SizeId equals c.SizeId
                                               select new
                                               {
                                                   sizeId = c.SizeId,
-                                                  value = b.Value ?? 0,
-                                                  unit = b.Unit ?? "",
+                                                  value = b.ProductIngredient.Value ?? 0,
+                                                  unit = b.ProductIngredient.Unit ?? "",
                                               }
                                    }).ToList(),
 

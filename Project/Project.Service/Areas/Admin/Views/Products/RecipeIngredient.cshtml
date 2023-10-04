@@ -36,7 +36,7 @@
                 <input class="form-control" type="text" value="@(item.ProductIngredient.SortOrder)" data-id="@item.ProductIngredient.ProductIngredientId" data-type="@EnumIngredientData.SORT_ORDER" onkeypress="return validateNumber(event)" onchange="change_data_ingredient($(this))" />
             </td>
             <td class="text-center">
-                <input class="form-control" type="text" value="@(item.ProductIngredient.Value)" data-id="@item.ProductIngredient.ProductIngredientId" data-type="@EnumIngredientData.QTY" onkeypress="return validateNumber(event)" onchange="change_data_ingredient($(this))" />
+                <input class="form-control" type="text" value="@(item.ProductIngredient.Value)" data-id="@item.ProductIngredient.ProductIngredientId" data-type="@EnumIngredientData.QTY" onchange="change_data_ingredient($(this))" />
             </td>
             <td class="text-center">
                 <select class="ctr-select" name="unitid@(stt)" data-id="@item.ProductIngredient.ProductIngredientId" data-type="@EnumIngredientData.UNIT" onchange="change_data_ingredient($(this))">
@@ -52,7 +52,7 @@
                 </a>
             </td>
             <td class="text-center">
-                <input class="form-control text-right" disabled type="text" value="@(item.ProductIngredient.Price.Value.ToString("#,###"))" onkeypress="return validateNumber(event)" />
+                <input class="form-control text-right" disabled type="text" value="@(item.ProductIngredient.Price != null ? item.ProductIngredient.Price.Value.ToString("#,###") :"")" onkeypress="return validateNumber(event)" />
             </td>
             <td class="text-center">
                 <a data-id="@item.ProductIngredient.ProductIngredientId" style="cursor: pointer;" onclick="delete_ingredient($(this))"><img src="/Files/images/system/delete.png" width="24" /></a>
