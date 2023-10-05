@@ -18,7 +18,7 @@
             <td class="text-left">@(item.FullName)</td>
             <td class="text-left">@(item.Email)</td>
             <td class="text-left">@(item.Phone)</td>
-            <td class="text-left">@(item.PermissionID == EnumUserType.EMPLOYEE ? "View Only" : "Manager")</td>
+            <td class="text-left">@(item.PermissionID == EnumUserType.EMPLOYEE ? "View Only" : item.PermissionID == EnumUserType.MANAGER ? "Manager" : "Guest")</td>
             <td class="text-left">@(item.CreateDate != null ? item.CreateDate.Value.ToString("yyyy-MM-dd") :"")</td>
             <td class="text-center clickable-td">
                 @if (nd_dv.Users.PermissionID == EnumUserType.ADMIN)

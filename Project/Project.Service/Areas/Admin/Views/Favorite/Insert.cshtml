@@ -1,53 +1,69 @@
-﻿@using Common.Constants
+﻿
+@using Common.Constants
 @using Project.Model.DbSet
 @using Common.Resources
-@model ProductDirection
+@model Product
 
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        <form class="fv-form fv-form-bootstrap" id="frm-capnhat2">
+        <form class="fv-form fv-form-bootstrap" id="frm-capnhat1">
             <div class="modal-body">
                 <h4 class="modal-title">
-                    Step by Text
+                    Favorite
                 </h4>
-                <input type="hidden" id="ProductId" name="ProductId" value="@Model.ProductId">
-                <input type="hidden" id="ProductTempId" name="ProductTempId" value="">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 30px;">
                         <div class="row">
                             <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label class="control-label" for="first-name">Recipe</label>
                                 <div>
-                                    <textarea class="form-control" rows="8" name="stepItems" placeholder="Garnish:
-Add chopped chocolate chips as garnish"></textarea>
+                                    <select class="ctr-select" data-live-search="true" name="ProductId" id="ProductId">
+                                        @Html.Raw(ViewBag.cbxProducts)
+                                    </select>
                                 </div>
-
-                            </div>
-                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <span><strong>Add headers</strong> use a colon <strong>:</strong> eg <strong>Garnish:</strong></span>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="clearfix"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-                <button id="btn-saveStep" type="button" onclick="saveStepByText()" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal">@Message.CANCEL</button>
+                <button id="btn-save1" type="submit" class="btn btn-success">@Message.SAVE</button>
             </div>
         </form>
     </div>
 </div>
-
 <script>
-    function saveStepByText() {
-        var s = new FormData(document.getElementById('frm-capnhat1'));
-        $('[name=ProductTempId]').val(s.get('ProductTempId'));
-        $.ajax({
-                url: '@Url.Action("UpdateStepByText", "Products", new { area = "Admin" })',
+    $(document).ready(function () {
+        $(".ctr-select").selectpicker({
+            width: '100%',
+            showTick: true,
+        });
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        $('#frm-capnhat1').formValidation({
+            framework: 'bootstrap',
+            excluded: ':disabled',
+            fields: {
+                ProductId: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Required data'
+                        },
+                    }
+                },
+            }
+        }).on('success.form.fv', function (e) {
+            document.getElementById("btn-save1").disabled = true;
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("Insert", "Favorite", new { area = "Admin" })',
                 type: 'POST',
                 dataType: 'json',
                 mimeType: "multipart/form-data",
@@ -55,12 +71,11 @@ Add chopped chocolate chips as garnish"></textarea>
                 processData: false,
                 async: false,
                 cache: false,
-                data: new FormData(document.getElementById('frm-capnhat2')),
+                data: new FormData(document.getElementById('frm-capnhat1')),
                 success: function (data) {
                     if (data.isSuccess) {
                         alertify.success(data.message);
-                        $('#modal-qltaikhoan').modal('hide');
-                        LoadStep();
+                        window.location.reload();
                     }
                     else {
                         alertify.error(data.message);
@@ -69,9 +84,7 @@ Add chopped chocolate chips as garnish"></textarea>
                     }
                 }
             });
-    }
-
-
+        });
+    });
 
 </script>
-

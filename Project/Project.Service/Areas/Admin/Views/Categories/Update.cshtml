@@ -20,14 +20,20 @@
                     Recipe Book
                 </h4>
                 <input type="hidden" id="CategoryId" name="CategoryId" value="@(Model != null? Model.CategoryId.ToString():"0")">
-                <input type="hidden" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder:0)">
+                @*<input type="hidden" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder:0)">*@
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                         <div class="row">
-                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group col-md-10 col-sm-10 col-xs-12">
                                 <label class="control-label" for="first-name">Name</label>
                                 <div>
                                     <input type="text" class="form-control" id="Name" name="Name" value="@(Model != null && !string.IsNullOrEmpty(Model.Name)? Model.Name :"")" />
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2 col-sm-2 col-xs-12">
+                                <label class="control-label" for="first-name">SortOrder</label>
+                                <div>
+                                    <input type="text" class="form-control" id="SortOrder" name="SortOrder" value="@(Model != null? Model.SortOrder:0)" />
                                 </div>
                             </div>
                         </div>

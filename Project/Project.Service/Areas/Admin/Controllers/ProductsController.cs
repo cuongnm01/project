@@ -239,11 +239,11 @@ namespace Project.Service.Areas.Admin.Controllers
 
             old.CategoryId = products.CategoryId;
             old.Name = products.Name;
-            old.IsNew = products.IsNew;
             old.VideoUrl = products.VideoUrl;
             old.VideoTitle = products.VideoTitle;
             old.VideoDescription = products.VideoDescription;
             old.CategoryId = products.CategoryId;
+            old.CreateDate = DateTime.Now;
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
         }
@@ -356,6 +356,8 @@ namespace Project.Service.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult UpdateStep(ProductDirection direction, HttpPostedFileBase _LogoStep = null, Guid? ProductTempId = null)
         {
+            var product = _db.Products.FirstOrDefault(x => x.ProductId == ProductTempId);
+
             if (direction.ProductDirectionId == Guid.Empty)
             {
                 direction.ProductDirectionId = Guid.NewGuid();
@@ -372,6 +374,12 @@ namespace Project.Service.Areas.Admin.Controllers
                 }
 
                 _db.ProductDirections.Add(direction);
+
+                if(product != null)
+                {
+                    product.CreateDate = DateTime.Now;
+                }    
+
                 _db.SaveChanges();
 
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
@@ -394,6 +402,11 @@ namespace Project.Service.Areas.Admin.Controllers
                 old.ProductDirectionGroupId = direction.ProductDirectionGroupId;
                 old.Name = direction.Name;
                 old.Description = direction.Description;
+
+                if (product != null)
+                {
+                    product.CreateDate = DateTime.Now;
+                }
                 _db.SaveChanges();
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
             }
@@ -402,6 +415,7 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("recipe/change-data-step")]
         public ActionResult ChangeDataStep(Guid? id = null, dynamic value = null, int? type = null)
         {
+
             var obj = _db.ProductDirections.FirstOrDefault(x => x.ProductDirectionId == id);
             if (obj != null)
             {
@@ -414,7 +428,11 @@ namespace Project.Service.Areas.Admin.Controllers
                 {
                     obj.Description = value[0] as string;
                 }
-
+                var product = _db.Products.FirstOrDefault(x => x.ProductId == obj.ProductId);
+                if (product != null)
+                {
+                    product.CreateDate = DateTime.Now;
+                }
                 _db.SaveChanges();
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
             }
@@ -431,6 +449,11 @@ namespace Project.Service.Areas.Admin.Controllers
             if (productsDirection == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)));
             _db.ProductDirections.Remove(productsDirection);
+            var product = _db.Products.FirstOrDefault(x => x.ProductId == productsDirection.ProductId);
+            if (product != null)
+            {
+                product.CreateDate = DateTime.Now;
+            }
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
@@ -467,6 +490,8 @@ namespace Project.Service.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult UpdateStepGroup(ProductDirectionGroup obj)
         {
+            var product = _db.Products.FirstOrDefault(x => x.ProductId == obj.ProductId);
+
             var productDirectionGroup = _db.ProductDirectionGroup.FirstOrDefault(x => x.ProductId == obj.ProductId && x.Name.ToLower() == obj.Name.ToLower().Trim());
             if (productDirectionGroup != null)
             {
@@ -480,6 +505,10 @@ namespace Project.Service.Areas.Admin.Controllers
                 obj.StatusID = EnumStatus.ACTIVE;
                 obj.SortOrder = _db.ProductDirectionGroup.Count(x => x.ProductId == obj.ProductId) + 1;
                 _db.ProductDirectionGroup.Add(obj);
+                if (product != null)
+                {
+                    product.CreateDate = DateTime.Now;
+                }
                 _db.SaveChanges();
 
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
@@ -491,6 +520,10 @@ namespace Project.Service.Areas.Admin.Controllers
                     return Json(new CxResponse("err", Message.MSG_EMPTY));
 
                 old.Name = obj.Name;
+                if (product != null)
+                {
+                    product.CreateDate = DateTime.Now;
+                }
                 _db.SaveChanges();
 
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
@@ -600,6 +633,12 @@ namespace Project.Service.Areas.Admin.Controllers
             {
                 _db.ProductDirections.AddRange(lstProductDirections);
                 _db.ProductDirectionGroup.AddRange(lstProductDirectionGroups);
+
+                var product = _db.Products.FirstOrDefault(x => x.ProductId == ProductTempId);
+                if (product != null)
+                {
+                    product.CreateDate = DateTime.Now;
+                }
                 _db.SaveChanges();
             }
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
@@ -680,6 +719,8 @@ namespace Project.Service.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult UpdateIngredient(ProductIngredient obj, Guid? ProductTempId = null)
         {
+            var product = _db.Products.FirstOrDefault(x => x.ProductId == ProductTempId);
+
             var ingredient = _db.Ingredients.FirstOrDefault(x => x.IngredientId == obj.IngredientId);
             if (ingredient == null)
             {
@@ -717,6 +758,10 @@ namespace Project.Service.Areas.Admin.Controllers
                 }
 
                 _db.ProductIngredients.Add(obj);
+                if (product != null)
+                {
+                    product.CreateDate = DateTime.Now;
+                }
                 _db.SaveChanges();
 
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_INSERT)));
@@ -749,6 +794,10 @@ namespace Project.Service.Areas.Admin.Controllers
                     old.Price = price;
                 }
 
+                if (product != null)
+                {
+                    product.CreateDate = DateTime.Now;
+                }
                 _db.SaveChanges();
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
             }

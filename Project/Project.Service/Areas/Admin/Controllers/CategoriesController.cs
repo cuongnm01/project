@@ -140,6 +140,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 old.Name = productCategory.Name;
                 old.StatusID = productCategory.StatusID;
                 old.IsHomePage = productCategory.IsHomePage;
+                old.SortOrder = productCategory.SortOrder;
 
                 _db.SaveChanges();
 

@@ -1,7 +1,6 @@
 ﻿@using Common.Constants
 @using Project.Model.Model
 @using Common.Resources
-
 @{
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     UserInfo nd_dv = (UserInfo)ViewBag.User;
@@ -28,7 +27,6 @@
                             <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit Group</a></li>
                             <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Sizes",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Size</a></li>
                             <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Insert","Favorite",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/list_alt.png" width="24" /> Favorite</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Insert","Favorite",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/list_alt.png" width="24" /> Favorite</a></li>
                         </ul>
                     </li>
                 }
@@ -36,7 +34,7 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                             <div>
-                                <input class="form-control search-form" placeholder="Search Ingredient..." name="tuKhoa" onchange="DanhSach();" />
+                                <input class="form-control search-form" placeholder="Search recipe..." name="tuKhoa" onchange="DanhSach();" />
                             </div>
                         </div>
                     </div>
@@ -61,7 +59,7 @@
                     <img src="/Files/images/system/recipe_book.png" width="24" />
                     <span>Recipe Books</span>
                 </a>
-                <a class="menu-nav-item active">
+                <a class="menu-nav-item" href="@Url.Action("MainPage","Ingredient")">
                     <img src="/Files/images/system/ingredients.png" width="24" />
                     <span>Ingredients</span>
                 </a>
@@ -81,24 +79,19 @@
                     <img src="/Files/images/system/unit_group_color.png" width="24" />
                     <span>Size</span>
                 </a>
-                <a class="menu-nav-item" href="@Url.Action("MainPage","Favorite")">
+                <a class="menu-nav-item active">
                     <img src="/Files/images/system/recipe.png" width="24" />
                     <span>Favorite</span>
                 </a>
-
             </div>
+
             <div class="x_content table-responsive">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th class="text-left" width="60" style="max-width:60px;"><input type="checkbox" name="checkedAll" id="checkedAll" /></th>
+                            <th class="text-left" width="200">Type</th>
                             <th class="text-left">Name</th>
-                            <th class="text-left" width="200">Image</th>
-                            <th class="text-left" width="200">Group</th>
-                            <th class="text-left" width="150">Publish Status</th>
-                            <th class="text-left" width="100">Scale by </th>
-                            <th class="text-left" width="150">Price</th>
-                            <th class="text-left" width="100">Date Added</th>
                             <th width="150" class="text-left" style="max-width:60px;">
                             </th>
                         </tr>
@@ -111,7 +104,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="19">
+                            <td colspan="18">
                                 <span class="pull-left" style="margin-left:5px;">
                                     <img title="Firt page" alt="Firt page" style="cursor:pointer" onclick="ChoosePage(3)" src="~/Files/images/system/PgFirst.gif" />
                                     &nbsp;
@@ -156,6 +149,7 @@
             showTick: true,
         });
         DanhSach();
+
         $("#checkedAll").change(function () {
             if (this.checked) {
                 $(".checkSingle").each(function () {
@@ -181,34 +175,12 @@
             }
         });
     });
-    // Sort order by Tab table//
-    //$('th').click(function () {
-    //    var table = $(this).parents('table').eq(0)
-    //    var rows = table.find('tbody tr').toArray().sort(comparer($(this).index()))
-    //    this.asc = !this.asc
-    //    if (!this.asc) { rows = rows.reverse() }
-    //    for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
-    //})
-    //function comparer(index) {
-    //    return function (a, b) {
-    //        var valA = getCellValue(a, index), valB = getCellValue(b, index)
-    //        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-    //    }
-    //}
-    //function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
-    //===================================//
-</script>
 
-<script>
     function DanhSach() {
         $("#list").html("<tr><td colspan='19'><img src='/Files/images/system/loading.gif' style='margin: auto auto;display: block;margin-top: 20px;height:80px;' /></td></tr>");
-        $("#list").load("@Url.Action("List", "Ingredient", new {area ="Admin"})?keyword=" + encodeURI($("[name=tuKhoa]").val()) + "&tongsodong=" + $('[name=tongsodong]').val() + "&unitGroupId=" + @ViewBag.unitGroupId+ "&ingredientGroupId=" + @ViewBag.ingredientGroupId);
+        $("#list").load("@Url.Action("List", "Favorite", new {area ="Admin"})?keyword=" + encodeURI($("[name=tuKhoa]").val()) + "&tongsodong=" + $('[name=tongsodong]').val());
     }
-</script>
-<script>
-    $(document).on("change", "[name=tuKhoa]", function () {
-        DanhSach();
-    });
+   
 </script>
 <script>
     function ChoosePage(loaichon)//loaichon = 0 nhập số trang, 1 trước, 2 sau, 3 đầu tiên, 4 cuối cùng, 5 chọn số dòng hiển thị
@@ -264,16 +236,16 @@
                 return false;
             }
         }
-        //$("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
-        $("#list").load("@Url.Action("List", "Ingredient", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()) + "&unitGroupId=" + @ViewBag.unitGroupId+ "&ingredientGroupId=" + @ViewBag.ingredientGroupId);
+        $("#list").html("<tr><td class='text-center' colspan='19'><img src='/Files/images/system/loading.gif' alt='Loading' style='margin: auto auto;display: block;margin-top: 80px;height:80px;' /></td></tr>");
+        $("#list").load("@Url.Action("List", "Favorite", new { area = "Admin" })?sotrang=" + sotrang + "&tongsodong=" + $('[name=tongsodong]').val() + "&keyword=" + encodeURI($("[name = tuKhoa]").val()));
     }
 </script>
 <script>
     function Xoa(obj) {
-        alertify.confirm('Xác nhận xoá', function (e) {
+        alertify.confirm('Confirm', function (e) {
             if (e) {
             $.ajax({
-                url: '@Url.Action("Delete", "Ingredient", new { area = "Admin" })',
+                url: '@Url.Action("Delete", "Favorite", new { area = "Admin" })',
                 type: 'GET',
                 dataType: 'json',
                 mimeType: "multipart/form-data",
@@ -294,16 +266,17 @@
             }
         });
     }
-     function RemoveAll(obj) {
-         var checkboxValues = [];
-         $('input[name=checkAll]:checked').map(function () {
-             checkboxValues.push($(this).val());
-         });
-         console.log(checkboxValues);
-         alertify.confirm('Confirm delete', function (e) {
+
+    function RemoveAll(obj) {
+        var checkboxValues = [];
+        $('input[name=checkAll]:checked').map(function () {
+            checkboxValues.push($(this).val());
+        });
+        console.log(checkboxValues);
+        alertify.confirm('Confirm delete', function (e) {
             if (e) {
             $.ajax({
-                url: '@Url.Action("DeleteAll", "Ingredient", new { area = "Admin" })',
+                url: '@Url.Action("DeleteAll", "Favorite", new { area = "Admin" })',
                 type: 'GET',
                 dataType: 'json',
                 mimeType: "multipart/form-data",
@@ -318,37 +291,6 @@
                         }
                         else {
                         alertify.error(data.message);
-                        }
-                    }
-                });
-            }
-        });
-    }
-</script>
-<script>
-    function CapNhatTrangThai(obj) {
-        alertify.confirm('Xác nhận thay đổi trạng thái', function (e) {
-            if (e) {
-                $.ajax({
-                    url: '@Url.Action("Change_Status", "Ingredient", new { area = "Admin" })',
-                    type: 'GET',
-                    dataType: 'json',
-                    mimeType: "multipart/form-data",
-                    contentType: false,
-                    async: false,
-                    cache: false,
-                    data: { id: obj.attr("data-id") },
-                    success: function (data) {
-                        if (data.isSuccess) {
-                            alertify.success(data.message);
-                            if (data.data == @EnumStatus.ACTIVE)
-                                obj.html('<i class="fa fa-unlock" style="font-size:22px;"></i>');
-                            else
-                                obj.html('<i class="fa fa-lock" style="font-size:22px;"></i>');
-                            DanhSach();
-                        }
-                        else {
-                            alertify.error(data.message);
                         }
                     }
                 });

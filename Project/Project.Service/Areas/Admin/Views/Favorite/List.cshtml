@@ -1,0 +1,55 @@
+﻿@using Common.Constants
+@using Project.Model.Model
+@using Common.Helpers
+@using Common.Resources
+@using Project.Model.Model
+@using Project.Model.Configuration;
+
+@model IEnumerable<ProductInfo>
+@{
+    int stt = 0;
+    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
+
+}
+@if (Model != null && Model.Count() > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-left">
+                <input type="checkbox" name="checkAll" class="checkSingle" value="@item.Product.ProductId" />
+            </td>
+            <td class="text-left">
+                <span class="">@(item.Category.Name)</span>
+            </td>
+            <td class="text-left">
+                @(item.Product.Name)
+            </td>
+            <td class="text-center clickable-td">
+                @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
+                {
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
+                            <img src="/Files/images/system/more_vertical.png" width="24" height="24" />
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="btn btn-xs" data-id="@item.Product.ProductId" onclick="Xoa($(this))"><img src="/Files/images/system/delete.png" width="24" /> Remove Recipe</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+            </td>
+        </tr>
+
+    }
+}
+<script>
+    $('#idsotrang').val('@ViewBag.sotrang');
+    document.getElementById("idtongsotrang").innerHTML = '@ViewBag.tongsotrang';
+    $(".clickable-td").on("click", function (e) {
+        $(".dropdown-toggle").dropdown();
+    });
+
+</script>
+

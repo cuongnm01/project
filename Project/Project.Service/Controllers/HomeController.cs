@@ -106,18 +106,14 @@ namespace Project.Service.Controllers
                                    productId = a.ProductId,
                                }).ToList();
 
-                var category = db.Categorys.FirstOrDefault(x => x.IsHomePage == EnumStatus.ACTIVE) ?? new Category();
-
-                var product = db.Products.Where(x=> x.StatusID != EnumStatus.DELETE && x.CategoryId == category.CategoryId).OrderBy(x=>x.Name).ToList();
-
-
+                var product = db.Products.Where(x=> x.StatusID != EnumStatus.DELETE && x.IsNew == EnumStatus.ACTIVE).OrderBy(x=>x.Name).Take(20).ToList();
                 var products = (from a in product
                                 select new
                                 {
                                     code = a.ProductId,
                                     name = a.Name,
                                     image = !string.IsNullOrEmpty(a.Image) ? url + a.Image.Replace("~/","/") : "",
-                                    isNew = a.IsNew == 1 ? true : false,
+                                    isNew = a.CreateDate.Value.AddDays(15) > DateTime.Now ? true : false,
                                 }).ToList();
 
                 return Json(new { isSuccess = true, data = new { sliders = sliders, products = products, }, message = "", version = "", code = "" });

@@ -52,7 +52,7 @@ namespace Project.Service.Controllers
                                     code = a.ProductId,
                                     name = a.Name,
                                     image = GetBaseUrl + a.Image.GetImage(),
-                                    isNew = a.IsNew == 1 ? true : false,
+                                    isNew = a.CreateDate.Value.AddDays(15) > DateTime.Now ? true : false,
                                 }).Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList();
 
                 return Json(new { isSuccess = true, data = new { total = product.Count, products = products, }, message = "", version = "", code = "" });
@@ -94,7 +94,7 @@ namespace Project.Service.Controllers
                                     code = a.ProductId,
                                     name = a.Name,
                                     image = GetBaseUrl + a.Image.GetImage(),
-                                    isNew = a.IsNew == 1 ? true : false,
+                                    isNew = a.CreateDate.Value.AddDays(15) > DateTime.Now ? true : false,
                                 }).Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList();
 
                 return Json(new { isSuccess = true, data = new { total = product.Count, products = products, }, message = "", version = "", code = "" });
