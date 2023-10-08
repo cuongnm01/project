@@ -4,8 +4,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_PublishTargetUrl>E:\Publish\bottega</_PublishTargetUrl>
-    <History>True|2023-10-04T03:14:08.4373840Z;True|2023-10-04T02:40:59.5252350+07:00;True|2023-09-07T14:22:10.6305426+07:00;True|2023-01-30T17:38:41.2810073+07:00;True|2023-01-30T17:34:12.3431345+07:00;True|2023-01-30T17:29:24.8299038+07:00;True|2023-01-04T18:22:42.3314474+07:00;True|2023-01-03T15:52:57.4009353+07:00;</History>
+    <_PublishTargetUrl>D:\Publish\bottega</_PublishTargetUrl>
+    <History>True|2023-10-08T16:31:14.6286052Z;False|2023-10-06T12:01:10.5485441+07:00;True|2023-10-04T10:14:08.4373840+07:00;True|2023-10-04T02:40:59.5252350+07:00;True|2023-09-07T14:22:10.6305426+07:00;True|2023-01-30T17:38:41.2810073+07:00;True|2023-01-30T17:34:12.3431345+07:00;True|2023-01-30T17:29:24.8299038+07:00;True|2023-01-04T18:22:42.3314474+07:00;True|2023-01-03T15:52:57.4009353+07:00;</History>
+    <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/Admin/Views/Categories/List.cshtml">
@@ -198,13 +199,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/27/2022 10:48:38</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>10/05/2023 23:29:20</publishTime>
+      <publishTime>10/06/2023 02:49:02</publishTime>
     </File>
     <File Include="bin/Common.dll.config">
-      <publishTime>12/20/2022 10:18:52</publishTime>
+      <publishTime>10/06/2023 02:35:18</publishTime>
     </File>
     <File Include="bin/Common.pdb">
-      <publishTime>10/05/2023 23:29:20</publishTime>
+      <publishTime>10/06/2023 02:49:02</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>10/23/2017 20:15:18</publishTime>
@@ -243,19 +244,19 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:59</publishTime>
     </File>
     <File Include="bin/Project.Model.dll">
-      <publishTime>10/05/2023 23:29:21</publishTime>
+      <publishTime>10/06/2023 02:37:35</publishTime>
     </File>
     <File Include="bin/Project.Model.dll.config">
-      <publishTime>10/01/2023 15:41:38</publishTime>
+      <publishTime>10/06/2023 02:29:42</publishTime>
     </File>
     <File Include="bin/Project.Model.pdb">
-      <publishTime>10/05/2023 23:29:21</publishTime>
+      <publishTime>10/06/2023 02:37:35</publishTime>
     </File>
     <File Include="bin/Project.Service.dll">
-      <publishTime>10/05/2023 23:29:25</publishTime>
+      <publishTime>10/08/2023 23:30:56</publishTime>
     </File>
     <File Include="bin/Project.Service.pdb">
-      <publishTime>10/05/2023 23:29:25</publishTime>
+      <publishTime>10/08/2023 23:30:56</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>12/20/2022 10:18:58</publishTime>
@@ -24006,7 +24007,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/20/2022 10:18:57</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/05/2023 23:29:41</publishTime>
+      <publishTime>10/08/2023 23:31:01</publishTime>
     </File>
   </ItemGroup>
 </Project>
