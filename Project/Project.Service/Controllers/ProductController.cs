@@ -303,7 +303,7 @@ namespace Project.Service.Controllers
                                  }).ToList(),
                     video = new
                     {
-                        url = !string.IsNullOrEmpty(product.VideoUrl) ? url + product.VideoUrl.Replace("~/", "/") : "",
+                        url =  product.VideoUrl ?? "",
                         title = product.VideoTitle ?? "",
                         description = product.VideoDescription ?? "",
                     },

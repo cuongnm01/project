@@ -375,10 +375,10 @@ namespace Project.Service.Areas.Admin.Controllers
 
                 _db.ProductDirections.Add(direction);
 
-                if(product != null)
+                if (product != null)
                 {
                     product.CreateDate = DateTime.Now;
-                }    
+                }
 
                 _db.SaveChanges();
 
@@ -732,18 +732,17 @@ namespace Project.Service.Areas.Admin.Controllers
             if (obj.ProductIngredientId == Guid.Empty)
             {
                 var checkExist = _db.ProductIngredients.Count(x => x.ProductId == ProductTempId && x.SizeId == obj.SizeId);
-                if(checkExist > 9)
+                if (checkExist > 9)
                 {
                     return Json(new CxResponse("err", "Dupplicate Ingredient"));
                 }
 
-                var lastItem = _db.ProductIngredients.Where(x => x.ProductId == ProductTempId && x.SizeId == obj.SizeId && x.ProductIngredientGroupId == obj.ProductIngredientGroupId).OrderByDescending(x=>x.SortOrder).FirstOrDefault();
-
+                var lastItem = _db.ProductIngredients.Where(x => x.ProductId == ProductTempId && x.SizeId == obj.SizeId && x.ProductIngredientGroupId == obj.ProductIngredientGroupId).OrderByDescending(x => x.SortOrder).FirstOrDefault();
                 obj.ProductIngredientId = Guid.NewGuid();
                 obj.CreateDate = DateTime.Now;
                 obj.StatusID = EnumStatus.ACTIVE;
                 obj.ProductId = ProductTempId;
-                obj.SortOrder = (lastItem != null ? lastItem.SortOrder: 0) + 1;
+                obj.SortOrder = (lastItem != null ? lastItem.SortOrder : 0) + 1;
 
                 obj.Price = 0;
                 var unit = _db.Units.FirstOrDefault(x => x.UnitId == obj.UnitId);
@@ -758,6 +757,26 @@ namespace Project.Service.Areas.Admin.Controllers
                 }
 
                 _db.ProductIngredients.Add(obj);
+
+                var checkSize = _db.ProductIngredients.FirstOrDefault(x => x.ProductId == obj.ProductId && x.IngredientId == obj.IngredientId && x.SizeId == EnumSize.LARGE);
+                if (obj.SizeId == EnumSize.REGULAR && checkSize == null)
+                {
+                    var sizeLarge = new ProductIngredient();
+                    sizeLarge.ProductIngredientId = Guid.NewGuid();
+                    sizeLarge.ProductId = obj.ProductId;
+                    sizeLarge.SizeId = EnumSize.LARGE;
+                    sizeLarge.IngredientId = obj.IngredientId;
+                    sizeLarge.Value = obj.Value * 1.5;
+                    sizeLarge.Price = obj.Price * 1.5;
+                    sizeLarge.StatusID = obj.StatusID;
+                    sizeLarge.CreateDate = obj.CreateDate;
+                    sizeLarge.UnitId = obj.UnitId;
+                    sizeLarge.Unit = obj.Unit;
+                    sizeLarge.ProductIngredientGroupId = obj.ProductIngredientGroupId;
+                    sizeLarge.SortOrder = obj.SortOrder;
+                    _db.ProductIngredients.Add(sizeLarge);
+                }
+
                 if (product != null)
                 {
                     product.CreateDate = DateTime.Now;
@@ -1052,6 +1071,26 @@ namespace Project.Service.Areas.Admin.Controllers
 
                                     productIngredient.Price = price;
                                     lstProductIngredients.Add(productIngredient);
+
+                                    var checkSize = _db.ProductIngredients.FirstOrDefault(x => x.ProductId == ProductTempId && x.IngredientId == ingredient.IngredientId && x.SizeId == EnumSize.LARGE);
+                                    if (obj.SizeId == EnumSize.REGULAR && checkSize == null)
+                                    {
+                                        var sizeLarge = new ProductIngredient();
+                                        sizeLarge.ProductIngredientId = Guid.NewGuid();
+                                        sizeLarge.ProductId = productIngredient.ProductId;
+                                        sizeLarge.SizeId = EnumSize.LARGE;
+                                        sizeLarge.IngredientId = productIngredient.IngredientId;
+                                        sizeLarge.Value = productIngredient.Value * 1.5;
+                                        sizeLarge.Price = productIngredient.Price * 1.5;
+                                        sizeLarge.StatusID = productIngredient.StatusID;
+                                        sizeLarge.CreateDate = productIngredient.CreateDate;
+                                        sizeLarge.UnitId = productIngredient.UnitId;
+                                        sizeLarge.Unit = productIngredient.Unit;
+                                        sizeLarge.ProductIngredientGroupId = productIngredient.ProductIngredientGroupId;
+                                        sizeLarge.SortOrder = productIngredient.SortOrder;
+                                        lstProductIngredients.Add(sizeLarge);
+
+                                    }
                                 }
                             }
                         }

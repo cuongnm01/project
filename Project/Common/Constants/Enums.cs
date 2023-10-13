@@ -350,4 +350,23 @@ namespace Common.Constants
             }
         }
     }
+
+    public class EnumSize
+    {
+        public const int REGULAR = 13;
+        public const int LARGE = 14;
+
+        public static string ToString(int? value)
+        {
+            switch (value)
+            {
+                case REGULAR:
+                    return "Regular";
+                case LARGE:
+                    return "Large";
+                default:
+                    return "";
+            }
+        }
+    }
 }

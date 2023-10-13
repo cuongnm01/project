@@ -14,21 +14,7 @@
             <ul class="nav navbar-nav navbar-right">
                 @if (nd_dv.Users.PermissionID != EnumUserType.EMPLOYEE)
                 {
-                    <li class="">
-                        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="cta-add-new">+ New</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-usermenu pull-right">
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Insert","Products",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/list_alt.png" width="24" /> Recipe</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Categories",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/book.png" width="24" /> Recipe Book</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/ingredient_group.png" width="24" /> Ingredient</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Ingredient", new { area = "Admin"})', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/ingredient_group.png" width="24" /> Ingredient Group</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update_Group","Unit",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Unit Group</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Update","Sizes",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/unit_group.png" width="24" /> Size</a></li>
-                            <li><a onclick="javascript: $('#modal-qltaikhoan').load('@Url.Action("Insert","Favorite",new { area = "Admin" })', function (e) { $('#modal-qltaikhoan').modal('show'); });"><img src="/Files/images/system/list_alt.png" width="24" /> Favorite</a></li>
-                        </ul>
-                    </li>
+                    @RenderPage("~/Views/Shared/_Add_New.cshtml")
                 }
 
                 <li style="padding: 12px;">
@@ -100,11 +86,11 @@
                     </thead>
                     <tbody id="list"></tbody>
                     <tfoot>
-                        <tr>
+                        @*<tr>
                             <td colspan="18" class="clear-all text-left" style="background-color: #fff;">
                                 <a class="btn btn-xs" onclick="RemoveAll($(this))"><img src="/Files/images/system/delete.png" width="24" /> Remove</a>
                             </td>
-                        </tr>
+                        </tr>*@
                         <tr>
                             <td colspan="19">
                                 <span class="pull-left" style="margin-left:5px;">
