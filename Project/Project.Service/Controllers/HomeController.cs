@@ -124,5 +124,46 @@ namespace Project.Service.Controllers
             }
         }
 
+
+        //[HttpGet]
+        //[Route("api/data/sync")]
+        //public IHttpActionResult SyncData()
+        //{
+        //    try
+        //    {
+        //        var sizes = db.ProductIngredients.Where(x => x.SizeId == EnumSize.REGULAR);
+
+        //        List<ProductIngredient> lstProductIngredients = new List<ProductIngredient>();
+
+        //        foreach (var productIngredient in sizes)
+        //        {
+        //            var sizeLarge = new ProductIngredient();
+        //            sizeLarge.ProductIngredientId = Guid.NewGuid();
+        //            sizeLarge.ProductId = productIngredient.ProductId;
+        //            sizeLarge.SizeId = EnumSize.LARGE;
+        //            sizeLarge.IngredientId = productIngredient.IngredientId;
+        //            sizeLarge.Value = productIngredient.Value * 1.5;
+        //            sizeLarge.Price = productIngredient.Price * 1.5;
+        //            sizeLarge.StatusID = productIngredient.StatusID;
+        //            sizeLarge.CreateDate = productIngredient.CreateDate;
+        //            sizeLarge.UnitId = productIngredient.UnitId;
+        //            sizeLarge.Unit = productIngredient.Unit;
+        //            sizeLarge.ProductIngredientGroupId = productIngredient.ProductIngredientGroupId;
+        //            sizeLarge.SortOrder = productIngredient.SortOrder;
+        //            lstProductIngredients.Add(sizeLarge);
+        //        }
+
+        //        db.ProductIngredients.AddRange(lstProductIngredients);
+        //        db.SaveChanges();
+
+
+
+        //        return Json(new { isSuccess = true, data = new { }, message = "", version = "", code = "" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { isSuccess = false, data = new { }, message = "", version = "", code = "" });
+        //    }
+        //}
     }
 }
