@@ -19,16 +19,22 @@ namespace Project.Service.Areas.Admin.Controllers
         {
             get
             {
-                UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
-                return nd_dv;
-
+                try
+                {
+                    UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
+                    return nd_dv;
+                }
+                catch
+                {
+                    return new UserInfo();
+                }
             }
         }
 
         public ActionResult CheckPermission(int? functions = null, int? option = null)
         {
             AppDbContext _db = new AppDbContext();
-            UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
+            UserInfo nd_dv = GetUserLogin;
             if (nd_dv == null)
                 return RedirectToAction("Timeout", "SessionLogin", new { area = "" });
 

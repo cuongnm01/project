@@ -51,6 +51,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 var users = (from a in _db.Users
                              where a.UserName == u && a.Password == p 
                              && ( a.PermissionID == EnumUserType.ADMIN || a.PermissionID == EnumUserType.MANAGER || a.PermissionID == EnumUserType.EMPLOYEE)
+                             && (a.PermissionID == EnumUserType.ADMIN || a.PositionID == EnumStatus.ACTIVE)
                              select a).FirstOrDefault();
                 if (users != null)
                 {
@@ -77,8 +78,8 @@ namespace Project.Service.Areas.Admin.Controllers
         [Route("logout")]
         public ActionResult Logout()
         {
-            Session[ConfigKey.SESSION_LOGIN] = "";
-            return RedirectToAction("Login");
+            Session[ConfigKey.SESSION_LOGIN] = null;
+            return RedirectToAction("Login", "Home", new { area = "" });
         }
 
         [Route("account/change-password")]

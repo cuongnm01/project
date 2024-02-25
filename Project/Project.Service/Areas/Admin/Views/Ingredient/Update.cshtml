@@ -127,14 +127,6 @@
                             maxSize: 5242880,
                             message: 'Hệ thống chỉ hỗ trợ sử dụng file ảnh jpg,png'
                         },
-                        @if (!(Model != null && Model.Image != null))
-                        {
-                            <text>
-                                notEmpty: {
-                                    message: 'Required data'
-                                },
-                            </text>
-                        }
                     }
                 },
 

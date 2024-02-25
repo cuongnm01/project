@@ -379,6 +379,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     obj.Password = Base.Security.Encode(obj.Password);
                     obj.PermissionID = obj.PermissionID ?? EnumUserType.EMPLOYEE;
                     obj.CreateDate = DateTime.Now;
+                    obj.PositionID = obj.PositionID;
                     _db.Users.Add(obj);
                     _db.SaveChanges();
 
@@ -426,6 +427,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     old.Email = obj.Email;
                     old.FullName = obj.FullName;
                     old.StatusID = obj.StatusID;
+                    old.PositionID = obj.PositionID;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
