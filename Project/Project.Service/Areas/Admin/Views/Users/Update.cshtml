@@ -1,6 +1,7 @@
 ﻿@using Common.Constants
 @using Project.Model.DbSet
 @using Common.Resources
+@using Base
 @model User
 
 <div class="modal-dialog">
@@ -26,7 +27,7 @@
                         <div class="form-group col-md-4 col-sm-4 col-xs-12">
                             <label class="control-label" for="first-name">Password</label>
                             <div>
-                                <input type="password" class="form-control" id="Password" name="Password" value="" />
+                                <input type="text" class="form-control" id="Password" name="Password" value="@(Model != null && !string.IsNullOrEmpty(Model.Password)? Model.Password.Decode() :"")" />
                             </div>
                         </div>
                         <div class="form-group col-md-4 col-sm-4 col-xs-12">

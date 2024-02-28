@@ -918,7 +918,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     obj.SortOrder = Convert.ToInt32(value);
 
                     var checkSize = _db.ProductIngredients.FirstOrDefault(x => x.ProductId == obj.ProductId && x.IngredientId == obj.IngredientId && x.SizeId == (obj.SizeId == EnumSize.REGULAR ? EnumSize.LARGE : EnumSize.REGULAR));
-                    if(checkSize != null)
+                    if (checkSize != null)
                     {
                         checkSize.SortOrder = obj.SortOrder;
                     }
@@ -958,8 +958,8 @@ namespace Project.Service.Areas.Admin.Controllers
                     var checkSize = _db.ProductIngredients.FirstOrDefault(x => x.ProductId == obj.ProductId && x.IngredientId == obj.IngredientId && x.SizeId == EnumSize.LARGE);
                     if (checkSize != null)
                     {
-                        checkSize.Value = obj.Value * 1.5;
-                        checkSize.Price = obj.Price * 1.5;
+                        checkSize.Value = Math.Round((obj.Value * 1.5) ?? 0, 2, MidpointRounding.AwayFromZero);
+                        checkSize.Price = Math.Round((obj.Price * 1.5) ?? 0, 2, MidpointRounding.AwayFromZero);
                     }
                 }
                 else if (obj.SizeId == EnumSize.LARGE)
@@ -995,7 +995,10 @@ namespace Project.Service.Areas.Admin.Controllers
             else if (productIngredients.SizeId == EnumSize.LARGE)
             {
                 var regular = _db.ProductIngredients.FirstOrDefault(x => x.ProductId == productIngredients.ProductId && x.IngredientId == productIngredients.IngredientId && x.SizeId == EnumSize.REGULAR);
-                _db.ProductIngredients.Remove(regular);
+                if (regular != null)
+                {
+                    _db.ProductIngredients.Remove(regular);
+                }
             }
 
             _db.ProductIngredients.Remove(productIngredients);
