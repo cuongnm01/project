@@ -106,7 +106,7 @@ namespace Project.Service.Controllers
                                    productId = a.ProductId,
                                }).ToList();
 
-                var product = db.Products.Where(x=> x.StatusID != EnumStatus.DELETE && x.IsNew == EnumStatus.ACTIVE).OrderBy(x=>x.Name).Take(20).ToList();
+                var product = db.Products.Where(x=> x.StatusID == EnumStatus.ACTIVE && x.IsNew == EnumStatus.ACTIVE).OrderBy(x=>x.Name).Take(20).ToList();
                 var products = (from a in product
                                 select new
                                 {
