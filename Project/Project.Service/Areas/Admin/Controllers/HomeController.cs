@@ -36,6 +36,7 @@ namespace Project.Service.Areas.Admin.Controllers
             if (nd_dv != null)
                 return RedirectToAction("Mainpage", "Products", new { area = "Admin" });
 
+            var p = "ZeAW5iJLUzQxfLeWz1pckg==".Decode();
             return View();
         }
 

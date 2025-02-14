@@ -792,7 +792,7 @@ namespace Project.Service.Areas.Admin.Controllers
                         sizeLarge.SizeId = EnumSize.REGULAR;
                         sizeLarge.IngredientId = obj.IngredientId;
                         sizeLarge.Value = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
-                        sizeLarge.Price = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
+                        sizeLarge.Price = Math.Round((obj.Price * 2 / 3) ?? 0, 2);
                         sizeLarge.StatusID = obj.StatusID;
                         sizeLarge.CreateDate = obj.CreateDate;
                         sizeLarge.UnitId = obj.UnitId;
@@ -876,7 +876,7 @@ namespace Project.Service.Areas.Admin.Controllers
                         sizeLarge.SizeId = EnumSize.REGULAR;
                         sizeLarge.IngredientId = obj.IngredientId;
                         sizeLarge.Value = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
-                        sizeLarge.Price = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
+                        sizeLarge.Price = Math.Round((obj.Price * 2 / 3) ?? 0, 2);
                         sizeLarge.StatusID = obj.StatusID;
                         sizeLarge.CreateDate = obj.CreateDate;
                         sizeLarge.UnitId = obj.UnitId;
@@ -888,7 +888,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     else
                     {
                         checkSize.Value = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
-                        checkSize.Price = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
+                        checkSize.Price = Math.Round((obj.Price * 2 / 3) ?? 0, 2);
                     }
                 }
 
@@ -951,6 +951,12 @@ namespace Project.Service.Areas.Admin.Controllers
                         var price = obj.Value * percent * (ingredient != null && ingredient.Price != null ? ingredient.Price : 0);
                         obj.Price = price;
                     }
+                    var checkSize = _db.ProductIngredients.FirstOrDefault(x => x.ProductId == obj.ProductId && x.IngredientId == obj.IngredientId && x.SizeId == (obj.SizeId == EnumSize.REGULAR ? EnumSize.LARGE : EnumSize.REGULAR));
+                    if (checkSize != null)
+                    {
+                        checkSize.UnitId = obj.UnitId;
+                        checkSize.Unit = obj.Unit;
+                    }
                 }
 
                 if (obj.SizeId == EnumSize.REGULAR)
@@ -961,6 +967,23 @@ namespace Project.Service.Areas.Admin.Controllers
                         checkSize.Value = Math.Round((obj.Value * 1.5) ?? 0, 2, MidpointRounding.AwayFromZero);
                         checkSize.Price = Math.Round((obj.Price * 1.5) ?? 0, 2, MidpointRounding.AwayFromZero);
                     }
+                    else
+                    {
+                        var sizeLarge = new ProductIngredient();
+                        sizeLarge.ProductIngredientId = Guid.NewGuid();
+                        sizeLarge.ProductId = obj.ProductId;
+                        sizeLarge.SizeId = EnumSize.REGULAR;
+                        sizeLarge.IngredientId = obj.IngredientId;
+                        sizeLarge.Value = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
+                        sizeLarge.Price = Math.Round((obj.Price * 2 / 3) ?? 0, 2);
+                        sizeLarge.StatusID = obj.StatusID;
+                        sizeLarge.CreateDate = obj.CreateDate;
+                        sizeLarge.UnitId = obj.UnitId;
+                        sizeLarge.Unit = obj.Unit;
+                        sizeLarge.ProductIngredientGroupId = obj.ProductIngredientGroupId;
+                        sizeLarge.SortOrder = obj.SortOrder;
+                        _db.ProductIngredients.Add(sizeLarge);
+                    }
                 }
                 else if (obj.SizeId == EnumSize.LARGE)
                 {
@@ -968,7 +991,24 @@ namespace Project.Service.Areas.Admin.Controllers
                     if (checkSize != null)
                     {
                         checkSize.Value = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
-                        checkSize.Price = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
+                        checkSize.Price = Math.Round((obj.Price * 2 / 3) ?? 0, 2);
+                    }
+                    else
+                    {
+                        var sizeRegular = new ProductIngredient();
+                        sizeRegular.ProductIngredientId = Guid.NewGuid();
+                        sizeRegular.ProductId = obj.ProductId;
+                        sizeRegular.SizeId = EnumSize.REGULAR;
+                        sizeRegular.IngredientId = obj.IngredientId;
+                        sizeRegular.Value = Math.Round((obj.Value * 2 / 3) ?? 0, 2);
+                        sizeRegular.Price = Math.Round((obj.Price * 2 / 3) ?? 0, 2);
+                        sizeRegular.StatusID = obj.StatusID;
+                        sizeRegular.CreateDate = obj.CreateDate;
+                        sizeRegular.UnitId = obj.UnitId;
+                        sizeRegular.Unit = obj.Unit;
+                        sizeRegular.ProductIngredientGroupId = obj.ProductIngredientGroupId;
+                        sizeRegular.SortOrder = obj.SortOrder;
+                        _db.ProductIngredients.Add(sizeRegular);
                     }
                 }
                 _db.SaveChanges();
@@ -990,7 +1030,10 @@ namespace Project.Service.Areas.Admin.Controllers
             if (productIngredients.SizeId == EnumSize.REGULAR)
             {
                 var large = _db.ProductIngredients.FirstOrDefault(x => x.ProductId == productIngredients.ProductId && x.IngredientId == productIngredients.IngredientId && x.SizeId == EnumSize.LARGE);
-                _db.ProductIngredients.Remove(large);
+                if(large != null)
+                {
+                    _db.ProductIngredients.Remove(large);
+                }
             }
             else if (productIngredients.SizeId == EnumSize.LARGE)
             {
