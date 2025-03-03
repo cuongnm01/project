@@ -40,7 +40,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 20px;">
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                         <div class="form-group col-md-4 col-sm-4 col-xs-12">
                             <label class="control-label" for="first-name">Full Name</label>
                             <div>
@@ -61,6 +61,14 @@
                                     <option value="@EnumStatus.ACTIVE" @((Model != null && Model.StatusID == EnumStatus.ACTIVE) ? "Selected" : "")>@EnumStatus.ToString(EnumStatus.ACTIVE)</option>
                                     <option value="@EnumStatus.INACTIVE" @((Model != null && Model.StatusID == EnumStatus.INACTIVE) ? "Selected" : "")>Block</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 clearfix" style="padding-bottom: 20px;">
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">IP Allow</label>
+                            <div>
+                                <input type="text" class="form-control" id="Address" name="Address" value="@(Model != null && !string.IsNullOrEmpty(Model.Address)? Model.Address :"")" />
                             </div>
                         </div>
                     </div>

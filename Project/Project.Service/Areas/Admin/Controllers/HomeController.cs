@@ -51,8 +51,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 p = p.Encode();
                 var users = (from a in _db.Users
                              where a.UserName == u && a.Password == p 
-                             && ( a.PermissionID == EnumUserType.ADMIN || a.PermissionID == EnumUserType.MANAGER || a.PermissionID == EnumUserType.EMPLOYEE)
-                             && (a.PermissionID == EnumUserType.ADMIN || a.PositionID == EnumStatus.ACTIVE)
+                             && ( a.PermissionID == EnumUserType.ADMIN)
                              select a).FirstOrDefault();
                 if (users != null)
                 {

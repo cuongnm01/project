@@ -141,7 +141,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 old.StatusID = productCategory.StatusID;
                 old.IsHomePage = productCategory.IsHomePage;
                 old.SortOrder = productCategory.SortOrder;
-
+                old.CreateDate = DateTime.Now;
                 _db.SaveChanges();
 
                 return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));

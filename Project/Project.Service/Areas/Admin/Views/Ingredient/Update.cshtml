@@ -7,6 +7,34 @@
 @{
     UserInfo nd_dv = (UserInfo)Session[ConfigKey.SESSION_LOGIN];
 }
+<style>
+    td {
+        border: 0 !important
+    }
+
+    .image-area {
+        position: relative;
+    }
+
+    .overlay-image-remove {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgb(50 50 50 / 50%);
+        top: 0;
+    }
+
+    .image-area:hover .overlay-image-remove {
+        display: block;
+    }
+
+    .overlay-image-remove a {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
+</style>
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -23,9 +51,17 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 clearfix">
                         <div class="form-group col-md-12 col-sm-12 col-xs-12">
                             <label class="control-label" for="first-name"> Image: (64x45)</label>
-                            <div>
+                            <div class="image-area">
                                 <input type="file" class="form-control" id="imgUploadLogo" name="_Logo" style="display:none" onchange="loadFileLogo(event)" />
                                 <img src="@((Model != null && Model.Image != null) ? @Model.Image.Replace("~/", "/") : "/Files/images/system/cover_default.png" )" id="OpenImgUploadLogo" style="width: 100%" />
+                                @if (Model != null && Model.Image != null)
+                                {
+                                    <div class="overlay-image-remove">
+                                        <div>
+                                            <a data-id="@Model.IngredientId" data-type="@EnumProductImageType.BACKGROUND" style="cursor: pointer;" title="Remove Image" onclick="delete_image($(this))"><i class="fa fa-trash" style="font-size: 25px; color: #fff;"></i></a>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -103,7 +139,33 @@
             URL.revokeObjectURL(output.src) // free memory
         }
     };
-
+    function delete_image(obj) {
+        alertify.confirm('Confirm Delete', function (e) {
+            if (e) {
+                $.ajax({
+                    url: '@Url.Action("DeleteImage", "Ingredient", new { area = "Admin" })',
+                    type: 'GET',
+                    dataType: 'json',
+                    mimeType: "multipart/form-data",
+                    contentType: false,
+                    async: false,
+                    cache: false,
+                    data: {
+                        id: obj.attr("data-id"),
+                        type: obj.attr("data-type"),
+                    },
+                    success: function (data) {
+                        if (data.isSuccess) {
+                            window.location.reload();
+                        }
+                        else {
+                            alertify.error(data.message);
+                        }
+                    }
+                });
+            }
+        });
+    }
 </script>
 <script>
     $(document).ready(function () {

@@ -193,7 +193,7 @@ namespace Project.Service.Areas.Admin.Controllers
                             IngredientGroup = b,
                             UnitGroup = c,
                         })
-            .OrderBy(x => x.IngredientGroup.Name).ThenBy(x=>x.Ingredient.Name);
+            .OrderBy(x => x.IngredientGroup.Name).ThenBy(x => x.Ingredient.Name);
 
             int tongso = list.Count();
 
@@ -259,6 +259,10 @@ namespace Project.Service.Areas.Admin.Controllers
 
                 if (obj.IngredientId == 0)
                 {
+                    var exists = _db.Ingredients.Count(x => x.Name.ToLower().Trim() == obj.Name.ToLower().Trim());
+                    if(exists > 0)
+                        return Json(new CxResponse("err", "Ingredients name existed"));
+
                     // tao moi
                     if (_Logo != null)
                     {
@@ -267,7 +271,7 @@ namespace Project.Service.Areas.Admin.Controllers
                         string[] fileImage = _Logo.uploadFile(rootPathImage, filePathImage);
                         obj.Image = fileImage[1];
                     }
-
+                    obj.CreateDate = DateTime.Now;
                     _db.Ingredients.Add(obj);
                     _db.SaveChanges();
 
@@ -281,6 +285,11 @@ namespace Project.Service.Areas.Admin.Controllers
                     {
                         return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
                     }
+
+                    var exists = _db.Ingredients.Count(x => x.IngredientId != obj.IngredientId && x.Name.ToLower().Trim() == obj.Name.ToLower().Trim());
+                    if (exists > 0)
+                        return Json(new CxResponse("err", "Ingredients name existed"));
+
                     if (_Logo != null)
                     {
                         string rootPathImage = string.Format("~/Files/slider/{0}", DateTime.Now.ToString("dd/MM/yyyy"));
@@ -293,6 +302,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     old.UnitGroupId = obj.UnitGroupId;
                     old.Price = obj.Price;
                     old.StatusID = obj.StatusID;
+                    old.CreateDate = DateTime.Now;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
@@ -318,6 +328,12 @@ namespace Project.Service.Areas.Admin.Controllers
             if (obj == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_SLIDER)));
             obj.StatusID = EnumStatus.DELETE;
+            _db.Ingredients.Remove(obj);
+
+            var productIngredients = _db.ProductIngredients.Where(x => x.IngredientId == id);
+            if (productIngredients != null && productIngredients.Count() > 0)
+                _db.ProductIngredients.RemoveRange(productIngredients);
+
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
@@ -337,6 +353,11 @@ namespace Project.Service.Areas.Admin.Controllers
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT_CATEGORY)));
 
             _db.Ingredients.RemoveRange(ingredients);
+
+            var productIngredients = _db.ProductIngredients.Where(x => ingreIds.Contains(x.IngredientId.ToString()));
+            if (productIngredients != null && productIngredients.Count() > 0)
+                _db.ProductIngredients.RemoveRange(productIngredients);
+
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
@@ -360,6 +381,18 @@ namespace Project.Service.Areas.Admin.Controllers
 
             _db.SaveChanges();
             return Json(new CxResponse<object>(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)), JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("ingredient/delete-image")]
+        public ActionResult DeleteImage(int id, int? type = null)
+        {
+            var ingredients = _db.Ingredients.FirstOrDefault(x => x.IngredientId == id);
+            if (ingredients == null)
+                return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
+
+            ingredients.Image = null;
+            _db.SaveChanges();
+            return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
         #endregion
 

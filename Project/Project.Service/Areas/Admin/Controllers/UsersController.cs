@@ -428,6 +428,7 @@ namespace Project.Service.Areas.Admin.Controllers
                     old.FullName = obj.FullName;
                     old.StatusID = obj.StatusID;
                     old.PositionID = obj.PositionID;
+                    old.Address = obj.Address;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));

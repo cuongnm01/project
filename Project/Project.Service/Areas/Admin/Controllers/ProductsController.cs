@@ -136,6 +136,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 old.VideoTitle = products.VideoTitle;
                 old.VideoDescription = products.VideoDescription;
                 old.CategoryId = products.CategoryId;
+                old.CreateDate = DateTime.Now;
                 _db.SaveChanges();
                 return Json(new CxResponse<object>(old.ProductId, Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));
             }
@@ -261,6 +262,26 @@ namespace Project.Service.Areas.Admin.Controllers
             if (products == null)
                 return Json(new CxResponse("err", Message.MSG_NOT_FOUND.Params(Message.F_PRODUCT)), JsonRequestBehavior.AllowGet);
             products.StatusID = EnumStatus.DELETE;
+            //Remove all
+            _db.Products.Remove(products);
+
+            var stepGroups = _db.ProductDirectionGroup.Where(x => x.ProductId == id);
+            if (stepGroups != null && stepGroups.Count() > 0)
+                _db.ProductDirectionGroup.RemoveRange(stepGroups);
+
+            var steps = _db.ProductDirections.Where(x => x.ProductId == id);
+            if (steps != null && steps.Count() > 0)
+                _db.ProductDirections.RemoveRange(steps);
+
+            var ingredientGroups = _db.ProductIngredientGroup.Where(x => x.ProductId == id);
+            if (ingredientGroups != null && ingredientGroups.Count() > 0)
+                _db.ProductIngredientGroup.RemoveRange(ingredientGroups);
+
+
+            var ingredients = _db.ProductIngredients.Where(x => x.ProductId == id);
+            if (ingredients != null && ingredients.Count() > 0)
+                _db.ProductIngredients.RemoveRange(ingredients);
+
             _db.SaveChanges();
             return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_DELETE)), JsonRequestBehavior.AllowGet);
         }
