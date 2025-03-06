@@ -171,23 +171,145 @@ namespace Project.Service.Controllers
                 }
                 var response = new
                 {
-                    categories = db.Categorys.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    provinces = db.Provinces.ToList(),
-                    districts = db.Districts.ToList(),
-                    wards = db.Wards.ToList(),
-                    ingredientGroups = db.IngredientGroups.Where(x=>x.StatusID != EnumStatus.DELETE).ToList(),
-                    ingredients = db.Ingredients.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    productDirectionGroups = db.ProductDirectionGroup.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    productDirections = db.ProductDirections.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    productIngredientGroups = db.ProductIngredientGroup.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    productIngredients = db.ProductIngredients.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    products = db.Products.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    productSizes = db.ProductSizes.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    sizes = db.Sizes.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    sliders = db.Sliders.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    units = db.Units.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    unitGroups = db.UnitGroups.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
-                    users = db.Users.Where(x => x.StatusID != EnumStatus.DELETE).ToList(),
+                    categories = db.Categorys.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        categoryId = x.CategoryId,
+                        code = x.Code,
+                        name = x.Name,
+                        image = x.Image,
+                        statusId = x.StatusID,
+                    }).ToList(),
+                    provinces = db.Provinces.Select(x => new
+                    {
+                        provinceId = x.ProvinceID,
+                        name = x.Name,
+                    }).ToList(),
+                    districts = db.Districts.Select(x => new
+                    {
+                        districtID = x.DistrictID,
+                        provinceId = x.ProvinceID,
+                        name = x.Name,
+                    }).ToList(),
+                    wards = db.Wards.Select(x => new
+                    {
+                        districtID = x.DistrictID,
+                        wardID = x.WardID,
+                        name = x.Name,
+                    }).ToList(),
+                    ingredientGroups = db.IngredientGroups.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        ingredientGroupId = x.IngredientGroupId,
+                        name = x.Name,
+                    }).ToList(),
+                    ingredients = db.Ingredients.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.IngredientId,
+                        ingredientGroupId = x.IngredientGroupId,
+                        name = x.Name,
+                        image = x.Image,
+                    }).ToList(),
+                    productDirectionGroups = db.ProductDirectionGroup.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.ProductDirectionGroupId,
+                        productId = x.ProductId,
+                        name = x.Name,
+                    }).ToList(),
+                    productDirections = db.ProductDirections.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.ProductDirectionId,
+                        productId = x.ProductId,
+                        code = x.Code,
+                        name = x.Name,
+                        image = x.Image,
+                        description = x.Description,
+                    }).ToList(),
+                    productIngredientGroups = db.ProductIngredientGroup.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.ProductIngredientGroupId,
+                        productId = x.ProductId,
+                        name = x.Name,
+                    }).ToList(),
+                    productIngredients = db.ProductIngredients.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.ProductIngredientId,
+                        productId = x.ProductId,
+                        sizeId = x.SizeId,
+                        ingredientId = x.IngredientId,
+                        value = x.Value,
+                        unitId = x.UnitId,
+                        unit = x.Unit,
+                        price = x.Price,
+                    }).ToList(),
+                    products = db.Products.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.ProductId,
+                        categoryId = x.CategoryId,
+                        code = x.Code,
+                        name = x.Name,
+                        image = x.Image,
+                        background = x.Background,
+                        isNew = x.IsNew == 1 ? true : false,
+                        videoUrl = x.VideoUrl,
+                        videoTitle = x.VideoTitle,
+                        videoDescription = x.VideoDescription,
+                        statusId = x.StatusID,
+                    }).ToList(),
+                    productSizes = db.ProductSizes.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.ProductSizeId,
+                        productId = x.ProductId,
+                        sizeId = x.SizeId,
+                    }).ToList(),
+                    sizes = db.Sizes.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.SizeId,
+                        name = x.Name,
+                        sortOrder = x.SortOrder,
+                    }).ToList(),
+                    sliders = db.Sliders.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.SliderId,
+                        url = x.Url,
+                        title = x.Title,
+                    }).ToList(),
+                    units = db.Units.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.UnitId,
+                        unitGroupId = x.UnitGroupId,
+                        code = x.Code,
+                        name = x.Name,
+                        rate = x.Rate,
+                        isDefault = x.IsDefault,
+                    }).ToList(),
+                    unitGroups = db.UnitGroups.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.UnitGroupId,
+                        name = x.Name,
+                        sortOrder = x.SortOrder,
+                    }).ToList(),
+                    users = db.Users.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    {
+                        id = x.UserID,
+                        userCode = x.UserCode ?? "",
+                        userName = x.UserName ?? "",
+                        password = x.Password,
+                        fullName = x.FullName ?? "",
+                        avatar = x.Avatar,
+                        email = x.Email ?? "",
+                        permission = x.PermissionID ?? EnumUserType.GUEST,
+                    }).ToList(),
+                    userCategory = db.User_Category.Select(x => new
+                    {
+                        id = x.User_CategoryID,
+                        userID = x.UserID,
+                        categoryId = x.CategoryId,
+                    }).ToList(),
+                    userProduct = db.User_Product.Select(x => new
+                    {
+                        id = x.User_ProductID,
+                        userID = x.UserID,
+                        productId = x.ProductId,
+                    }).ToList(),
                 };
 
                 return Json(new { isSuccess = true, data = response, message = "", version = "", code = "" });
