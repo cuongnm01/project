@@ -14,7 +14,7 @@ namespace Project.Service.Controllers
 {
     public class ProductController : BaseController
     {
-        private string url = "http://cafebottega.com/";
+        private string url = "https://appcafebottega.com/";
 
         [HttpGet]
         [Route("api/product/list")]

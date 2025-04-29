@@ -34,7 +34,7 @@
                 </span>
             </td>
             <td class="text-left">@item.UnitGroup.Name</td>
-            <td class="text-left">@(item.Ingredient.Price != null ? item.Ingredient.Price.Value.ToString("#,###") :"")</td>
+            <td class="text-left">@(item.Ingredient.Price != null ? item.Ingredient.Price.ToString() :"")</td>
             <td class="text-left">
                 <span class="">@( item.Ingredient.CreateDate != null ? item.Ingredient.CreateDate.Value.ToString("yyyy-MM-dd") :"")</span>
             </td>

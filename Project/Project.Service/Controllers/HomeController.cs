@@ -15,6 +15,8 @@ using System.Drawing.Printing;
 using System.Net;
 using System.Web.Razor.Tokenizer.Symbols;
 using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Project.Service.Controllers
 {
@@ -30,7 +32,8 @@ namespace Project.Service.Controllers
             return Ok(new CxResponse<List<Size>>(size, "ok"));
         }
 
-        private string url = "http://cafebottega.com/";
+        private string url = "https://appcafebottega.com/";
+        static string key = "S3nt0r@_V13tN@m_@uth3nt@gmail.c0m";
         // GET: Api/Bottega
 
         [HttpPost]
@@ -65,7 +68,7 @@ namespace Project.Service.Controllers
                 if (user.StatusID == EnumStatus.INACTIVE)
                     return Json(new { isSuccess = false, data = new { }, message = "Account blocked", version = "", code = "" });
 
-                if (!string.IsNullOrEmpty(user.Address) && user.Address != clientIp)
+                if (!string.IsNullOrEmpty(user.Address) && !user.Address.Contains(clientIp))
                     return Json(new { isSuccess = false, data = new { }, message = "IP not allow", version = "", code = "" });
 
                 if (request.deviceToken != "")
@@ -79,8 +82,8 @@ namespace Project.Service.Controllers
                 if (user.DeviceToken != request.deviceToken)
                     user.DeviceToken = request.deviceToken;
 
-                if (!string.IsNullOrEmpty(clientIp))
-                    user.Address = clientIp;
+                //if (!string.IsNullOrEmpty(clientIp))
+                //    user.Address = clientIp;
 
                 Token token = new Token();
                 token.TokenID = Guid.NewGuid();
@@ -103,6 +106,8 @@ namespace Project.Service.Controllers
                         avatar = !string.IsNullOrEmpty(user.Avatar) ? url + user.Avatar : "",
                         email = user.Email ?? "",
                         permission = user.PermissionID ?? EnumUserType.GUEST,
+                        enableDownload = user.CompanyID ?? EnumStatus.INACTIVE,
+                        ipAllow = !string.IsNullOrEmpty(user.Address) ? user.Address.Split(',').ToList() : null,
                     }
                 };
 
@@ -140,7 +145,9 @@ namespace Project.Service.Controllers
                                     isNew = a.CreateDate.Value.AddDays(15) > DateTime.Now ? true : false,
                                 }).ToList();
 
-                return Json(new { isSuccess = true, data = new { sliders = sliders, products = products, }, message = "", version = "", code = "" });
+                var lastUpdate = db.Products.OrderByDescending(x => x.CreateDate).FirstOrDefault();
+
+                return Json(new { isSuccess = true, data = new { sliders = sliders, products = products, lastUpdated = lastUpdate?.CreateDate, }, message = "", version = "", code = "" });
             }
             catch (Exception ex)
             {
@@ -178,6 +185,7 @@ namespace Project.Service.Controllers
                         name = x.Name,
                         image = x.Image,
                         statusId = x.StatusID,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     provinces = db.Provinces.Select(x => new
                     {
@@ -200,6 +208,7 @@ namespace Project.Service.Controllers
                     {
                         ingredientGroupId = x.IngredientGroupId,
                         name = x.Name,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     ingredients = db.Ingredients.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
@@ -207,27 +216,32 @@ namespace Project.Service.Controllers
                         ingredientGroupId = x.IngredientGroupId,
                         name = x.Name,
                         image = x.Image,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     productDirectionGroups = db.ProductDirectionGroup.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
                         id = x.ProductDirectionGroupId,
                         productId = x.ProductId,
                         name = x.Name,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     productDirections = db.ProductDirections.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
                         id = x.ProductDirectionId,
+                        productDirectionGroupId = x.ProductDirectionGroupId,
                         productId = x.ProductId,
                         code = x.Code,
                         name = x.Name,
                         image = x.Image,
                         description = x.Description,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     productIngredientGroups = db.ProductIngredientGroup.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
                         id = x.ProductIngredientGroupId,
                         productId = x.ProductId,
                         name = x.Name,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     productIngredients = db.ProductIngredients.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
@@ -239,6 +253,7 @@ namespace Project.Service.Controllers
                         unitId = x.UnitId,
                         unit = x.Unit,
                         price = x.Price,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     products = db.Products.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
@@ -253,6 +268,7 @@ namespace Project.Service.Controllers
                         videoTitle = x.VideoTitle,
                         videoDescription = x.VideoDescription,
                         statusId = x.StatusID,
+                        createDate = x.CreateDate,
                     }).ToList(),
                     productSizes = db.ProductSizes.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
@@ -271,6 +287,7 @@ namespace Project.Service.Controllers
                         id = x.SliderId,
                         url = x.Url,
                         title = x.Title,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     units = db.Units.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
@@ -280,6 +297,7 @@ namespace Project.Service.Controllers
                         name = x.Name,
                         rate = x.Rate,
                         isDefault = x.IsDefault,
+                        sortOrder = x.SortOrder,
                     }).ToList(),
                     unitGroups = db.UnitGroups.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
                     {
@@ -287,12 +305,13 @@ namespace Project.Service.Controllers
                         name = x.Name,
                         sortOrder = x.SortOrder,
                     }).ToList(),
-                    users = db.Users.Where(x => x.StatusID != EnumStatus.DELETE).Select(x => new
+                    users = db.Users.Where(x => x.StatusID != EnumStatus.DELETE).ToList().Select(x => new
                     {
                         id = x.UserID,
                         userCode = x.UserCode ?? "",
                         userName = x.UserName ?? "",
                         password = x.Password,
+                        passwordV2 = HashSignature(x.Password.Decode(), key),
                         fullName = x.FullName ?? "",
                         avatar = x.Avatar,
                         email = x.Email ?? "",
@@ -360,5 +379,23 @@ namespace Project.Service.Controllers
         //        return Json(new { isSuccess = false, data = new { }, message = "", version = "", code = "" });
         //    }
         //}
+
+        public static string HashSignature(string data, string privateKey)
+        {
+            var input = data + privateKey;
+            var _hash = "";
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                // Convert string to byte
+                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+
+                // ComputeHash SHA-256
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+
+                // convert byte to hex
+                _hash = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            }
+            return _hash;
+        }
     }
 }

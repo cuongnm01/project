@@ -429,6 +429,8 @@ namespace Project.Service.Areas.Admin.Controllers
                     old.StatusID = obj.StatusID;
                     old.PositionID = obj.PositionID;
                     old.Address = obj.Address;
+                    //Offline mode
+                    old.CompanyID = obj.CompanyID;
                     _db.SaveChanges();
 
                     return Json(new CxResponse(Message.MSG_SUCESS.Params(Message.ACTION_UPDATE)));

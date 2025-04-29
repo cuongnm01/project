@@ -115,6 +115,7 @@ namespace Project.Service.Areas.Admin.Controllers
                 products.CreateDate = DateTime.Now;
                 products.IsNew = EnumStatus.ACTIVE;
                 products.ProductId = Guid.NewGuid();
+                products.CreateDate = DateTime.Now;
                 _db.Products.Add(products);
                 _db.SaveChanges();
 

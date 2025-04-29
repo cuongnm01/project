@@ -17,7 +17,7 @@ namespace Project.Service.Controllers
     public class AuthController : BaseController
     {
         AppDbContext db = new AppDbContext();
-        private string url = "http://bottega.sapp.asia";
+        private string url = "https://appcafebottega.com/";
 
         //// GET: Auth
         //[HttpPost]

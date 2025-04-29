@@ -71,6 +71,15 @@
                                 <input type="text" class="form-control" id="Address" name="Address" value="@(Model != null && !string.IsNullOrEmpty(Model.Address)? Model.Address :"")" />
                             </div>
                         </div>
+                        <div class="form-group col-md-4 col-sm-4 col-xs-12">
+                            <label class="control-label" for="first-name">Offline mode:</label>
+                            <div>
+                                <select class="ctr-select" data-live-search="true" name="CompanyID">
+                                    <option value="@EnumStatus.INACTIVE" @((Model != null && Model.CompanyID == EnumStatus.INACTIVE) ? "Selected" : "")>No</option>
+                                    <option value="@EnumStatus.ACTIVE" @((Model != null && Model.CompanyID == EnumStatus.ACTIVE) ? "Selected" : "")>Yes</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     @if (Model.UserID != Guid.Empty)
                     {
